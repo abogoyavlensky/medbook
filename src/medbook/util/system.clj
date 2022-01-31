@@ -22,17 +22,17 @@
   [profile]
   {:pre [(contains? PROFILES profile)]}
   (-> "config.edn"
-      (io/resource)
-      (aero/read-config {:profile profile})))
+    (io/resource)
+    (aero/read-config {:profile profile})))
 
 
 (defn at-shutdown
   "Add hook for shutdown system on sigterm."
   [system]
   (-> (Runtime/getRuntime)
-      (.addShutdownHook
-        (Thread. ^IFn (bound-fn []
-                        (log/info "System shutdown...")
-                        (ig/halt! system)
-                        (shutdown-agents)
-                        (log/info "System is stopped."))))))
+    (.addShutdownHook
+      (Thread. ^IFn (bound-fn []
+                      (log/info "System shutdown...")
+                      (ig/halt! system)
+                      (shutdown-agents)
+                      (log/info "System is stopped."))))))

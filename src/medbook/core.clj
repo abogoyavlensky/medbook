@@ -12,6 +12,6 @@
   (let [config (util/config :prod)]
     (ig/load-namespaces config)
     (-> config
-        (ig/init)
-        (util/at-shutdown)))
+      (ig/init)
+      (util/at-shutdown)))
   (log/info "System start completed."))
