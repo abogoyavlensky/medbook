@@ -19,6 +19,11 @@ help:
 	@grep '^.PHONY: .* #' Makefile | sed 's/\.PHONY: \(.*\) # \(.*\)/\1 > \2/' | column -tx -s ">"
 
 
+.PHONY: deps  # Install deps
+deps:
+	@$(INFO) "Install deps..."
+	@clojure -P -X:dev
+
 .PHONY: fmt-check  # Checking code formatting
 fmt-check:
 	@$(INFO) "Checking code formatting..."
