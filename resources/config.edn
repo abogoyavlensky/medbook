@@ -1,0 +1,4 @@
+{:medbook.server/server {:options {:join? false
+                                   :port 8000}
+                         :handler #ig/ref :medbook.handler/handler}
+ :medbook.handler/handler {}}
