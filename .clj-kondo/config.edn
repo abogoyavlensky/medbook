@@ -1,0 +1,9 @@
+{:linters {:single-key-in {:level :warning}
+           :shadowed-var {:level :warning}
+           :refer-all {:exclude [clojure.test
+                                 slingshot.slingshot]}
+           :unresolved-symbol {:exclude [(slingshot.slingshot/try+ [e])]}
+           :consistent-alias {:aliases {honey.sql honey
+                                        clojure.spec.alpha s
+                                        clojure.string str
+                                        bond.james bond}}}}

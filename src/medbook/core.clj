@@ -1,12 +1,17 @@
 (ns medbook.core
-  (:gen-class))
+  (:gen-class)
+  (:require [clojure.tools.logging :as log]
+            [integrant.core :as ig]
+            [medbook.util.system :as util]))
 
-(defn greet
-  "Callable entry point to the application."
-  [data]
-  (println (str "Hello, " (or (:name data) "World") "!")))
 
 (defn -main
-  "I don't do a whole lot ... yet."
-  [& args]
-  (greet {:name (first args)}))
+  "Run application system in production env."
+  [& _args]
+  (log/info "System is starting...")
+  (let [config (util/config :prod)]
+    (ig/load-namespaces config)
+    (-> config
+        (ig/init)
+        (util/at-shutdown)))
+  (log/info "System start completed."))

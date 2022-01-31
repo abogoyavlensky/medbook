@@ -9,6 +9,7 @@
 .java-version
 .lein-*
 .lsp/
+lsp/
 .nrepl-history
 .nrepl-port
 .project
