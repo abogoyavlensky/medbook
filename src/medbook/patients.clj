@@ -4,6 +4,6 @@
 
 (defn patient-list
   "Patient list handler."
-  [{:keys [context :reitit.core/router parameters] :as _request}]
+  [{:keys [_context _parameters] :as _request}]
   ; TODO: add json middleware to api router config!
   (ring-response/response "{:status :ok}"))
