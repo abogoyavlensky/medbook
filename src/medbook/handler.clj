@@ -22,8 +22,7 @@
       [["/api" {}
         ["/patient" {:name ::patient-list
                      :get {:handler patients/patient-list
-                           :parameters {}}}]]
-       ["/" {:name ::index}]]
+                           :parameters {}}}]]]
       {:validate ring-spec/validate
        :exception pretty/exception
        :data {:muuntaja muuntaja-core/instance
@@ -44,7 +43,8 @@
               ; all handlers should return rendered html string
               :responses {200 {:body string?}}}})
     (ring/routes
-      (ring/create-resource-handler {:path "/assets/"})
+      (ring/create-resource-handler {:path "/"
+                                     :index-files ["index.html"]})
       (ring/redirect-trailing-slash-handler)
       (ring/create-default-handler))))
 

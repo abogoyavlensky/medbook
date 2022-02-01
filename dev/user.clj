@@ -10,7 +10,9 @@
 
 
 (integrant.repl/set-prep!
-  (constantly (system-util/config :dev)))
+  (constantly
+    ; Add figwhell component to the dev system.
+    (assoc (system-util/config :dev) :medbook.figwheel/figwheel {})))
 
 
 (defn reset
@@ -27,4 +29,5 @@
 
 
 (comment
-  (keys ig-state/system))
+  (keys ig-state/system)
+  (system-util/config :dev))
