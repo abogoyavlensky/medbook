@@ -3,7 +3,9 @@
             [figwheel.main.api :as fig]
             [clojure.tools.logging :as log]))
 
+
 (def ^:private BUILD-ID-DEV "dev")
+
 
 (defmethod ig/init-key ::figwheel
   [_ _]
