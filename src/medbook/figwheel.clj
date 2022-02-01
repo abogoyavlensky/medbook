@@ -1,10 +1,8 @@
 (ns medbook.figwheel
   (:require [integrant.core :as ig]
             [figwheel.main.api :as fig]
-            [clojure.tools.logging :as log]))
-
-
-(def ^:private BUILD-ID-DEV "dev")
+            [clojure.tools.logging :as log]
+            [medbook.util.system :as system-util]))
 
 
 (defmethod ig/init-key ::figwheel
@@ -15,16 +13,16 @@
      :rebel-readline false
      :cljs-devtools false
      :open-url false}
-    {:id BUILD-ID-DEV
+    {:id system-util/BUILD-ID-DEV
      :config {:watch-dirs ["src"]
               :css-dirs   ["resources/public/css"]}
      :options {:main 'medbook.ui.main
-               :output-to "target/public/js/dev-main.js"
-               :output-dir "target/public/js/dev"
+               :output-to "target/resources/public/js/dev-main.js"
+               :output-dir "target/resources/public/js/dev"
                :asset-path "assets/js/dev"}}))
 
 
 (defmethod ig/halt-key! ::figwheel
   [_ _]
   (log/info "[Figwheel] Stopping figwheel dev build...")
-  (fig/stop BUILD-ID-DEV))
+  (fig/stop system-util/BUILD-ID-DEV))

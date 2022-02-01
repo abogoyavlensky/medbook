@@ -69,4 +69,4 @@ up:
 .PHONY: clean  # Clean target dir
 clean:
 	@$(INFO) "Cleaning target dir..."
-	@rm -rf target/*
+	@rm -rf target/resources/*

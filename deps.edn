@@ -23,11 +23,11 @@
 
  :paths ["src" "resources"]
 
- :aliases {:dev {:extra-paths ["dev" "test" "target"]
+ :aliases {:dev {:extra-paths ["dev" "test" "target/resources"]
                  :extra-deps {hashp/hashp {:mvn/version "0.2.1"}
                               integrant/repl {:mvn/version "0.3.2"}
-                              com.bhauman/figwheel-main   {:mvn/version "0.2.16"}
-                              org.clojure/clojurescript   {:mvn/version "1.11.4"}}}
+                              com.bhauman/figwheel-main {:mvn/version "0.2.16"}
+                              org.clojure/clojurescript {:mvn/version "1.11.4"}}}
 
            :check-deps {:extra-deps {com.github.liquidz/antq {:mvn/version "1.4.0"}}
                         :main-opts ["-m" "antq.core" "--force"]}}}

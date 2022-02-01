@@ -11,7 +11,7 @@
 
 (integrant.repl/set-prep!
   (constantly
-    ; Add figwhell component to the dev system.
+    ; Add figwheel component to the dev system.
     (assoc (system-util/config :dev) :medbook.figwheel/figwheel {})))
 
 

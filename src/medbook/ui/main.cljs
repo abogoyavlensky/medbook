@@ -25,7 +25,7 @@
   []
   [:div
    [:h1 (:text @app-state)]
-   [:h3 "Edit this in src/andrey/fighello.cljs and watch it change!!!"]])
+   [:h3 "Edit this in src/medbook/ui/main.cljs and watch it change!!!"]])
 
 
 (defn mount
