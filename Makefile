@@ -60,9 +60,13 @@ check:
 	@$(MAKE) lint
 
 
-# Docker-compose
-
 .PHONY: up  # Run db, testing db and db admin web UI locally for development
 up:
 	@$(INFO) "Running db..."
 	@docker-compose up -d db adminer test-postgres
+
+
+.PHONY: clean  # Clean target dir
+clean:
+	@$(INFO) "Cleaning target dir..."
+	@rm -rf target/*

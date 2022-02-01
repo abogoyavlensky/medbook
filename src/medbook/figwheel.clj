@@ -19,9 +19,9 @@
      :config {:watch-dirs ["src"]
               :css-dirs   ["resources/public/css"]}
      :options {:main 'medbook.ui.main
-               :output-to "target/public/assets/dev-main.js"
-               :output-dir "target/public/assets/dev"
-               :asset-path "assets/dev"}}))
+               :output-to "target/public/js/dev-main.js"
+               :output-dir "target/public/js/dev"
+               :asset-path "assets/js/dev"}}))
 
 
 (defmethod ig/halt-key! ::figwheel
