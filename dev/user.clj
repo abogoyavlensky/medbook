@@ -3,7 +3,9 @@
             [integrant.repl.state :as ig-state]
             [clojure.tools.namespace.repl :refer [set-refresh-dirs]]
             [hashp.core]
-            [medbook.util.system :as system-util]))
+            [medbook.util.system :as system-util]
+            [figwheel.main.api :as fig]
+            [figwheel.main :as fig-main]))
 
 
 (set-refresh-dirs "dev" "src" "test")
@@ -28,6 +30,12 @@
   (ig-repl/halt))
 
 
+(defn cljs-repl
+  []
+  (fig/cljs-repl system-util/BUILD-ID-DEV))
+
+
 (comment
   (keys ig-state/system)
-  (system-util/config :dev))
+  (system-util/config :dev)
+  (cljs-repl))

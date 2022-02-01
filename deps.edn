@@ -27,7 +27,10 @@
                  :extra-deps {hashp/hashp {:mvn/version "0.2.1"}
                               integrant/repl {:mvn/version "0.3.2"}
                               com.bhauman/figwheel-main {:mvn/version "0.2.16"}
-                              org.clojure/clojurescript {:mvn/version "1.11.4"}}}
+                              org.clojure/clojurescript {:mvn/version "1.11.4"}
+                              nrepl/nrepl {:mvn/version "0.9.0"}
+                              cider/piggieback {:mvn/version "0.5.3"}}
+                 :main-opts ["-m" "nrepl.cmdline" "--middleware" "[cider.piggieback/wrap-cljs-repl]" "-i"]}
 
            :check-deps {:extra-deps {com.github.liquidz/antq {:mvn/version "1.4.0"}}
                         :main-opts ["-m" "antq.core" "--force"]}}}

@@ -24,6 +24,11 @@ deps:
 	@$(INFO) "Install deps..."
 	@clojure -P -X:dev
 
+.PHONY: repl  # Run repl
+repl:
+	@$(INFO) "Install deps..."
+	@clj -M:dev
+
 .PHONY: fmt-check  # Checking code formatting
 fmt-check:
 	@$(INFO) "Checking code formatting..."
