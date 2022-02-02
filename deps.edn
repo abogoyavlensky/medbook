@@ -30,7 +30,7 @@
                               org.clojure/clojurescript {:mvn/version "1.11.4"}
                               nrepl/nrepl {:mvn/version "0.9.0"}
                               cider/piggieback {:mvn/version "0.5.3"}}
-                 :main-opts ["-m" "nrepl.cmdline" "--middleware" "[cider.piggieback/wrap-cljs-repl]" "-i"]}
+                 :main-opts ["-m" "nrepl.cmdline"]}
 
            :check-deps {:extra-deps {com.github.liquidz/antq {:mvn/version "1.4.0"}}
                         :main-opts ["-m" "antq.core" "--force"]}}}
