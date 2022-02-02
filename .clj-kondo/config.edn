@@ -6,4 +6,5 @@
            :consistent-alias {:aliases {honey.sql honey
                                         clojure.spec.alpha s
                                         clojure.string str
-                                        bond.james bond}}}}
+                                        bond.james bond
+                                        medbook.util.system system-util}}}}

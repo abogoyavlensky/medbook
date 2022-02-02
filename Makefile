@@ -24,6 +24,11 @@ deps:
 	@$(INFO) "Install deps..."
 	@clojure -P -X:dev
 
+.PHONY: repl  # Run repl
+repl:
+	@$(INFO) "Run repl..."
+	@clj -M:dev
+
 .PHONY: fmt-check  # Checking code formatting
 fmt-check:
 	@$(INFO) "Checking code formatting..."
@@ -60,9 +65,13 @@ check:
 	@$(MAKE) lint
 
 
-# Docker-compose
-
 .PHONY: up  # Run db, testing db and db admin web UI locally for development
 up:
 	@$(INFO) "Running db..."
 	@docker-compose up -d db adminer test-postgres
+
+
+.PHONY: clean  # Clean target dir
+clean:
+	@$(INFO) "Cleaning target dir..."
+	@rm -rf target/resources/*

@@ -1,17 +1,32 @@
 (ns medbook.handler
   (:require [integrant.core :as ig]
+            [ring.middleware.cookies :as cookies]
+            [ring.util.response :as response]
             [reitit.dev.pretty :as pretty]
             [reitit.ring :as ring]
-            [ring.middleware.cookies :as cookies]
             [reitit.ring.middleware.exception :as exception]
             [reitit.ring.middleware.parameters :as params]
             [reitit.ring.middleware.muuntaja :as muuntaja]
             [reitit.ring.middleware.multipart :as multipart]
             [reitit.ring.coercion :as ring-coercion]
             [reitit.coercion.spec :as coercion-spec]
-            [muuntaja.core :as muuntaja-core]
             [reitit.ring.spec :as ring-spec]
+            [muuntaja.core :as muuntaja-core]
             [medbook.patients :as patients]))
+
+
+(defn- create-index-handler
+  [{:keys [index-file root]}]
+  (letfn [(index-handler-fn
+            [_request]
+            (-> index-file
+              (response/resource-response {:root root})
+              (response/content-type "text/html")))]
+    (fn
+      ([request]
+       (index-handler-fn request))
+      ([request respond _]
+       (respond (index-handler-fn request))))))
 
 
 (defn- handler
@@ -23,7 +38,7 @@
         ["/patient" {:name ::patient-list
                      :get {:handler patients/patient-list
                            :parameters {}}}]]
-       ["/" {:name ::index}]]
+       ["/assets/*" (ring/create-resource-handler)]]
       {:validate ring-spec/validate
        :exception pretty/exception
        :data {:muuntaja muuntaja-core/instance
@@ -40,11 +55,12 @@
                            exception/exception-middleware
                            ; handle multipart data
                            multipart/multipart-middleware
-                           cookies/wrap-cookies]
-              ; all handlers should return rendered html string
-              :responses {200 {:body string?}}}})
+                           cookies/wrap-cookies]}})
+              ; TODO: fix spec for response!
+              ;:responses {200 {:body string?}}}})
     (ring/routes
-      (ring/create-resource-handler {:path "/assets/"})
+      (create-index-handler {:index-file "index.html"
+                             :root "public"})
       (ring/redirect-trailing-slash-handler)
       (ring/create-default-handler))))
 

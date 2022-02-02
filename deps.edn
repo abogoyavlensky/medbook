@@ -1,27 +1,38 @@
-{:paths ["src" "resources"]
- :deps {org.clojure/clojure {:mvn/version "1.10.3"}
+{:deps {org.clojure/clojure {:mvn/version "1.10.3"}
         org.clojure/tools.logging {:mvn/version "1.2.4"}
         ch.qos.logback/logback-classic {:mvn/version "1.2.10"}
         integrant/integrant {:mvn/version "0.8.0"}
         aero/aero {:mvn/version "1.1.6"}
         slingshot/slingshot {:mvn/version "0.12.2"}
-        ; reitit + ring
+        ; server
         ring/ring-jetty-adapter {:mvn/version "1.9.5"}
-        ring/ring-devel {:mvn/version "1.9.5"}
         metosin/reitit-core {:mvn/version "0.5.15"}
         metosin/reitit-ring {:mvn/version "0.5.15"}
         metosin/reitit-middleware {:mvn/version "0.5.15"}
         metosin/reitit-spec {:mvn/version "0.5.15"}
-        metosin/reitit-dev {:mvn/version "0.5.15"}
         ; db
         hikari-cp/hikari-cp {:mvn/version "2.13.0"}
-        org.postgresql/postgresql {:mvn/version "42.3.1"}
+        org.postgresql/postgresql {:mvn/version "42.3.2"}
         com.github.seancorfield/honeysql {:mvn/version "2.2.861"}
-        com.github.seancorfield/next.jdbc {:mvn/version "1.2.761"}}
+        com.github.seancorfield/next.jdbc {:mvn/version "1.2.761"}
+        ; ui
+        re-frame/re-frame {:mvn/version "1.2.0"}
+        metosin/reitit-frontend {:mvn/version "0.5.15"}
+        day8.re-frame/http-fx {:mvn/version "0.2.4"}
+        cljs-ajax/cljs-ajax {:mvn/version "0.8.4"}}
 
- :aliases {:dev {:extra-paths ["dev" "test"]
+ :paths ["src" "resources"]
+
+ :aliases {:dev {:extra-paths ["dev" "test" "target/resources"]
                  :extra-deps {hashp/hashp {:mvn/version "0.2.1"}
-                              integrant/repl {:mvn/version "0.3.2"}}}
+                              integrant/repl {:mvn/version "0.3.2"}
+                              ring/ring-devel {:mvn/version "1.9.5"}
+                              metosin/reitit-dev {:mvn/version "0.5.15"}
+                              com.bhauman/figwheel-main {:mvn/version "0.2.16"}
+                              org.clojure/clojurescript {:mvn/version "1.11.4"}
+                              nrepl/nrepl {:mvn/version "0.9.0"}
+                              cider/piggieback {:mvn/version "0.5.3"}}
+                 :main-opts ["-m" "nrepl.cmdline"]}
 
            :check-deps {:extra-deps {com.github.liquidz/antq {:mvn/version "1.4.0"}}
                         :main-opts ["-m" "antq.core" "--force"]}}}

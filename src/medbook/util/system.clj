@@ -11,6 +11,8 @@
   #{:dev :prod})
 
 
+(def BUILD-ID-DEV "dev")
+
 ; Add #ig/ref tag for reading integrant config from aero.
 (defmethod aero/reader 'ig/ref
   [_ _ value]

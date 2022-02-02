@@ -2,15 +2,18 @@
   (:require [integrant.repl :as ig-repl]
             [integrant.repl.state :as ig-state]
             [clojure.tools.namespace.repl :refer [set-refresh-dirs]]
-            [hashp.core]
-            [medbook.util.system :as system-util]))
+            [medbook.util.system :as system-util]
+            [figwheel.main.api :as fig]
+            [hashp.core]))
 
 
 (set-refresh-dirs "dev" "src" "test")
 
 
 (integrant.repl/set-prep!
-  (constantly (system-util/config :dev)))
+  (constantly
+    ; Add figwheel component to the dev system.
+    (assoc (system-util/config :dev) :medbook.figwheel/figwheel {})))
 
 
 (defn reset
@@ -26,5 +29,12 @@
   (ig-repl/halt))
 
 
+(defn cljs-repl
+  []
+  (fig/cljs-repl system-util/BUILD-ID-DEV))
+
+
 (comment
-  (keys ig-state/system))
+  (keys ig-state/system)
+  (system-util/config :dev)
+  (cljs-repl))

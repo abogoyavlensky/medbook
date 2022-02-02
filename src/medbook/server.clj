@@ -6,9 +6,10 @@
 
 (defmethod ig/init-key ::server
   [_ {:keys [handler options]}]
-  {}
-  (ring/run-jetty handler options)
-  (log/info (str "Server started on port: http://localhost:" (:port options))))
+  (log/info (str "[Server] Starting server..."))
+  (let [server (ring/run-jetty handler options)]
+    (log/info (str "[Server] Server started on port: http://localhost:" (:port options)))
+    server))
 
 
 (defmethod ig/halt-key! ::server
