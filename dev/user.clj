@@ -2,10 +2,9 @@
   (:require [integrant.repl :as ig-repl]
             [integrant.repl.state :as ig-state]
             [clojure.tools.namespace.repl :refer [set-refresh-dirs]]
-            [hashp.core]
             [medbook.util.system :as system-util]
             [figwheel.main.api :as fig]
-            [figwheel.main :as fig-main]))
+            [hashp.core]))
 
 
 (set-refresh-dirs "dev" "src" "test")

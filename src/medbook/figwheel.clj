@@ -19,7 +19,8 @@
      :options {:main 'medbook.ui.main
                :output-to "target/resources/public/js/dev-main.js"
                :output-dir "target/resources/public/js/dev"
-               :asset-path "assets/js/dev"}}))
+               :asset-path "assets/js/dev"
+               :closure-defines {'medbook.ui.main/DEBUG true}}}))
 
 
 (defmethod ig/halt-key! ::figwheel

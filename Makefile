@@ -26,7 +26,7 @@ deps:
 
 .PHONY: repl  # Run repl
 repl:
-	@$(INFO) "Install deps..."
+	@$(INFO) "Run repl..."
 	@clj -M:dev
 
 .PHONY: fmt-check  # Checking code formatting

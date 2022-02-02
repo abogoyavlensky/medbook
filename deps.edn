@@ -6,26 +6,28 @@
         slingshot/slingshot {:mvn/version "0.12.2"}
         ; server
         ring/ring-jetty-adapter {:mvn/version "1.9.5"}
-        ring/ring-devel {:mvn/version "1.9.5"}
         metosin/reitit-core {:mvn/version "0.5.15"}
         metosin/reitit-ring {:mvn/version "0.5.15"}
         metosin/reitit-middleware {:mvn/version "0.5.15"}
         metosin/reitit-spec {:mvn/version "0.5.15"}
-        metosin/reitit-dev {:mvn/version "0.5.15"}
         ; db
         hikari-cp/hikari-cp {:mvn/version "2.13.0"}
-        org.postgresql/postgresql {:mvn/version "42.3.1"}
+        org.postgresql/postgresql {:mvn/version "42.3.2"}
         com.github.seancorfield/honeysql {:mvn/version "2.2.861"}
         com.github.seancorfield/next.jdbc {:mvn/version "1.2.761"}
         ; ui
-        ; TODO: replace with re-frame!
-        reagent/reagent {:mvn/version "0.10.0"}}
+        re-frame/re-frame {:mvn/version "1.2.0"}
+        metosin/reitit-frontend {:mvn/version "0.5.15"}
+        day8.re-frame/http-fx {:mvn/version "0.2.4"}
+        cljs-ajax/cljs-ajax {:mvn/version "0.8.4"}}
 
  :paths ["src" "resources"]
 
  :aliases {:dev {:extra-paths ["dev" "test" "target/resources"]
                  :extra-deps {hashp/hashp {:mvn/version "0.2.1"}
                               integrant/repl {:mvn/version "0.3.2"}
+                              ring/ring-devel {:mvn/version "1.9.5"}
+                              metosin/reitit-dev {:mvn/version "0.5.15"}
                               com.bhauman/figwheel-main {:mvn/version "0.2.16"}
                               org.clojure/clojurescript {:mvn/version "1.11.4"}
                               nrepl/nrepl {:mvn/version "0.9.0"}

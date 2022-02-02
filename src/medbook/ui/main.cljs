@@ -1,55 +1,37 @@
-(ns medbook.ui.main
-  (:require
-    [goog.dom :as gdom]
-    [reagent.core :as reagent :refer [atom]]
-    [reagent.dom :as rdom]))
+(ns ^:figwheel-hooks medbook.ui.main
+  (:require [reagent.dom :as reagent]
+            [re-frame.core :as re-frame]))
 
 
-(println "This text is printed from src/andrey/fighello.cljs. Go ahead and edit it and see reloading in action!")
+(goog-define ^boolean DEBUG false)
 
 
-(defn multiply
-  [a b]
-  (* a b))
-
-;; define your app data so that it doesn't get over-written on reload
-(defonce app-state (atom {:text "Hello world!"}))
-
-
-(defn get-app-element
+(defn dev-setup
   []
-  (gdom/getElement "app"))
+  (when DEBUG
+    (enable-console-print!)
+    (println "dev mode")))
 
 
-(defn hello-world
+(defn main-panel
   []
   [:div
-   [:h1 (:text @app-state)]
-   [:h3 "Edit this in src/medbook/ui/main.cljs and watch it change!!!"]])
+   {:class ["container" "grid-lg"]}
+   [:h1 "Hello re-frame!?"]])
 
 
-(defn mount
-  [el]
-  (rdom/render [hello-world] el))
-
-
-(defn mount-app-element
+(defn mount-root
   []
-  (when-let [el (get-app-element)]
-    (mount el)))
+  (re-frame/clear-subscription-cache!)
+  (reagent/render
+    [main-panel]
+    (.getElementById js/document "app")))
 
-;; conditionally start your application based on the presence of an "app" element
-;; this is particularly helpful for testing this ns without launching the app
-(mount-app-element)
 
-;; specify reload hook with ^:after-load metadata
-(defn ^:after-load on-reload
+(defn ^:after-load render
   []
-  (mount-app-element))
-;; optionally touch your app-state to force rerendering depending on
-;; your application
-;; (swap! app-state update-in [:__figwheel_counter] inc)
+  (dev-setup)
+  (mount-root))
 
 
-(comment
-  (js/alert "Hello cljs repl!"))
+(render)
