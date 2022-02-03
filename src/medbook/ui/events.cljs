@@ -3,6 +3,7 @@
             ;; import http-fx to register events
             [day8.re-frame.http-fx]
             [reitit.frontend.controllers :as reitit-controllers]
+            [reitit.frontend.easy :as reitit-easy]
             [medbook.ui.db :as db]))
 
 
@@ -21,6 +22,15 @@
                         new-match)]
       (assoc db :current-page (assoc new-match :controllers controllers)))))
 
+
+(re-frame/reg-fx :push-state
+  (fn [route]
+    (apply reitit-easy/push-state route)))
+
+
+(re-frame/reg-event-fx ::push-state
+  (fn [_ [_ & route]]
+    {:push-state route}))
 
 ;; Inspect app-db state
 (comment
