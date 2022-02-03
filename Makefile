@@ -68,10 +68,14 @@ check:
 .PHONY: up  # Run db, testing db and db admin web UI locally for development
 up:
 	@$(INFO) "Running db..."
-	@docker-compose up -d db adminer test-postgres
+	@docker-compose up -d db adminer test-db
 
 
 .PHONY: clean  # Clean target dir
 clean:
 	@$(INFO) "Cleaning target dir..."
 	@rm -rf target/resources/*
+
+.PHONY: migrations  # Manage migrations
+migrations:
+	@clojure -X:dev:migrations $(GOALS)

@@ -37,4 +37,10 @@
                  :main-opts ["-m" "nrepl.cmdline"]}
 
            :check-deps {:extra-deps {com.github.liquidz/antq {:mvn/version "1.4.0"}}
-                        :main-opts ["-m" "antq.core" "--force"]}}}
+                        :main-opts ["-m" "antq.core" "--force"]}
+
+           :migrations {:extra-deps {net.clojars.abogoyavlensky/automigrate {:mvn/version "0.1.0"}}
+                        :ns-default automigrate.core
+                        :exec-args {:models-file "resources/db/models.edn"
+                                    :migrations-dir "resources/db/migrations"
+                                    :jdbc-url "jdbc:postgresql://localhost:5432/medbook?user=medbook&password=medbook"}}}}
