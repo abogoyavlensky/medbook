@@ -11,7 +11,6 @@
   (fig/start
     {:mode :serve
      :rebel-readline false
-     :cljs-devtools false
      :open-url false}
     {:id system-util/BUILD-ID-DEV
      :config {:watch-dirs ["src"]
@@ -20,7 +19,10 @@
                :output-to "target/resources/public/js/dev-main.js"
                :output-dir "target/resources/public/js/dev"
                :asset-path "assets/js/dev"
-               :closure-defines {'medbook.ui.main/DEBUG true}}}))
+               :closure-defines {'medbook.ui.main/DEBUG true
+                                 "re_frame.trace.trace_enabled_QMARK_" true}
+               :preloads ['day8.re-frame-10x.preload
+                          'hashp.core]}}))
 
 
 (defmethod ig/halt-key! ::figwheel
