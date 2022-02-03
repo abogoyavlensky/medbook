@@ -2,8 +2,10 @@
   (:require [reagent.dom :as reagent]
             [re-frame.core :as re-frame]
             [medbook.ui.views :as views]
+            [medbook.ui.router :as router]
+            [medbook.ui.events :as events]
             ; Import namespaces for compiler
-            [medbook.ui.events]))
+            [medbook.ui.subs]))
 
 
 (goog-define ^boolean DEBUG false)
@@ -19,13 +21,15 @@
 (defn mount-root
   []
   (re-frame/clear-subscription-cache!)
-  (reagent/render [views/main-panel] (.getElementById js/document "app")))
+  (reagent/render [views/router-component {:router router/router}]
+    (.getElementById js/document "app")))
 
 
 (defn ^:after-load render
   []
   (dev-setup)
-  (re-frame/dispatch-sync [:event/initialize-db])
+  (router/init-routes!)
+  (re-frame/dispatch-sync [::events/initialize-db])
   (mount-root))
 
 
