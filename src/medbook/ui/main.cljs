@@ -1,6 +1,9 @@
 (ns ^:figwheel-hooks medbook.ui.main
   (:require [reagent.dom :as reagent]
-            [re-frame.core :as re-frame]))
+            [re-frame.core :as re-frame]
+            [medbook.ui.views :as views]
+            ; Import namespaces for compiler
+            [medbook.ui.events]))
 
 
 (goog-define ^boolean DEBUG false)
@@ -13,24 +16,16 @@
     (println "dev mode")))
 
 
-(defn main-panel
-  []
-  [:div
-   {:class ["container" "grid-lg"]}
-   [:h1 "Hello re-frame!?"]])
-
-
 (defn mount-root
   []
   (re-frame/clear-subscription-cache!)
-  (reagent/render
-    [main-panel]
-    (.getElementById js/document "app")))
+  (reagent/render [views/main-panel] (.getElementById js/document "app")))
 
 
 (defn ^:after-load render
   []
   (dev-setup)
+  (re-frame/dispatch-sync [:event/initialize-db])
   (mount-root))
 
 
