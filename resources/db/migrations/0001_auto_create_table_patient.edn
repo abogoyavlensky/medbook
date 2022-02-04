@@ -1,0 +1,9 @@
+({:action :create-table,
+  :model-name :patient,
+  :fields
+  {:id {:primary-key true, :type :serial},
+   :full-name {:null false, :type [:varchar 256]},
+   :gender {:default 0, :null false, :type :smallint},
+   :birthday {:null false, :type :date},
+   :address {:null false, :type :text},
+   :insurance-number {:null false, :type [:varchar 16]}}})

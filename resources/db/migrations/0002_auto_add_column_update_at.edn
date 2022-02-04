@@ -1,0 +1,8 @@
+({:action :add-column,
+  :field-name :update-at,
+  :model-name :patient,
+  :options {:default [:now], :type :timestamp}}
+ {:action :add-column,
+  :field-name :created-at,
+  :model-name :patient,
+  :options {:default [:now], :type :timestamp}})
