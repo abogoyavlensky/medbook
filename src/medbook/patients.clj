@@ -6,4 +6,4 @@
   "Patient list handler."
   [{:keys [_context _parameters] :as _request}]
   ; TODO: add json middleware to api router config!
-  (ring-response/response "{:status :ok}"))
+  (ring-response/response {:status :ok}))
