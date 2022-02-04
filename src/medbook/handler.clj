@@ -12,7 +12,7 @@
             [reitit.coercion.spec :as coercion-spec]
             [reitit.ring.spec :as ring-spec]
             [muuntaja.core :as muuntaja-core]
-            [medbook.patients :as patients]
+            [medbook.routes :as routes]
             [medbook.util.middlewares :as middlewares-util]))
 
 
@@ -36,9 +36,7 @@
     (ring/ring-handler
       (ring/router
         [["/api" {:middleware [[middlewares-util/wrap-handler-context context]]}
-          ["/patient" {:name ::patient-list
-                       :get {:handler patients/patient-list
-                             :parameters {}}}]]
+          routes/api-routes]
          ["/assets/*" (ring/create-resource-handler)]]
         {:validate ring-spec/validate
          :exception pretty/exception
