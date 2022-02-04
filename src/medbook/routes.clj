@@ -1,5 +1,5 @@
 (ns medbook.routes
-  (:require [medbook.patients :as patients]))
+  (:require [medbook.patients.handlers :as patients]))
 
 
 (def api-routes

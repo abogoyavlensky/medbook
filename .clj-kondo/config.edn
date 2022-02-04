@@ -7,4 +7,6 @@
                                         clojure.spec.alpha s
                                         clojure.string str
                                         bond.james bond
-                                        medbook.util.system system-util}}}}
+                                        medbook.util.system system-util
+                                        medbook.util.middlewares middlewares-util
+                                        medbook.util.db db-util}}}}
