@@ -24,3 +24,12 @@
     {{:keys [patient-id]} :path} :parameters}]
   (let [patient (sql/get-patient-detail! db patient-id)]
     (ring-response/response patient)))
+
+
+(defn update-patient!
+  "Create patient to db by given params."
+  [{{:keys [db]} :context
+    {:keys [body]
+     {:keys [patient-id]} :path} :parameters}]
+  (let [patient (sql/update-patient! db patient-id body)]
+    (ring-response/response patient)))

@@ -32,6 +32,17 @@
   (s/coll-of ::patient-with-id :kind vector?))
 
 
+(s/def ::patient-update
+  (s/and
+    (s/keys
+      :opt-un [::full-name
+               ::gender
+               ::birthday
+               ::address
+               ::insurance-number])
+    (s/map-of keyword? any? :min-count 1)))
+
+
 (def api-routes
   "All API routes with handlers and specs."
   ["/api"
@@ -46,4 +57,8 @@
      ["/:patient-id" {:name ::patient-detail
                       :get {:handler patients/patient-detail
                             :parameters {:path {:patient-id ::id}}
+                            :responses {200 {:body ::patient-with-id}}}
+                      :put {:handler patients/update-patient!
+                            :parameters {:path {:patient-id ::id}
+                                         :body ::patient-update}
                             :responses {200 {:body ::patient-with-id}}}}]]]])
