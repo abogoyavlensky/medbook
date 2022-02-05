@@ -48,6 +48,9 @@ FIXME: listing of options this app accepts.
 ### That You Think
 ### Might be Useful
 
+## TODO
+- [ ] TailwindCSS
+
 ## License
 
 Copyright © 2022 Andrey

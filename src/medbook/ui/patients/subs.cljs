@@ -12,3 +12,9 @@
   ::patients-loading?
   (fn [db]
     (:patients-loading? db)))
+
+
+(re-frame/reg-sub
+  ::patient-form-submitting?
+  (fn [db]
+    (:patient-form-submitting? db)))

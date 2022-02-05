@@ -1,5 +1,6 @@
 (ns medbook.ui.patients.events
   (:require [re-frame.core :as re-frame]
+            [reitit.frontend.easy :as reitit-easy]
             [ajax.core :as ajax]
             ; import http-fx to register http-xhrio events
             [day8.re-frame.http-fx]))
@@ -35,3 +36,37 @@
                   :response-format (ajax/json-response-format {:keywords? true})
                   :on-success [::get-patients-success]
                   :on-failure [::get-patients-error]}}))
+
+
+(re-frame/reg-event-fx
+  ::create-patient
+  (fn [{:keys [db]} [_ params]]
+    {:db (-> db
+           (assoc :patient-form-submitting? true)
+           (assoc :patient-form-errors nil))
+     :http-xhrio {:method :post
+                  ; TODO: update to shared routes for api!
+                  :uri "/api/v1/patients"
+                  :format (ajax/json-request-format)
+                  :params params
+                  :response-format (ajax/json-response-format {:keywords? true})
+                  :on-success [::create-patient-success]
+                  :on-failure [::create-patient-error]}}))
+
+
+(re-frame/reg-event-fx
+  ::create-patient-success
+  (fn [{:keys [db]} [_ response]]
+    {:db (-> db
+           (assoc :patient-form-submitting? false)
+           (assoc :patient-form-errors nil)
+           (assoc :patient-new response))
+     :fx/set-url {:url (reitit-easy/href :medbook.ui.router/home)}}))
+
+
+(re-frame/reg-event-db
+  ::create-patient-error
+  (fn [db [_ {{:keys [errors]} :response}]]
+    (-> db
+      (assoc :patient-form-submitting? false)
+      (assoc :patient-form-errors errors))))

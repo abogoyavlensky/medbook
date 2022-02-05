@@ -18,13 +18,11 @@
      :controllers
      [{:start (fn [& _] (re-frame/dispatch [::patients-events/get-patients]))
        :stop  (fn [& _params] (js/console.log "Leaving home page"))}]}]
-   ["create-patient"
-    {:name ::create-patient
-     :view patients-views-create/create-patient-view
-     :page-title "Create new patient"
-     :controllers
-     [{:start (fn [& _params] (js/console.log "Entering create page"))
-       :stop  (fn [& _params] (js/console.log "Leaving create page"))}]}]])
+   ["patient"
+    ["/create"
+     {:name ::create-patient
+      :view patients-views-create/create-patient-view
+      :page-title "Create new patient"}]]])
 
 
 (def router
