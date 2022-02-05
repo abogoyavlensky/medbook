@@ -24,8 +24,9 @@
 ; Create patient
 (comment
   (require '[integrant.repl.state :as ig-state])
+
   (let [db (get ig-state/system :medbook.db/db)
-        patient-data {:full-name "Some Full Name"
+        patient-data {:full-name "Some Full Name 3"
                       :gender 1
                       :birthday #inst "1990-02-02"
                       :address "Moscow, st ..."

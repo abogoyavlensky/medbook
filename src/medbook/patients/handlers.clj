@@ -6,8 +6,5 @@
 (defn patient-list
   "Return patients data from db."
   [{:keys [context _parameters] :as _request}]
-  ; TODO: add validation output with spec!
   (let [patients (sql/get-patient-list! (:db context))]
-    (->> patients
-         ;(map #(s/unform ::patient-with-id %))
-      (ring-response/response))))
+    (ring-response/response patients)))

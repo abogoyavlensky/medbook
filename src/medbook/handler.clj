@@ -35,14 +35,16 @@
   (fn [context]
     (ring/ring-handler
       (ring/router
-        [["/api" {:middleware [[middlewares-util/wrap-handler-context context]]}
+        [["/api" {}
           routes/api-routes]
          ["/assets/*" (ring/create-resource-handler)]]
         {:validate ring-spec/validate
          :exception pretty/exception
          :data {:muuntaja muuntaja-core/instance
                 :coercion coercion-spec/coercion
-                :middleware [; parse any request params
+                :middleware [; add handler options to request
+                             [middlewares-util/wrap-handler-context context]
+                             ; parse any request params
                              params/parameters-middleware
                              ; negotiate request and response
                              muuntaja/format-middleware
