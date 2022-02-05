@@ -56,8 +56,6 @@
                              ; handle multipart data
                              multipart/multipart-middleware
                              cookies/wrap-cookies]}})
-                ; TODO: fix spec for response!
-                ;:responses {200 {:body string?}}}})
       (ring/routes
         (create-index-handler {:index-file "index.html"
                                :root "public"})
