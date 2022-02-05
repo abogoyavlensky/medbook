@@ -14,8 +14,8 @@
   "Create patient to db by given params."
   [{{:keys [db]} :context
     {:keys [body]} :parameters}]
-  (let [created-ticket (sql/create-patient! db body)]
-    (ring-response/response created-ticket)))
+  (let [created-patient (sql/create-patient! db body)]
+    (ring-response/response created-patient)))
 
 
 (defn patient-detail

@@ -1,7 +1,5 @@
 (ns medbook.ui.events
   (:require [re-frame.core :as re-frame]
-            ;; import http-fx to register events
-            [day8.re-frame.http-fx]
             [reitit.frontend.controllers :as reitit-controllers]
             [reitit.frontend.easy :as reitit-easy]
             [medbook.ui.db :as db]))

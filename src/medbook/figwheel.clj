@@ -21,8 +21,7 @@
                :asset-path "assets/js/dev"
                :closure-defines {'medbook.ui.main/DEBUG true
                                  "re_frame.trace.trace_enabled_QMARK_" true}
-                          ; TODO: uncomment for enabling re-frame-10x debugger
-               :preloads [;'day8.re-frame-10x.preload
+               :preloads ['day8.re-frame-10x.preload
                           'hashp.core]}}))
 
 

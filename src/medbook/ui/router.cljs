@@ -4,6 +4,7 @@
             [reitit.frontend :as reitit-front]
             [reitit.frontend.easy :as reitit-easy]
             [medbook.ui.events :as events]
+            [medbook.ui.patients.events :as patients-events]
             [medbook.ui.patients.views :as patients-views]))
 
 
@@ -14,7 +15,7 @@
      :view patients-views/patient-list-view
      :page-title "Patients"
      :controllers
-     [{:start (fn [& _params] (js/console.log "Entering home page"))
+     [{:start (fn [& _] (re-frame/dispatch [::patients-events/get-patients]))
        :stop  (fn [& _params] (js/console.log "Leaving home page"))}]}]
    ["create-patient"
     {:name ::create-patient

@@ -5,7 +5,9 @@
             [medbook.ui.router :as router]
             [medbook.ui.events :as events]
             ; Import namespaces for compiler
-            [medbook.ui.subs]))
+            [medbook.ui.subs]
+            [medbook.ui.patients.subs]
+            [medbook.ui.patients.events]))
 
 
 #_{:clj-kondo/ignore [:missing-docstring]}

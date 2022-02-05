@@ -1,8 +1,6 @@
 (ns medbook.ui.patients.views
   (:require [re-frame.core :as re-frame]
-            [reitit.core :as reitit]
             [reitit.frontend.easy :as reitit-easy]
-            [reagent.core :as reagent]
             [medbook.ui.patients.subs :as subs]))
 
 
@@ -40,26 +38,20 @@
 
 (defn- render-patients-table
   [patients]
-  (let [];ticket-new-id (re-frame/subscribe [:ticket-new-id])]
-    (if (seq patients)
-      [:div
-       ;(when (some? @ticket-new-id)
-       ;  [:div.toast.toast-success
-       ;   [:button.btn.btn-clear.float-right
-       ;    {:on-click #(re-frame/dispatch [:event/clear-ticket-new-id])}]
-       ;   [:p "New ticket has been created successfully!"]])
-       [:table
-        {:class ["table"]}
-        [:thead
-         [:tr
-          [:th "Title"]
-          [:th "Description"]
-          [:th "Applicant"]
-          [:th "Executor"]
-          [:th "Completion date"]]]
-        [:tbody
-         (map (partial render-patient-item nil #_@ticket-new-id) patients)]]]
-      [empty-patients])))
+  (if (seq patients)
+    [:div
+     [:table
+      {:class ["table"]}
+      [:thead
+       [:tr
+        [:th "Full name"]
+        [:th "Gender"]
+        [:th "Birthday"]
+        [:th "Address"]
+        [:th "Insurance number"]]]
+      [:tbody
+       (map (partial render-patient-item nil) patients)]]]
+    [empty-patients]))
 
 
 (defn patient-list-view
@@ -76,12 +68,10 @@
        {:class ["col-2" "col-mr-auto"]}
        page-title]
       [create-patient-btn]]
-     ;[:div
-     ; (if (true? @loading?)
-     ;   [:p "Loading..."]]]
-       ;(if (some? @error)
-       ;  [:p @error]
-     [render-patients-table patients]]))
+     [:div
+      (if (true? loading?)
+        [:p "Loading..."]
+        [render-patients-table patients])]]))
 
 
 (defn create-patient-view
