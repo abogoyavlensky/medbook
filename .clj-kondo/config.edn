@@ -1,5 +1,6 @@
 {:linters {:single-key-in {:level :warning}
            :shadowed-var {:level :warning}
+           :missing-docstring {:level :warning}
            :refer-all {:exclude [clojure.test
                                  slingshot.slingshot]}
            :unresolved-symbol {:exclude [(slingshot.slingshot/try+ [e])]}

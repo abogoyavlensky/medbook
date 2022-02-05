@@ -7,13 +7,13 @@
             [medbook.ui.views :as views]))
 
 
-(defn on-navigate
+(defn- on-navigate
   [new-match]
   (when new-match
     (re-frame/dispatch [::events/navigate new-match])))
 
 
-(def routes
+(def ^:private routes
   ["/"
    [""
     {:name ::home
@@ -25,11 +25,13 @@
 
 
 (def router
+  "Router for frontend pages."
   (reitit-front/router
     routes
     {:data {:coercion reitit-spec/coercion}}))
 
 
 (defn init-routes!
+  "Initial setup router."
   []
   (reitit-easy/start! router on-navigate {:use-fragment false}))

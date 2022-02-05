@@ -4,6 +4,7 @@
 
 
 (defn home-page
+  "View for home page."
   []
   [:div
    {:class ["container" "grid-lg"]}
@@ -11,6 +12,7 @@
 
 
 (defn router-component
+  "Component for routing ui navigation."
   [{:keys [_router]}]
   (let [current-page @(re-frame/subscribe [::subs/current-page])]
     [:div

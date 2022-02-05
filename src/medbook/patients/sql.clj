@@ -3,6 +3,7 @@
 
 
 (defn get-patient-list!
+  "Return patient data vector from db."
   [db]
   (db-util/exec! db
     {:select [:id :full-name :gender :birthday :address :insurance-number]
@@ -11,6 +12,7 @@
 
 
 (defn create-patient!
+  "Create a patient in db with given params."
   [db params]
   ; TODO: add validation with spec!
   (db-util/exec-one! db
