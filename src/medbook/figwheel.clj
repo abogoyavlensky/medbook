@@ -28,4 +28,7 @@
 (defmethod ig/halt-key! ::figwheel
   [_ _]
   (log/info "[Figwheel] Stopping figwheel dev build...")
-  (fig/stop system-util/BUILD-ID-DEV))
+  (try
+    (fig/stop system-util/BUILD-ID-DEV)
+    (catch Exception _
+      (log/info "Figwheel has been stopped."))))

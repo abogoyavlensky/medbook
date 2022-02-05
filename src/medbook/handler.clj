@@ -12,7 +12,8 @@
             [reitit.coercion.spec :as coercion-spec]
             [reitit.ring.spec :as ring-spec]
             [muuntaja.core :as muuntaja-core]
-            [medbook.patients :as patients]))
+            [medbook.routes :as routes]
+            [medbook.util.middlewares :as middlewares-util]))
 
 
 (defn- create-index-handler
@@ -29,42 +30,41 @@
        (respond (index-handler-fn request))))))
 
 
-(defn- handler
+(def ^:private handler
   "Main application handler."
-  [_context]
-  (ring/ring-handler
-    (ring/router
-      [["/api" {}
-        ["/patient" {:name ::patient-list
-                     :get {:handler patients/patient-list
-                           :parameters {}}}]]
-       ["/assets/*" (ring/create-resource-handler)]]
-      {:validate ring-spec/validate
-       :exception pretty/exception
-       :data {:muuntaja muuntaja-core/instance
-              :coercion coercion-spec/coercion
-              :middleware [; parse any request params
-                           params/parameters-middleware
-                           ; negotiate request and response
-                           muuntaja/format-middleware
-                           ; coerce request and response to spec
-                           ring-coercion/coerce-exceptions-middleware
-                           ring-coercion/coerce-request-middleware
-                           ring-coercion/coerce-response-middleware
-                           ; handle any exceptions
-                           exception/exception-middleware
-                           ; handle multipart data
-                           multipart/multipart-middleware
-                           cookies/wrap-cookies]}})
-              ; TODO: fix spec for response!
-              ;:responses {200 {:body string?}}}})
-    (ring/routes
-      (create-index-handler {:index-file "index.html"
-                             :root "public"})
-      (ring/redirect-trailing-slash-handler)
-      (ring/create-default-handler))))
+  (fn [context]
+    (ring/ring-handler
+      (ring/router
+        [routes/api-routes
+         ["/assets/*" (ring/create-resource-handler)]]
+        {:validate ring-spec/validate
+         :exception pretty/exception
+         :data {:muuntaja muuntaja-core/instance
+                :coercion coercion-spec/coercion
+                :middleware [; add handler options to request
+                             [middlewares-util/wrap-handler-context context]
+                             ; parse any request params
+                             params/parameters-middleware
+                             ; negotiate request and response
+                             muuntaja/format-middleware
+                             ; coerce request and response to spec
+                             ring-coercion/coerce-exceptions-middleware
+                             ring-coercion/coerce-request-middleware
+                             ring-coercion/coerce-response-middleware
+                             ; handle any exceptions
+                             exception/exception-middleware
+                             ; handle multipart data
+                             multipart/multipart-middleware
+                             cookies/wrap-cookies]}})
+      (ring/routes
+        (create-index-handler {:index-file "index.html"
+                               :root "public"})
+        (ring/redirect-trailing-slash-handler)
+        (ring/create-default-handler)))))
 
 
 (defmethod ig/init-key ::handler
-  [_ context]
-  (handler context))
+  [_ {:keys [options] :as context}]
+  (if (true? (:wrap-reload? options))
+    (middlewares-util/wrap-reload #'handler context)
+    (handler context)))

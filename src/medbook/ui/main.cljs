@@ -8,17 +8,18 @@
             [medbook.ui.subs]))
 
 
+#_{:clj-kondo/ignore [:missing-docstring]}
 (goog-define ^boolean DEBUG false)
 
 
-(defn dev-setup
+(defn- dev-setup
   []
   (when DEBUG
     (enable-console-print!)
     (println "dev mode")))
 
 
-(defn mount-root
+(defn- mount-root
   []
   (re-frame/clear-subscription-cache!)
   (reagent/render [views/router-component {:router router/router}]
@@ -26,11 +27,12 @@
 
 
 (defn ^:after-load render
+  "Render all the app with init routes and db."
   []
   (dev-setup)
   (router/init-routes!)
   (re-frame/dispatch-sync [::events/initialize-db])
   (mount-root))
 
-
+; Render the app for first time load of the html page.
 (render)

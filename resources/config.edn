@@ -2,6 +2,8 @@
                                    :port 8000}
                          :handler #ig/ref :medbook.handler/handler}
  :medbook.db/db {:options
-                 {:jdbc-url #profile {:dev "jdbc:postgresql://localhost:5444/medbook?user=medbook&password=medbook"
+                 {:jdbc-url #profile {:dev "jdbc:postgresql://localhost:5432/medbook?user=medbook&password=medbook"
                                       :prod #env MEDBOOK_DB_URL}}}
- :medbook.handler/handler {:db #ig/ref :medbook.db/db}}
+ :medbook.handler/handler {:options {:wrap-reload? #profile {:dev true
+                                                             :prod false}}
+                           :db #ig/ref :medbook.db/db}}
