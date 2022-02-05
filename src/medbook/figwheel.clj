@@ -31,4 +31,4 @@
   (try
     (fig/stop system-util/BUILD-ID-DEV)
     (catch Exception _
-      (log/info "Figwheel has been stopped."))))
+      (log/info "[Figwheel] Warning: figwheel has been stopped."))))

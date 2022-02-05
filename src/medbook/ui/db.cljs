@@ -3,4 +3,6 @@
 
 (def default-db
   "Main data for the app."
-  {:current-page nil})
+  {:current-page nil
+   :patients []
+   :patients-loading? false})
