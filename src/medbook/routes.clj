@@ -21,12 +21,22 @@
     :opt-un [::id]))
 
 
+(s/def ::patient-with-id
+  (s/merge
+    ::patient
+    (s/keys
+      :opt-un [::id])))
+
+
 (s/def ::patients
-  (s/coll-of ::patient :kind vector?))
+  (s/coll-of ::patient-with-id :kind vector?))
 
 
 (def api-routes
   "All API routes with handlers and specs."
   ["/patient" {:name ::patient-list
                :get {:handler patients/patient-list
-                     :responses {200 {:body ::patients}}}}])
+                     :responses {200 {:body ::patients}}}
+               :post {:handler patients/create-patient!
+                      :parameters {:body ::patient}
+                      :responses {200 {:body ::patient-with-id}}}}])

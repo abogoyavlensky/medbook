@@ -14,7 +14,6 @@
 (defn create-patient!
   "Create a patient in db with given params."
   [db params]
-  ; TODO: add validation with spec!
   (db-util/exec-one! db
     {:insert-into :patient
      :values [params]
