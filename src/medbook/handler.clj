@@ -35,8 +35,7 @@
   (fn [context]
     (ring/ring-handler
       (ring/router
-        [["/api" {}
-          routes/api-routes]
+        [routes/api-routes
          ["/assets/*" (ring/create-resource-handler)]]
         {:validate ring-spec/validate
          :exception pretty/exception

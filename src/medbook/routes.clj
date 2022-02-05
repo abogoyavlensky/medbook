@@ -34,9 +34,16 @@
 
 (def api-routes
   "All API routes with handlers and specs."
-  ["/patient" {:name ::patient-list
-               :get {:handler patients/patient-list
-                     :responses {200 {:body ::patients}}}
-               :post {:handler patients/create-patient!
-                      :parameters {:body ::patient}
-                      :responses {200 {:body ::patient-with-id}}}}])
+  ["/api"
+   ["/v1"
+    ["/patients"
+     ["" {:name ::patient-list
+          :get {:handler patients/patient-list
+                :responses {200 {:body ::patients}}}
+          :post {:handler patients/create-patient!
+                 :parameters {:body ::patient}
+                 :responses {200 {:body ::patient-with-id}}}}]
+     ["/:patient-id" {:name ::patient-detail
+                      :get {:handler patients/patient-detail
+                            :parameters {:path {:patient-id ::id}}
+                            :responses {200 {:body ::patient-with-id}}}}]]]])

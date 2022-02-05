@@ -2,6 +2,17 @@
   (:require [medbook.util.db :as db-util]))
 
 
+(defn create-patient!
+  "Create a patient in db with given params."
+  [db params]
+  (db-util/exec-one! db
+    {:insert-into :patient
+     :values [params]
+     :on-conflict [:id]
+     :do-nothing true
+     :returning [:id :full-name :gender :birthday :address :insurance-number]}))
+
+
 (defn get-patient-list!
   "Return patient data vector from db."
   [db]
@@ -11,14 +22,14 @@
      :order-by [[:created-at :desc]]}))
 
 
-(defn create-patient!
-  "Create a patient in db with given params."
-  [db params]
+(defn get-patient-detail!
+  "Return single patient data from db."
+  [db patient-id]
   (db-util/exec-one! db
-    {:insert-into :patient
-     :values [params]
-     :on-conflict [:id]
-     :do-nothing true}))
+    {:select [:id :full-name :gender :birthday :address :insurance-number]
+     :from [:patient]
+     :where [:= :id patient-id]}))
+
 
 ; Create patient
 (comment

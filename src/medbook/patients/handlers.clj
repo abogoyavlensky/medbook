@@ -16,3 +16,11 @@
     {:keys [body]} :parameters}]
   (let [created-ticket (sql/create-patient! db body)]
     (ring-response/response created-ticket)))
+
+
+(defn patient-detail
+  "Return data for particular patient by id from db."
+  [{{:keys [db]} :context
+    {{:keys [patient-id]} :path} :parameters}]
+  (let [patient (sql/get-patient-detail! db patient-id)]
+    (ring-response/response patient)))
