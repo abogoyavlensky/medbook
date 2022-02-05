@@ -11,14 +11,14 @@
   ["/"
    [""
     {:name ::home
-     :view patients-views/patient-list
+     :view patients-views/patient-list-view
      :page-title "Patients"
      :controllers
      [{:start (fn [& _params] (js/console.log "Entering home page"))
        :stop  (fn [& _params] (js/console.log "Leaving home page"))}]}]
    ["create-patient"
     {:name ::create-patient
-     :view patients-views/create-patient
+     :view patients-views/create-patient-view
      :page-title "Create new patient"
      :controllers
      [{:start (fn [& _params] (js/console.log "Entering create page"))
