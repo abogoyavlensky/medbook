@@ -1,0 +1,4 @@
+({:action :create-index,
+  :index-name :insurance-number-unique-idx,
+  :model-name :patient,
+  :options {:fields [:insurance-number], :unique true, :type :btree}})

@@ -4,6 +4,8 @@
             [medbook.patients.handlers :as patients]))
 
 
+(def ^:private INSURANCE-NUMBER-LENGTH 16)
+
 (s/def ::id pos-int?)
 (s/def ::full-name string?)
 
@@ -16,7 +18,23 @@
 
 (s/def ::birthday inst?)
 (s/def ::address string?)
-(s/def ::insurance-number string?)
+
+
+(defn- insurance-number-length-valid?
+  [value]
+  (= INSURANCE-NUMBER-LENGTH (count value)))
+
+
+(defn- insurance-number-length-digits?
+  [value]
+  (some? (re-matches #"^[\d+]{16}$" value)))
+
+
+(s/def ::insurance-number
+  (s/and
+    string?
+    insurance-number-length-valid?
+    insurance-number-length-digits?))
 
 
 (s/def ::patient
