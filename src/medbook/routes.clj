@@ -1,11 +1,19 @@
 (ns medbook.routes
   (:require [clojure.spec.alpha :as s]
+            [spec-tools.core :as st]
             [medbook.patients.handlers :as patients]))
 
 
 (s/def ::id pos-int?)
 (s/def ::full-name string?)
-(s/def ::gender integer?)
+
+
+(s/def ::gender
+  (st/spec
+    {:spec #{0 1}
+     :decode/json #(Integer. %2)}))
+
+
 (s/def ::birthday inst?)
 (s/def ::address string?)
 (s/def ::insurance-number string?)
