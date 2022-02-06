@@ -15,7 +15,7 @@
 
 
 (defn- input-field
-  [{:keys [params field label field-type submitting? errors]}]
+  [{:keys [params field label field-type submitting? errors pattern]}]
   (let [field-name-str (name field)
         form-classes ["form-group"]
         form-classes* (if (seq errors)
@@ -28,20 +28,25 @@
        :class ["form-label"]}
       label]
      [:input
-      {:id field-name-str
-       :name field-name-str
-       :type field-type
-       :value (get @params field)
-       :on-change #(swap! params assoc field (-> % .-target .-value))
-       :disabled (true? submitting?)
-       :class ["form-input"]}]
+      (cond-> {:id field-name-str
+               :name field-name-str
+               :type field-type
+               :value (get @params field)
+               :on-change #(swap! params assoc field (-> % .-target .-value))
+               :disabled (true? submitting?)
+               :class ["form-input"]}
+        (some? pattern) (assoc :pattern pattern))]
      (map error-hint errors)]))
 
 
 (defn- patient-form
   []
   (let [patient-form-submitting? @(re-frame/subscribe [::subs/patient-form-submitting?])
-        params (reagent/atom {})]
+        params (reagent/atom {:full-name nil
+                              :gender nil
+                              :birthday nil
+                              :address nil
+                              :insurance-number nil})]
         ;errors (re-frame/subscribe [::subs/patient-form-errors])]
     (fn []
       [:div
@@ -76,7 +81,8 @@
                      :field :insurance-number
                      :label "Insurance number"
                      :field-type "text"
-                     :submitting? patient-form-submitting?}]
+                     :submitting? patient-form-submitting?
+                     :pattern "^[\\d+]{16}$"}]
                      ;:errors (:completed-at @errors)}]
        [:button
         {:type :button

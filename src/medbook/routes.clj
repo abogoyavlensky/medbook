@@ -13,7 +13,7 @@
 (s/def ::gender
   (st/spec
     {:spec #{0 1}
-     :decode/json #(Integer. %2)}))
+     :decode/json #(if (string? %2) (Integer. %2) %2)}))
 
 
 (s/def ::birthday inst?)

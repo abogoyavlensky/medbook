@@ -1,6 +1,5 @@
 (ns medbook.ui.patients.events
   (:require [re-frame.core :as re-frame]
-            [reitit.frontend.easy :as reitit-easy]
             [ajax.core :as ajax]
             ; import http-fx to register http-xhrio events
             [day8.re-frame.http-fx]))
@@ -61,7 +60,7 @@
            (assoc :patient-form-submitting? false)
            (assoc :patient-form-errors nil)
            (assoc :patient-new response))
-     :fx/set-url {:url (reitit-easy/href :medbook.ui.router/home)}}))
+     :fx/push-state {:route :medbook.ui.router/home}}))
 
 
 (re-frame/reg-event-db
