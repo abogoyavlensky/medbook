@@ -76,3 +76,11 @@
   (fn [db [_ _]]
     (-> db
       (assoc :patient-new nil))))
+
+
+(re-frame/reg-event-fx
+  ::clear-patient-form
+  (fn [{:keys [db]} [_ _]]
+    {:db (-> db
+           (assoc :patient-form-errors nil))
+     :fx/push-state {:route :medbook.ui.router/home}}))

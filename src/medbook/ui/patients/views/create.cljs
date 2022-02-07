@@ -99,7 +99,7 @@
            :class ["btn" "btn-primary" "btn-lg" "mt-2" "float-right"]}
           "Save"]
          [:a
-          {:href (reitit-easy/href :medbook.ui.router/home)
+          {:on-click #(re-frame/dispatch [::events/clear-patient-form])
            :class ["btn" "btn-lg" "mt-2" "float-right" "mr-2"]}
           "Cancel"]]))))
 
