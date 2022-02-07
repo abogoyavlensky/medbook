@@ -18,3 +18,9 @@
   ::patient-form-submitting?
   (fn [db]
     (:patient-form-submitting? db)))
+
+
+(re-frame/reg-sub
+  ::patient-form-errors
+  (fn [db]
+    (:patient-form-errors db)))

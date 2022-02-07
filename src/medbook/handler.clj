@@ -30,7 +30,7 @@
        (respond (index-handler-fn request))))))
 
 
-(defn default-error-handler
+(defn- default-error-handler
   [message exception _request]
   {:status 500
    :body {:type message
@@ -39,10 +39,10 @@
           :data (ex-data exception)}})
 
 
-(defn application-error-handler
+(defn- application-error-handler
   [exception _request]
   (let [error-data (ex-data exception)]
-    {:status (:http-code error-data)
+    {:status (or (:http-code error-data) 400)
      :body {:type "Application error"
             :exception (.getClass exception)
             :error (:type error-data)
@@ -67,6 +67,7 @@
 
 
 (def exception-middleware
+  "Common exception middleware to handle all errors."
   (exception/create-exception-middleware
     (merge
       exception/default-handlers

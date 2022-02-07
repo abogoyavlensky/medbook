@@ -22,7 +22,7 @@
   {:medbook.routes/full-name (field-error :full-name "%s value should be string.")
    :medbook.routes/address (field-error :address "%s value should be string.")
    :medbook.routes/gender (field-error :gender "%s value is invalid.")
-   :medbook.routes/birthday (field-error :birthday "%s value should date in format \"YYYY-MM-DD\".")
+   :medbook.routes/birthday (field-error :birthday "%s value has invalid format.")
    :medbook.routes/insurance-number (field-error :insurance-number "%s value should contain 16 digits without spaces.")
    :medbook.routes/not-empty-string
    (fn [problem]
@@ -44,7 +44,6 @@
 (defn coercion-exception->error-messages
   "Convert spec problems to human-readable error messages."
   [explain-data]
-  #p (get-in explain-data [:problems ::s/problems])
   (->> (get-in explain-data [:problems ::s/problems])
     (map problem->error-message)
     (group-by :field)

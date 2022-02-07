@@ -18,7 +18,8 @@
   [{:keys [params field label field-type submitting? errors pattern]}]
   (let [field-name-str (name field)
         form-classes ["form-group"]
-        form-classes* (if (seq errors)
+        field-errors (get errors field)
+        form-classes* (if (seq field-errors)
                         (conj form-classes "has-error")
                         form-classes)]
     [:div
@@ -36,7 +37,7 @@
                :disabled (true? submitting?)
                :class ["form-input"]}
         (some? pattern) (assoc :pattern pattern))]
-     (map error-hint errors)]))
+     (map error-hint field-errors)]))
 
 
 (defn- form-error
@@ -48,59 +49,59 @@
 
 (defn- patient-form
   []
-  (let [patient-form-submitting? @(re-frame/subscribe [::subs/patient-form-submitting?])
-        params (reagent/atom {:full-name ""
+  (let [params (reagent/atom {:full-name ""
                               :gender ""
                               :birthday ""
                               :address ""
                               :insurance-number ""})]
-        ;errors @(re-frame/subscribe [::subs/patient-form-errors])]
     (fn []
-      [:div
-       {:class ["column" "col-8"]}
-       ;(when (seq (:form errors))
-       ;  (mapv form-error (:form errors)))
-       [input-field {:params params
-                     :field :full-name
-                     :label "Full name"
-                     :field-type "text"
-                     :submitting? patient-form-submitting?}]
-                     ;:errors (:title errors)}]
-       [input-field {:params params
-                     :field :gender
-                     :label "Gender"
-                     :field-type "number"
-                     :submitting? patient-form-submitting?}]
-                     ;:errors (:description errors)}]
-       [input-field {:params params
-                     :field :birthday
-                     :label "Birthday"
-                     :field-type "date"
-                     :submitting? patient-form-submitting?}]
-                     ;:errors (:applicant errors)}]
-       [input-field {:params params
-                     :field :address
-                     :label "Address"
-                     :field-type "text"
-                     :submitting? patient-form-submitting?}]
-                     ;:errors (:executor errors)}]
-       [input-field {:params params
-                     :field :insurance-number
-                     :label "Insurance number"
-                     :field-type "text"
-                     :submitting? patient-form-submitting?
-                     :pattern "^[\\d+]{16}$"}]
-                     ;:errors (:completed-at errors)}]
-       [:button
-        {:type :button
-         :disabled (true? patient-form-submitting?)
-         :on-click #(re-frame/dispatch [::events/create-patient @params])
-         :class ["btn" "btn-primary" "btn-lg" "mt-2" "float-right"]}
-        "Save"]
-       [:a
-        {:href (reitit-easy/href :medbook.ui.router/home)
-         :class ["btn" "btn-lg" "mt-2" "float-right" "mr-2"]}
-        "Cancel"]])))
+      (let [errors @(re-frame/subscribe [::subs/patient-form-errors])
+            patient-form-submitting? @(re-frame/subscribe [::subs/patient-form-submitting?])]
+        [:div
+         {:class ["column" "col-8"]}
+         (when (seq (:form errors))
+           (map form-error (:form errors)))
+         [input-field {:params params
+                       :field :full-name
+                       :label "Full name"
+                       :field-type "text"
+                       :submitting? patient-form-submitting?
+                       :errors errors}]
+         [input-field {:params params
+                       :field :gender
+                       :label "Gender"
+                       :field-type "number"
+                       :submitting? patient-form-submitting?
+                       :errors errors}]
+         [input-field {:params params
+                       :field :birthday
+                       :label "Birthday"
+                       :field-type "date"
+                       :submitting? patient-form-submitting?
+                       :errors errors}]
+         [input-field {:params params
+                       :field :address
+                       :label "Address"
+                       :field-type "text"
+                       :submitting? patient-form-submitting?
+                       :errors errors}]
+         [input-field {:params params
+                       :field :insurance-number
+                       :label "Insurance number"
+                       :field-type "text"
+                       :submitting? patient-form-submitting?
+                       :pattern "^[\\d+]{16}$"
+                       :errors errors}]
+         [:button
+          {:type :button
+           :disabled (true? patient-form-submitting?)
+           :on-click #(re-frame/dispatch [::events/create-patient @params])
+           :class ["btn" "btn-primary" "btn-lg" "mt-2" "float-right"]}
+          "Save"]
+         [:a
+          {:href (reitit-easy/href :medbook.ui.router/home)
+           :class ["btn" "btn-lg" "mt-2" "float-right" "mr-2"]}
+          "Cancel"]]))))
 
 
 (defn create-patient-view
