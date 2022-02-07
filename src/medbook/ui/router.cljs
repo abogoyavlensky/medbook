@@ -6,23 +6,33 @@
             [medbook.ui.events :as events]
             [medbook.ui.patients.events :as patients-events]
             [medbook.ui.patients.views.list :as patients-views-list]
-            [medbook.ui.patients.views.create :as patients-views-create]))
+            [medbook.ui.patients.views.create :as patients-views-create]
+            [medbook.ui.patients.views.update :as patients-views-update]))
 
 
 (def ^:private routes
   ["/"
    [""
     {:name ::home
-     :view patients-views-list/patient-list-view
      :page-title "Patients"
+     :view patients-views-list/patient-list-view
      :controllers
      [{:start (fn [& _] (re-frame/dispatch [::patients-events/get-patients]))
        :stop  (fn [& _params] (js/console.log "Leaving home page"))}]}]
    ["patient"
     ["/create"
      {:name ::create-patient
-      :view patients-views-create/create-patient-view
-      :page-title "Create new patient"}]]])
+      :page-title "Create new patient"
+      :view patients-views-create/create-patient-view}]
+    ["/update/:patient-id"
+     {:name ::update-patient
+      :page-title "Edit patient"
+      :view patients-views-update/update-patient-view
+      :parameters {:path {:patient-id integer?}}
+      :controllers [{:identity identity  ; pass the whole match to controller
+                     :start (fn [{{{:keys [patient-id]} :path} :parameters}]
+                              (re-frame/dispatch
+                                [::patients-events/get-patient-detail patient-id]))}]}]]])
 
 
 (def router

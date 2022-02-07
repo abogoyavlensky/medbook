@@ -1,5 +1,6 @@
 (ns medbook.patients.handlers
   (:require [ring.util.response :as ring-response]
+            [slingshot.slingshot :refer [throw+]]
             [medbook.patients.sql :as sql]))
 
 
@@ -23,7 +24,10 @@
   [{{:keys [db]} :context
     {{:keys [patient-id]} :path} :parameters}]
   (let [patient (sql/get-patient-detail! db patient-id)]
-    (ring-response/response patient)))
+    (if (some? patient)
+      (ring-response/response patient)
+      (throw+ {:type :medbook.handler/error
+               :messages ["Patient does not exit."]}))))
 
 
 (defn update-patient!

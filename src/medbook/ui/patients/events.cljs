@@ -38,6 +38,39 @@
 
 
 (re-frame/reg-event-fx
+  ::get-patient-detail
+  (fn [{:keys [db]} [_ patient-id]]
+    {:db (-> db
+           (assoc :patient-detail-loading? true))
+             ; TODO: uncomment!
+             ;(assoc :patients-error nil))
+     :http-xhrio {:method :get
+                  ; TODO: update to shared routes for api!
+                  :uri (str "/api/v1/patients/" patient-id)
+                  :format (ajax/json-request-format)
+                  :response-format (ajax/json-response-format {:keywords? true})
+                  :on-success [::get-patient-detail-success]
+                  :on-failure [::get-patient-detail-error]}}))
+
+
+(re-frame/reg-event-db
+  ::get-patient-detail-success
+  (fn [db [_ patient]]
+    (-> db
+      (assoc :patient-detail-current patient)
+      (assoc :patient-detail-loading? false))))
+
+
+(re-frame/reg-event-db
+  ::get-patient-detail-error
+  (fn [db [_ _]]
+    (-> db
+      (assoc :patients-error (str "Error happened while fetching a patient. "
+                               "Please try to reload the page."))
+      (assoc :patient-detail-loading? false))))
+
+
+(re-frame/reg-event-fx
   ::create-patient
   (fn [{:keys [db]} [_ params]]
     {:db (-> db

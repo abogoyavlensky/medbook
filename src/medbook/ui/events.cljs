@@ -14,7 +14,7 @@
 (re-frame/reg-event-db
   ::navigate
   (fn [db [_ new-match]]
-    (let [old-match   (:current-page db)
+    (let [old-match (:current-page db)
           controllers (reitit-controllers/apply-controllers
                         (:controllers old-match)
                         new-match)]

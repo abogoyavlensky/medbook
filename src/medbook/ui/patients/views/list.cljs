@@ -13,6 +13,15 @@
    "Create patient"])
 
 
+(defn- edit-patient-link
+  [patient-id]
+  [:a
+   {:href (reitit-easy/href
+            :medbook.ui.router/update-patient
+            {:patient-id patient-id})}
+   "Edit"])
+
+
 (defn- render-patient-item
   [active-patient-id patient]
   (let [tr-class (cond-> []
@@ -26,7 +35,8 @@
      [:td (:gender patient)]
      [:td (:birthday patient)]
      [:td (:address patient)]
-     [:td (:insurance-number patient)]]))
+     [:td (:insurance-number patient)]
+     [:td [edit-patient-link (:id patient)]]]))
 
 
 (defn- empty-patients
@@ -55,7 +65,8 @@
           [:th "Gender"]
           [:th "Birthday"]
           [:th "Address"]
-          [:th "Insurance number"]]]
+          [:th "Insurance number"]
+          [:th "Action"]]]
         [:tbody
          (map (partial render-patient-item nil) patients)]]]
       [empty-patients])))
