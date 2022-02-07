@@ -24,3 +24,9 @@
   ::patient-form-errors
   (fn [db]
     (:patient-form-errors db)))
+
+
+(re-frame/reg-sub
+  ::patient-new
+  (fn [db]
+    (:patient-new db)))

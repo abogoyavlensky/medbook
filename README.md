@@ -50,6 +50,8 @@ FIXME: listing of options this app accepts.
 
 ## TODO
 - [ ] TailwindCSS
+- [ ] Validation form field on client side.
+- [ ] Pagination using cursor.
 
 ## License
 

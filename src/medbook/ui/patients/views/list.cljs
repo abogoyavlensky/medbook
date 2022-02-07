@@ -1,7 +1,8 @@
 (ns medbook.ui.patients.views.list
   (:require [re-frame.core :as re-frame]
             [reitit.frontend.easy :as reitit-easy]
-            [medbook.ui.patients.subs :as subs]))
+            [medbook.ui.patients.subs :as subs]
+            [medbook.ui.patients.events :as events]))
 
 
 (defn- create-patient-btn
@@ -38,20 +39,26 @@
 
 (defn- render-patients-table
   [patients]
-  (if (seq patients)
-    [:div
-     [:table
-      {:class ["table"]}
-      [:thead
-       [:tr
-        [:th "Full name"]
-        [:th "Gender"]
-        [:th "Birthday"]
-        [:th "Address"]
-        [:th "Insurance number"]]]
-      [:tbody
-       (map (partial render-patient-item nil) patients)]]]
-    [empty-patients]))
+  (let [patient-new @(re-frame/subscribe [::subs/patient-new])]
+    (if (seq patients)
+      [:div
+       (when (some? patient-new)
+         [:div.toast.toast-success
+          [:button.btn.btn-clear.float-right
+           {:on-click #(re-frame/dispatch [::events/clear-patient-new])}]
+          [:p (str "New patient \"" (:full-name patient-new) "\" has been created successfully!")]])
+       [:table
+        {:class ["table"]}
+        [:thead
+         [:tr
+          [:th "Full name"]
+          [:th "Gender"]
+          [:th "Birthday"]
+          [:th "Address"]
+          [:th "Insurance number"]]]
+        [:tbody
+         (map (partial render-patient-item nil) patients)]]]
+      [empty-patients])))
 
 
 (defn patient-list-view

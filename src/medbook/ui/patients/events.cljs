@@ -69,3 +69,10 @@
     (-> db
       (assoc :patient-form-submitting? false)
       (assoc :patient-form-errors messages))))
+
+
+(re-frame/reg-event-db
+  ::clear-patient-new
+  (fn [db [_ _]]
+    (-> db
+      (assoc :patient-new nil))))
