@@ -39,51 +39,58 @@
      (map error-hint errors)]))
 
 
+(defn- form-error
+  [error]
+  [:div
+   {:class ["toast" "toast-error" "col-12"]}
+   error])
+
+
 (defn- patient-form
   []
   (let [patient-form-submitting? @(re-frame/subscribe [::subs/patient-form-submitting?])
-        params (reagent/atom {:full-name nil
-                              :gender nil
-                              :birthday nil
-                              :address nil
-                              :insurance-number nil})]
-        ;errors (re-frame/subscribe [::subs/patient-form-errors])]
+        params (reagent/atom {:full-name ""
+                              :gender ""
+                              :birthday ""
+                              :address ""
+                              :insurance-number ""})]
+        ;errors @(re-frame/subscribe [::subs/patient-form-errors])]
     (fn []
       [:div
        {:class ["column" "col-8"]}
-       ;(when (seq (:form @errors))
-       ;  (map form-error (:form @errors))}
+       ;(when (seq (:form errors))
+       ;  (mapv form-error (:form errors)))
        [input-field {:params params
                      :field :full-name
                      :label "Full name"
                      :field-type "text"
                      :submitting? patient-form-submitting?}]
-                     ;:errors (:title @errors)}]
+                     ;:errors (:title errors)}]
        [input-field {:params params
                      :field :gender
                      :label "Gender"
                      :field-type "number"
                      :submitting? patient-form-submitting?}]
-                     ;:errors (:description @errors)}]
+                     ;:errors (:description errors)}]
        [input-field {:params params
                      :field :birthday
                      :label "Birthday"
                      :field-type "date"
                      :submitting? patient-form-submitting?}]
-                     ;:errors (:applicant @errors)}]
+                     ;:errors (:applicant errors)}]
        [input-field {:params params
                      :field :address
                      :label "Address"
                      :field-type "text"
                      :submitting? patient-form-submitting?}]
-                     ;:errors (:executor @errors)}]
+                     ;:errors (:executor errors)}]
        [input-field {:params params
                      :field :insurance-number
                      :label "Insurance number"
                      :field-type "text"
                      :submitting? patient-form-submitting?
                      :pattern "^[\\d+]{16}$"}]
-                     ;:errors (:completed-at @errors)}]
+                     ;:errors (:completed-at errors)}]
        [:button
         {:type :button
          :disabled (true? patient-form-submitting?)

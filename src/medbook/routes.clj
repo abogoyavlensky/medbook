@@ -1,23 +1,44 @@
 (ns medbook.routes
   (:require [clojure.spec.alpha :as s]
+            [clojure.string :as str]
             [spec-tools.core :as st]
             [medbook.patients.handlers :as patients]))
+
+
+(def ^:private MALE-GENDER 0)
+(def ^:private FEMALE-GENDER 1)
+
+
+(defn- gender->db
+  [_ value]
+  (try
+    (Integer. value)
+    (catch NumberFormatException _
+      ; will be caught by spec
+      nil)))
+
+
+(s/def ::not-empty-string
+  (fn [value]
+    (and
+      (string? value)
+      (boolean (seq (str/trim value))))))
 
 
 (def ^:private INSURANCE-NUMBER-LENGTH 16)
 
 (s/def ::id pos-int?)
-(s/def ::full-name string?)
+(s/def ::full-name ::not-empty-string)
 
 
 (s/def ::gender
   (st/spec
-    {:spec #{0 1}
-     :decode/json #(if (string? %2) (Integer. %2) %2)}))
+    {:spec #{MALE-GENDER FEMALE-GENDER}
+     :decode/json gender->db}))
 
 
 (s/def ::birthday inst?)
-(s/def ::address string?)
+(s/def ::address ::not-empty-string)
 
 
 (defn- insurance-number-length-valid?
@@ -32,7 +53,7 @@
 
 (s/def ::insurance-number
   (s/and
-    string?
+    ::not-empty-string
     insurance-number-length-valid?
     insurance-number-length-digits?))
 

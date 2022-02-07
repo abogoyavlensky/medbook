@@ -1,5 +1,6 @@
 (ns medbook.patients.handlers
   (:require [ring.util.response :as ring-response]
+            [slingshot.slingshot :refer [throw+]]
             [medbook.patients.sql :as sql]))
 
 
@@ -14,6 +15,9 @@
   "Create patient to db by given params."
   [{{:keys [db]} :context
     {:keys [body]} :parameters}]
+  ;(throw (Exception. "My random exception!"))
+  ;(throw+ {:type :medbook.handler/error
+  ;         :data [{:message "My random exception!"}]}]
   (let [created-patient (sql/create-patient! db body)]
     (ring-response/response created-patient)))
 

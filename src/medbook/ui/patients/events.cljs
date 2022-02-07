@@ -65,7 +65,7 @@
 
 (re-frame/reg-event-db
   ::create-patient-error
-  (fn [db [_ {{:keys [errors]} :response}]]
+  (fn [db [_ {{:keys [messages]} :response}]]
     (-> db
       (assoc :patient-form-submitting? false)
-      (assoc :patient-form-errors errors))))
+      (assoc :patient-form-errors messages))))
