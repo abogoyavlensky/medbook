@@ -1,6 +1,7 @@
-(ns medbook.ui.patients.views.common
+(ns medbook.ui.patients.views.form
   (:require [re-frame.core :as re-frame]
             [reagent.core :as reagent]
+            [reitit.frontend.easy :as reitit-easy]
             [medbook.ui.patients.subs :as subs]
             [medbook.ui.patients.events :as events]))
 
@@ -122,3 +123,42 @@
           {:on-click #(re-frame/dispatch [::events/clear-patient-form])
            :class ["btn" "btn-lg" "mt-2" "float-right" "mr-2"]}
           "Cancel"]]))))
+
+
+(defn create-patient-view
+  "Render creating patient page."
+  [{:keys [current-route]}]
+  (let [page-title (get-in current-route [:data :page-title])]
+    [:div
+     [:h2 page-title]
+     [:a
+      {:href (reitit-easy/href :medbook.ui.router/home)}
+      "<- Back to list"]
+     [:div
+      {:class ["columns"]}
+      (let [patient-init-data {:full-name ""
+                               :gender "0"
+                               :birthday ""
+                               :address ""
+                               :insurance-number ""}]
+        [patient-form
+         {:patient-init-data patient-init-data
+          :submit-event ::events/create-patient}])]]))
+
+
+(defn update-patient-view
+  "Render updating patient page."
+  [{:keys [current-route]}]
+  (let [page-title (get-in current-route [:data :page-title])]
+    [:div
+     [:h2 page-title]
+     [:a
+      {:href (reitit-easy/href :medbook.ui.router/home)}
+      "<- Back to list"]
+     [:div
+      {:class ["columns"]}
+      (let [patient-init-data @(re-frame/subscribe [::subs/patient-detail-current])]
+        ; TODO: need to pre-fill update form with patient by id!
+        [patient-form
+         {:patient-init-data patient-init-data
+          :submit-event ::events/update-patient}])]]))

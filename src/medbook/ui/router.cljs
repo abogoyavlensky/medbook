@@ -6,8 +6,7 @@
             [medbook.ui.events :as events]
             [medbook.ui.patients.events :as patients-events]
             [medbook.ui.patients.views.list :as patients-views-list]
-            [medbook.ui.patients.views.create :as patients-views-create]
-            [medbook.ui.patients.views.update :as patients-views-update]))
+            [medbook.ui.patients.views.form :as patients-views-form]))
 
 
 (def ^:private routes
@@ -23,11 +22,11 @@
     ["/create"
      {:name ::create-patient
       :page-title "Create new patient"
-      :view patients-views-create/create-patient-view}]
+      :view patients-views-form/create-patient-view}]
     ["/update/:patient-id"
      {:name ::update-patient
       :page-title "Edit patient"
-      :view patients-views-update/update-patient-view
+      :view patients-views-form/update-patient-view
       :parameters {:path {:patient-id integer?}}
       :controllers [{:identity identity  ; pass the whole match to controller
                      :start (fn [{{{:keys [patient-id]} :path} :parameters}]
