@@ -49,9 +49,10 @@ FIXME: listing of options this app accepts.
 ### Might be Useful
 
 ## TODO
-- [ ] TailwindCSS
+- [ ] TailwindCSS.
 - [ ] Validation form field on client side.
-- [ ] Pagination using cursor.
+- [ ] Cursor pagination.
+- [ ] Form library for re-frame.
 
 ## License
 

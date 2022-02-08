@@ -39,6 +39,35 @@
      (map error-hint field-errors)]))
 
 
+(defn- radio-on-change
+  [params field value data]
+  (when (-> data .-target .-checked)
+    (swap! params assoc field value)))
+
+
+(def ^:private GENDER-VALUE-MALE "0")
+(def ^:private GENDER-VALUE-FEMALE "1")
+
+
+(defn- radio-input
+  [label value field params]
+  [:label.form-radio
+   [:input (cond-> {:type "radio"
+                    :name (name field)
+                    :value value
+                    :checked (= value (get @params field))
+                    :on-change (partial radio-on-change params field value)})]
+   [:i.form-icon] label])
+
+
+(defn- gender-input
+  [params]
+  [:div.form-group
+   [:label.form-label "Gender"]
+   [radio-input "Male" GENDER-VALUE-MALE :gender params]
+   [radio-input "Female" GENDER-VALUE-FEMALE :gender params]])
+
+
 (defn- form-error
   [error]
   [:div
@@ -63,12 +92,7 @@
                        :field-type "text"
                        :submitting? patient-form-submitting?
                        :errors errors}]
-         [input-field {:params params
-                       :field :gender
-                       :label "Gender"
-                       :field-type "number"
-                       :submitting? patient-form-submitting?
-                       :errors errors}]
+         [gender-input params]
          [input-field {:params params
                        :field :birthday
                        :label "Birthday"

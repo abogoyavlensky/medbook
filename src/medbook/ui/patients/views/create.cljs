@@ -16,7 +16,7 @@
      [:div
       {:class ["columns"]}
       (let [patient-init-data {:full-name ""
-                               :gender ""
+                               :gender "0"
                                :birthday ""
                                :address ""
                                :insurance-number ""}]
