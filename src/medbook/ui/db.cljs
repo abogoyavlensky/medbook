@@ -13,5 +13,16 @@
 
    :patient-form-errors nil
    :patient-new nil
-   :patient-detail-current nil
-   :patient-detail-loading? false})
+   :patient-detail-current {:full-name ""
+                            :gender "0"
+                            :birthday ""
+                            :address ""
+                            :insurance-number ""}
+   :patient-detail-loading? false
+
+   :patient-form {:full-name ""
+                  ; TODO: import const var!
+                  :gender 0
+                  :birthday ""
+                  :address ""
+                  :insurance-number ""}})

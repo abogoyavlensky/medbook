@@ -15,7 +15,7 @@
 
 
 (defn- input-field
-  [{:keys [params field label field-type submitting? errors pattern]}]
+  [{:keys [field label field-type submitting? errors pattern]}]
   (let [field-name-str (name field)
         form-classes ["form-group"]
         field-errors (get errors field)
@@ -32,8 +32,9 @@
       (cond-> {:id field-name-str
                :name field-name-str
                :type field-type
-               :value (get @params field)
-               :on-change #(swap! params assoc field (-> % .-target .-value))
+               :value @(re-frame/subscribe [::subs/patient-form-field field])
+               :on-change #(re-frame/dispatch
+                             [::events/update-patient-form-field field (-> % .-target .-value)])
                :disabled (true? submitting?)
                :class ["form-input"]}
         (some? pattern) (assoc :pattern pattern))]
@@ -41,32 +42,33 @@
 
 
 (defn- radio-on-change
-  [params field value data]
+  [field value data]
   (when (-> data .-target .-checked)
-    (swap! params assoc field value)))
+    (re-frame/dispatch
+      [::events/update-patient-form-field field value])))
 
 
-(def ^:private GENDER-VALUE-MALE "0")
-(def ^:private GENDER-VALUE-FEMALE "1")
+(def ^:private GENDER-VALUE-MALE 0)
+(def ^:private GENDER-VALUE-FEMALE 1)
 
 
 (defn- radio-input
-  [label value field params]
+  [label value field]
   [:label.form-radio
    [:input (cond-> {:type "radio"
                     :name (name field)
                     :value value
-                    :checked (= value (get @params field))
-                    :on-change (partial radio-on-change params field value)})]
+                    :checked (= value @(re-frame/subscribe [::subs/patient-form-field field]))
+                    :on-change (partial radio-on-change field value)})]
    [:i.form-icon] label])
 
 
 (defn- gender-input
-  [params]
+  []
   [:div.form-group
    [:label.form-label "Gender"]
-   [radio-input "Male" GENDER-VALUE-MALE :gender params]
-   [radio-input "Female" GENDER-VALUE-FEMALE :gender params]])
+   [radio-input "Male" GENDER-VALUE-MALE :gender]
+   [radio-input "Female" GENDER-VALUE-FEMALE :gender]])
 
 
 (defn- form-error
@@ -79,7 +81,18 @@
 (defn patient-form
   "Render patient form for create or update view."
   [{:keys [patient-init-data submit-event]}]
-  (let [params (reagent/atom patient-init-data)]
+  (let [];{:keys [full-name
+        ;        gender
+        ;        birthday
+        ;        address
+        ;        insurance-number]} @(re-frame/subscribe [::subs/patient-detail-current])
+        ;data {:full-name full-name
+        ;      :gender gender
+        ;      :birthday birthday
+        ;      :address address
+        ;      :insurance-number insurance-number}
+        ;params (reagent/atom {})]
+        ;params patient-init-data]
     (fn []
       (let [errors @(re-frame/subscribe [::subs/patient-form-errors])
             patient-form-submitting? @(re-frame/subscribe [::subs/patient-form-submitting?])]
@@ -87,27 +100,23 @@
          {:class ["column" "col-8"]}
          (when (seq (:form errors))
            (map form-error (:form errors)))
-         [input-field {:params params
-                       :field :full-name
+         [input-field {:field :full-name
                        :label "Full name"
                        :field-type "text"
                        :submitting? patient-form-submitting?
                        :errors errors}]
-         [gender-input params]
-         [input-field {:params params
-                       :field :birthday
+         [gender-input]
+         [input-field {:field :birthday
                        :label "Birthday"
                        :field-type "date"
                        :submitting? patient-form-submitting?
                        :errors errors}]
-         [input-field {:params params
-                       :field :address
+         [input-field {:field :address
                        :label "Address"
                        :field-type "text"
                        :submitting? patient-form-submitting?
                        :errors errors}]
-         [input-field {:params params
-                       :field :insurance-number
+         [input-field {:field :insurance-number
                        :label "Insurance number"
                        :field-type "text"
                        :submitting? patient-form-submitting?
@@ -116,11 +125,14 @@
          [:button
           {:type :button
            :disabled (true? patient-form-submitting?)
-           :on-click #(re-frame/dispatch [submit-event @params])
+           ;:on-click #(re-frame/dispatch [submit-event @params])
+           ; TODO: patient id!
+           :on-click #(re-frame/dispatch [submit-event])
            :class ["btn" "btn-primary" "btn-lg" "mt-2" "float-right"]}
           "Save"]
          [:a
-          {:on-click #(re-frame/dispatch [::events/clear-patient-form])
+          ;{:on-click #(re-frame/dispatch [::events/clear-patient-form])}
+          {:href (reitit-easy/href :medbook.ui.router/home)
            :class ["btn" "btn-lg" "mt-2" "float-right" "mr-2"]}
           "Cancel"]]))))
 
@@ -136,13 +148,9 @@
       "<- Back to list"]
      [:div
       {:class ["columns"]}
-      (let [patient-init-data {:full-name ""
-                               :gender "0"
-                               :birthday ""
-                               :address ""
-                               :insurance-number ""}]
+      (let [];patient-init-data (re-frame/subscribe [::subs/patient-detail-current])]
         [patient-form
-         {:patient-init-data patient-init-data
+         {;:patient-init-data patient-init-data
           :submit-event ::events/create-patient}])]]))
 
 
@@ -157,8 +165,8 @@
       "<- Back to list"]
      [:div
       {:class ["columns"]}
-      (let [patient-init-data @(re-frame/subscribe [::subs/patient-detail-current])]
+      (let [];patient-init-data (re-frame/subscribe [::subs/patient-detail-current])]
         ; TODO: need to pre-fill update form with patient by id!
         [patient-form
-         {:patient-init-data patient-init-data
+         {;:patient-init-data patient-init-data
           :submit-event ::events/update-patient}])]]))

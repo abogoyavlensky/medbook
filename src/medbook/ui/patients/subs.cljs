@@ -35,4 +35,16 @@
 (re-frame/reg-sub
   ::patient-detail-current
   (fn [db]
-    (::patient-detail-current db)))
+    (:patient-detail-current db)))
+
+
+(re-frame/reg-sub
+  ::patient-form
+  (fn [db]
+    (:patient-form db)))
+
+
+(re-frame/reg-sub
+  ::patient-form-field
+  (fn [db [_ field]]
+    (get-in db [:patient-form field])))

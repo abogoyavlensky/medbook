@@ -2,7 +2,9 @@
   (:require [clojure.spec.alpha :as s]
             [clojure.string :as str]
             [spec-tools.core :as st]
-            [medbook.patients.handlers :as patients]))
+            [medbook.patients.handlers :as patients])
+  (:import [java.time.format DateTimeFormatter DateTimeParseException]
+           [java.time LocalDate]))
 
 
 (def ^:private MALE-GENDER 0)
@@ -37,7 +39,19 @@
      :decode/json gender->db}))
 
 
-(s/def ::birthday inst?)
+(def ^:private date-format
+  (DateTimeFormatter/ofPattern "yyyy-MM-dd"))
+
+
+(defn- valid-date?
+  [date-str]
+  (try
+    (LocalDate/parse date-str date-format)
+    (catch DateTimeParseException _
+      false)))
+
+(s/def ::birthday (s/and string? valid-date?))
+
 (s/def ::address ::not-empty-string)
 
 
