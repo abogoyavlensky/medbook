@@ -116,12 +116,15 @@
 (re-frame/reg-event-db
   ::clear-patient-form
   (fn [db [_ _]]
-    (assoc db :patient-form {:full-name ""
-                             ; TODO: import const var!
-                             :gender 0
-                             :birthday ""
-                             :address ""
-                             :insurance-number ""})))
+    (-> db
+      (assoc
+        :patient-form {:full-name ""
+                       ; TODO: import const var!
+                       :gender 0
+                       :birthday ""
+                       :address ""
+                       :insurance-number ""}
+        :patient-form-errors nil))))
 
 
 ;(re-frame/reg-event-fx
