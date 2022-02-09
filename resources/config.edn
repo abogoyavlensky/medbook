@@ -1,9 +1,12 @@
 {:medbook.server/server {:options {:join? false
-                                   :port 8000}
+                                   :port #profile {:default 8000
+                                                   :test 8001}}
                          :handler #ig/ref :medbook.handler/handler}
  :medbook.db/db {:options
                  {:jdbc-url #profile {:dev "jdbc:postgresql://localhost:5432/medbook?user=medbook&password=medbook"
+                                      :test "jdbc:postgresql://localhost:5555/medbook?user=medbook&password=medbook"
                                       :prod #env MEDBOOK_DB_URL}}}
  :medbook.handler/handler {:options {:wrap-reload? #profile {:dev true
+                                                             :test false
                                                              :prod false}}
                            :db #ig/ref :medbook.db/db}}

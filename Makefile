@@ -22,12 +22,12 @@ help:
 .PHONY: deps  # Install deps
 deps:
 	@$(INFO) "Install deps..."
-	@clojure -P -X:dev
+	@clojure -P -X:dev:test:migrations
 
 .PHONY: repl  # Run repl
 repl:
 	@$(INFO) "Run repl..."
-	@clj -M:dev
+	@clj -M:dev:test:migrations
 
 .PHONY: fmt-check  # Checking code formatting
 fmt-check:

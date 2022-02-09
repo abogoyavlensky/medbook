@@ -8,7 +8,7 @@
 
 (def PROFILES
   "Available profiles for app."
-  #{:dev :prod})
+  #{:dev :test :prod})
 
 
 (def BUILD-ID-DEV
