@@ -145,8 +145,8 @@
   ::update-patient
   (fn [{:keys [db]} _]
     {:db (-> db
-             (assoc :patient-form-submitting? true)
-             (assoc :patient-form-errors nil))
+           (assoc :patient-form-submitting? true)
+           (assoc :patient-form-errors nil))
      :http-xhrio {:method :put
                   ; TODO: update to shared routes for api!
                   :uri (str "/api/v1/patients/" (get-in db [:patient-form :id]))
@@ -162,9 +162,9 @@
   ::update-patient-success
   (fn [{:keys [db]} [_ _response]]
     {:db (-> db
-             (assoc :patient-form-submitting? false)
-             (assoc :patient-form-errors nil)
-             (assoc :patient-form {}))
+           (assoc :patient-form-submitting? false)
+           (assoc :patient-form-errors nil)
+           (assoc :patient-form {}))
      :fx/push-state {:route :medbook.ui.router/home}}))
 
 
@@ -172,5 +172,38 @@
   ::update-patient-error
   (fn [db [_ {{:keys [messages]} :response}]]
     (-> db
-        (assoc :patient-form-submitting? false)
-        (assoc :patient-form-errors messages))))
+      (assoc :patient-form-submitting? false)
+      (assoc :patient-form-errors messages))))
+
+
+(re-frame/reg-event-fx
+  ::delete-patient
+  (fn [{:keys [db]} [_ patient-id]]
+    {:db (-> db
+           (assoc :patient-delete-submitting? true)
+           (assoc :patient-delete-errors nil))
+     :http-xhrio {:method :delete
+                  ; TODO: update to shared routes for api!
+                  :uri (str "/api/v1/patients/" patient-id)
+                  :format (ajax/json-request-format)
+                  :response-format (ajax/json-response-format {:keywords? true})
+                  :on-success [::delete-patient-success]
+                  :on-failure [::delete-patient-error]}}))
+
+
+(re-frame/reg-event-fx
+  ::delete-patient-success
+  (fn [{:keys [db]} [_ _response]]
+    {:db (-> db
+           (assoc :patient-delete-submitting? false)
+           (assoc :patient-delete-errors nil)
+           (assoc :info-message "Patient has been deleted successfully."))
+     :fx/push-state {:route :medbook.ui.router/home}}))
+
+
+(re-frame/reg-event-db
+  ::delete-patient-error
+  (fn [db [_ {{:keys [messages]} :response}]]
+    (-> db
+      (assoc :patient-delete-submitting? false)
+      (assoc :patient-delete-errors messages))))

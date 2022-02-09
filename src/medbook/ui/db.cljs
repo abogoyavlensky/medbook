@@ -25,4 +25,9 @@
                   :gender 0
                   :birthday ""
                   :address ""
-                  :insurance-number ""}})
+                  :insurance-number ""}
+
+   :patient-delete-submitting? false
+   :patient-delete-errors nil
+
+   :info-message nil})

@@ -80,7 +80,7 @@
 
 (defn patient-form
   "Render patient form for create or update view."
-  [{:keys [patient-init-data submit-event]}]
+  [{:keys [delete-btn? submit-event]}]
   (let [];{:keys [full-name
         ;        gender
         ;        birthday
@@ -134,7 +134,15 @@
           ;{:on-click #(re-frame/dispatch [::events/clear-patient-form])}
           {:href (reitit-easy/href :medbook.ui.router/home)
            :class ["btn" "btn-lg" "mt-2" "float-right" "mr-2"]}
-          "Cancel"]]))))
+          "Cancel"]
+         (when (true? delete-btn?)
+           (let [patient-id @(re-frame/subscribe [::subs/patient-form-field :id])]
+             [:button
+              {:type :button
+               :disabled (true? patient-form-submitting?)
+               :on-click #(re-frame/dispatch [::events/delete-patient patient-id])
+               :class ["btn" "btn-error" "btn-lg" "mt-2" "float-left"]}
+              "Delete"]))]))))
 
 
 (defn create-patient-view
@@ -168,5 +176,5 @@
       (let [];patient-init-data (re-frame/subscribe [::subs/patient-detail-current])]
         ; TODO: need to pre-fill update form with patient by id!
         [patient-form
-         {;:patient-init-data patient-init-data
+         {:delete-btn? true
           :submit-event ::events/update-patient}])]]))

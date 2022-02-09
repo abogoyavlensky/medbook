@@ -50,6 +50,7 @@
     (catch DateTimeParseException _
       false)))
 
+
 (s/def ::birthday (s/and string? valid-date?))
 
 (s/def ::address ::not-empty-string)
@@ -122,4 +123,8 @@
                       :put {:handler patients/update-patient!
                             :parameters {:path {:patient-id ::id}
                                          :body ::patient-update}
-                            :responses {200 {:body ::patient-with-id}}}}]]]])
+                            :responses {200 {:body ::patient-with-id}}}
+                      :delete {:handler patients/delete-patient!
+                               :parameters {:path {:patient-id ::id}}
+                               :responses {204 {:body nil?}}}}]]]])
+

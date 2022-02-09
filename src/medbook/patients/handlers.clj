@@ -10,6 +10,7 @@
   [date-inst]
   (format "%1$tY-%1$tm-%1$td" date-inst))
 
+
 (defn- string->date
   [date-str]
   (instant/read-instant-date date-str))
@@ -34,7 +35,7 @@
   "Return patients data from db."
   [{{:keys [db]} :context}]
   (let [patients (->> (sql/get-patient-list! db)
-                      (s/unform ::patient-list->response))]
+                   (s/unform ::patient-list->response))]
     (ring-response/response patients)))
 
 
@@ -43,9 +44,9 @@
   [{{:keys [db]} :context
     {:keys [body]} :parameters}]
   (let [created-patient (->> body
-                            (s/conform ::patient->response)
-                            (sql/create-patient! db)
-                            (s/unform ::patient->response))]
+                          (s/conform ::patient->response)
+                          (sql/create-patient! db)
+                          (s/unform ::patient->response))]
     (ring-response/response created-patient)))
 
 
@@ -54,7 +55,7 @@
   [{{:keys [db]} :context
     {{:keys [patient-id]} :path} :parameters}]
   (let [patient (->> (sql/get-patient-detail! db patient-id)
-                     (s/unform ::patient->response))]
+                  (s/unform ::patient->response))]
     (if (some? patient)
       (ring-response/response patient)
       (throw+ {:type :medbook.handler/error
@@ -67,10 +68,26 @@
     {:keys [body]
      {:keys [patient-id]} :path} :parameters}]
   (let [patient (->> body
-                     (s/conform ::patient->response)
-                     (sql/update-patient! db patient-id)
-                     (s/unform ::patient->response))]
+                  (s/conform ::patient->response)
+                  (sql/update-patient! db patient-id)
+                  (s/unform ::patient->response))]
     (ring-response/response patient)))
+
+
+(defn deletion-success-response
+  "Return 204 response status without body"
+  []
+  {:status  204
+   :headers {}
+   :body    nil})
+
+
+(defn delete-patient!
+  "Delete patient from db by given id."
+  [{{:keys [db]} :context
+    {{:keys [patient-id]} :path} :parameters}]
+  (sql/delete-patient! db patient-id)
+  (deletion-success-response))
 
 
 (comment

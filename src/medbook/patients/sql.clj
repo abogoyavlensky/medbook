@@ -65,6 +65,15 @@
                        :messages {:insurance-number [unique-err-msg]}})))
           (throw e))))))
 
+
+(defn delete-patient!
+  "Delete patient from db."
+  [db patient-id]
+  (db-util/exec-one! db
+    {:delete-from :patient
+     :where [:= :id patient-id]}))
+
+
 ; Create patient
 (comment
   (require '[integrant.repl.state :as ig-state])
