@@ -3,7 +3,6 @@
             [clojure.string :as str]
             [integrant.core :as ig]
             [reitit.core :as reitit]
-            [integrant.repl.state :as state]
             [automigrate.core :as automigrate]
             [ring.mock.request :as mock]
             [muuntaja.core :as m]
@@ -12,12 +11,18 @@
             [medbook.handler :as handler]))
 
 
-(def ^:dynamic *test-system* nil)
+(def ^:dynamic *test-system*
+  "Testing system."
+  nil)
 
-(def TEST-URL-BASE (str "http://localhost:8001"))
+
+(def TEST-URL-BASE
+  "Basic url for UI testing."
+  (str "http://localhost:8001"))
 
 
 (defn with-system
+  "Run the whole system before tests."
   ([]
    (with-system {}))
   ([{:keys [exclude include] :or {exclude [] include {}}}]
@@ -90,6 +95,7 @@
 
 
 (defn rand-insurance-number
+  "Generate random insurance number string."
   []
   (->> (map (fn [_] (rand-int 10)) (range 16))
     (map str)
@@ -146,6 +152,7 @@
 
 
 (defn api-request!
+  "Make ring request mock and perform request to api handler from the testing system."
   ([http-method route-name]
    (api-request! http-method route-name {}))
   ([http-method route-name {:keys [path query body]}]
@@ -159,6 +166,7 @@
 
 
 (defn patient->output
+  "Conform patient from db to api input format."
   [patient]
   (update patient :birthday #(format "%1$tY-%1$tm-%1$td" %)))
 
@@ -169,5 +177,4 @@
   (require '[integrant.repl.state :as state])
 
   (let [db (get state/system :medbook.db/db)]
-    (pprint/print-table (:members (r/reflect db)))
-    (pool. db)))
+    (pprint/print-table (:members (r/reflect db)))))

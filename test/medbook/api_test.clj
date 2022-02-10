@@ -248,7 +248,7 @@
     (is (nil? (test-util/get-patient-by-insurance db (:insurance-number patient))))))
 
 
-(deftest test-patient-delete-ok
+(deftest test-patient-delete-does-not-exist-err
   (bond/with-stub! [[log/log* (constantly nil)]]
     (let [response (test-util/api-request! :delete
                      :medbook.routes/patient-detail

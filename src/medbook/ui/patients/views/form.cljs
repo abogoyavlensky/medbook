@@ -1,6 +1,5 @@
 (ns medbook.ui.patients.views.form
   (:require [re-frame.core :as re-frame]
-            [reagent.core :as reagent]
             [reitit.frontend.easy :as reitit-easy]
             [medbook.ui.patients.subs :as subs]
             [medbook.ui.patients.events :as events]))
@@ -81,68 +80,54 @@
 (defn patient-form
   "Render patient form for create or update view."
   [{:keys [delete-btn? submit-event]}]
-  (let [];{:keys [full-name
-        ;        gender
-        ;        birthday
-        ;        address
-        ;        insurance-number]} @(re-frame/subscribe [::subs/patient-detail-current])
-        ;data {:full-name full-name
-        ;      :gender gender
-        ;      :birthday birthday
-        ;      :address address
-        ;      :insurance-number insurance-number}
-        ;params (reagent/atom {})]
-        ;params patient-init-data]
-    (fn []
-      (let [errors @(re-frame/subscribe [::subs/patient-form-errors])
-            patient-form-submitting? @(re-frame/subscribe [::subs/patient-form-submitting?])]
-        [:div
-         {:class ["column" "col-8"]}
-         (when (seq (:form errors))
-           (map form-error (:form errors)))
-         [input-field {:field :full-name
-                       :label "Full name"
-                       :field-type "text"
-                       :submitting? patient-form-submitting?
-                       :errors errors}]
-         [gender-input]
-         [input-field {:field :birthday
-                       :label "Birthday"
-                       :field-type "date"
-                       :submitting? patient-form-submitting?
-                       :errors errors}]
-         [input-field {:field :address
-                       :label "Address"
-                       :field-type "text"
-                       :submitting? patient-form-submitting?
-                       :errors errors}]
-         [input-field {:field :insurance-number
-                       :label "Insurance number"
-                       :field-type "text"
-                       :submitting? patient-form-submitting?
-                       :pattern "^[\\d+]{16}$"
-                       :errors errors}]
-         [:button
-          {:type :button
-           :disabled (true? patient-form-submitting?)
-           ;:on-click #(re-frame/dispatch [submit-event @params])
-           ; TODO: patient id!
-           :on-click #(re-frame/dispatch [submit-event])
-           :class ["btn" "btn-primary" "btn-lg" "mt-2" "float-right"]}
-          "Save"]
-         [:a
-          ;{:on-click #(re-frame/dispatch [::events/clear-patient-form])}
-          {:href (reitit-easy/href :medbook.ui.router/home)
-           :class ["btn" "btn-lg" "mt-2" "float-right" "mr-2"]}
-          "Cancel"]
-         (when (true? delete-btn?)
-           (let [patient-id @(re-frame/subscribe [::subs/patient-form-field :id])]
-             [:button
-              {:type :button
-               :disabled (true? patient-form-submitting?)
-               :on-click #(re-frame/dispatch [::events/delete-patient patient-id])
-               :class ["btn" "btn-error" "btn-lg" "mt-2" "float-left"]}
-              "Delete"]))]))))
+  (fn []
+    (let [errors @(re-frame/subscribe [::subs/patient-form-errors])
+          patient-form-submitting? @(re-frame/subscribe [::subs/patient-form-submitting?])]
+      [:div
+       {:class ["column" "col-8"]}
+       (when (seq (:form errors))
+         (map form-error (:form errors)))
+       [input-field {:field :full-name
+                     :label "Full name"
+                     :field-type "text"
+                     :submitting? patient-form-submitting?
+                     :errors errors}]
+       [gender-input]
+       [input-field {:field :birthday
+                     :label "Birthday"
+                     :field-type "date"
+                     :submitting? patient-form-submitting?
+                     :errors errors}]
+       [input-field {:field :address
+                     :label "Address"
+                     :field-type "text"
+                     :submitting? patient-form-submitting?
+                     :errors errors}]
+       [input-field {:field :insurance-number
+                     :label "Insurance number"
+                     :field-type "text"
+                     :submitting? patient-form-submitting?
+                     :pattern "^[\\d+]{16}$"
+                     :errors errors}]
+       [:button
+        {:type :button
+         :disabled (true? patient-form-submitting?)
+         ; TODO: patient id!
+         :on-click #(re-frame/dispatch [submit-event])
+         :class ["btn" "btn-primary" "btn-lg" "mt-2" "float-right"]}
+        "Save"]
+       [:a
+        {:href (reitit-easy/href :medbook.ui.router/home)
+         :class ["btn" "btn-lg" "mt-2" "float-right" "mr-2"]}
+        "Cancel"]
+       (when (true? delete-btn?)
+         (let [patient-id @(re-frame/subscribe [::subs/patient-form-field :id])]
+           [:button
+            {:type :button
+             :disabled (true? patient-form-submitting?)
+             :on-click #(re-frame/dispatch [::events/delete-patient patient-id])
+             :class ["btn" "btn-error" "btn-lg" "mt-2" "float-left"]}
+            "Delete"]))])))
 
 
 (defn create-patient-view
@@ -156,10 +141,8 @@
       "<- Back to list"]
      [:div
       {:class ["columns"]}
-      (let [];patient-init-data (re-frame/subscribe [::subs/patient-detail-current])]
-        [patient-form
-         {;:patient-init-data patient-init-data
-          :submit-event ::events/create-patient}])]]))
+      [patient-form
+       {:submit-event ::events/create-patient}]]]))
 
 
 (defn update-patient-view
@@ -173,8 +156,7 @@
       "<- Back to list"]
      [:div
       {:class ["columns"]}
-      (let [];patient-init-data (re-frame/subscribe [::subs/patient-detail-current])]
-        ; TODO: need to pre-fill update form with patient by id!
-        [patient-form
-         {:delete-btn? true
-          :submit-event ::events/update-patient}])]]))
+      ; TODO: need to pre-fill update form with patient by id!
+      [patient-form
+       {:delete-btn? true
+        :submit-event ::events/update-patient}]]]))
