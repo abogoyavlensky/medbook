@@ -115,7 +115,7 @@
     (ring/ring-handler
       (router context)
       (ring/routes
-        (create-index-handler {:index-file "index.html"
+        (create-index-handler {:index-file (get-in context [:options :index-file])
                                :root "public"})
         (ring/redirect-trailing-slash-handler)
         (ring/create-default-handler)))))

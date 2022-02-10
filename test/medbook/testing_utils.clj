@@ -14,6 +14,8 @@
 
 (def ^:dynamic *test-system* nil)
 
+(def TEST-URL-BASE (str "http://localhost:8001"))
+
 
 (defn with-system
   ([]

@@ -3,7 +3,8 @@
            :missing-docstring {:level :warning}
            :refer-all {:exclude [clojure.test
                                  slingshot.slingshot]}
-           :unresolved-symbol {:exclude [(slingshot.slingshot/try+ [e])]}
+           :unresolved-symbol {:exclude [(slingshot.slingshot/try+ [e])
+                                         (etaoin.api/with-chrome-headless [driver])]}
            :consistent-alias {:aliases {honey.sql honey
                                         clojure.spec.alpha s
                                         clojure.string str

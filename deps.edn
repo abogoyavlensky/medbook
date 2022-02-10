@@ -37,7 +37,8 @@
                  :main-opts ["-m" "nrepl.cmdline"]}
 
            :test {:extra-deps {ring/ring-mock {:mvn/version "0.4.0"}
-                               circleci/bond {:mvn/version "0.6.0"}}}
+                               circleci/bond {:mvn/version "0.6.0"}
+                               etaoin/etaoin {:mvn/version "0.4.6"}}}
 
            :check-deps {:extra-deps {com.github.liquidz/antq {:mvn/version "1.4.0"}}
                         :main-opts ["-m" "antq.core" "--force"]}

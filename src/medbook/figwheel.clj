@@ -5,24 +5,33 @@
             [medbook.util.system :as system-util]))
 
 
-(defmethod ig/init-key ::figwheel
-  [_ _]
-  (log/info (str "[Figwheel] Starting figwheel dev build..."))
+(defn start-figwheel
+  [{:keys [mode build-id]
+    :or {mode :serve
+         build-id system-util/BUILD-ID-DEV}}]
   (fig/start
-    {:mode :serve
+    {:mode mode
      :rebel-readline false
+     :cljs-devtools false
      :open-url false}
-    {:id system-util/BUILD-ID-DEV
-     :config {:watch-dirs ["src"]
-              :css-dirs   ["resources/public/css"]}
-     :options {:main 'medbook.ui.main
-               :output-to "target/resources/public/js/dev-main.js"
-               :output-dir "target/resources/public/js/dev"
-               :asset-path "/assets/js/dev"
-               :closure-defines {'medbook.ui.main/DEBUG true
-                                 "re_frame.trace.trace_enabled_QMARK_" true}
-               :preloads ['day8.re-frame-10x.preload
-                          'hashp.core]}}))
+    {:id build-id
+     :config (cond-> {:css-dirs   ["resources/public/css"]}
+               (= :serve mode) (assoc :watch-dirs ["src"]))
+     :options (cond-> {:main 'medbook.ui.main
+                       :output-to "target/resources/public/js/dev-main.js"
+                       :output-dir (format "target/resources/public/js/%s" build-id)
+                       :asset-path (format "/assets/js/%s" build-id)}
+                (not= :serve mode) (assoc :clean-outputs true)
+                (= :serve mode) (assoc
+                                  :closure-defines {'medbook.ui.main/DEBUG true
+                                                    "re_frame.trace.trace_enabled_QMARK_" true}
+                                  :preloads ['day8.re-frame-10x.preload
+                                             'hashp.core]))}))
+
+(defmethod ig/init-key ::figwheel
+  [_ {:keys [options]}]
+  (log/info (str "[Figwheel] Starting figwheel dev build..."))
+  (start-figwheel options))
 
 
 (defmethod ig/halt-key! ::figwheel
@@ -32,3 +41,10 @@
     (fig/stop system-util/BUILD-ID-DEV)
     (catch Exception _
       (log/info "[Figwheel] Warning: figwheel has been stopped."))))
+
+; Run build-once
+(comment
+  (fig/stop system-util/BUILD-ID-TEST)
+  (let [options {:mode :build-once
+                 :build-id system-util/BUILD-ID-TEST}]
+    (start-figwheel options)))
