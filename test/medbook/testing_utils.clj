@@ -85,7 +85,7 @@
       (f))))
 
 
-(defn- rand-insurance-number
+(defn rand-insurance-number
   []
   (->> (map (fn [_] (rand-int 10)) (range 16))
     (map str)
@@ -113,6 +113,15 @@
         :returning [:id :full-name :gender :birthday :address :insurance-number]}))))
 
 
+(defn get-patient-list
+  "Return patient data vector from testing db."
+  [db]
+  (db-util/exec! db
+    {:select [:id :full-name :gender :birthday :address :insurance-number]
+     :from [:patient]
+     :order-by [[:created-at :desc]]}))
+
+
 (defn route-path
   "Return route path by its name."
   ([route route-name]
@@ -130,12 +139,13 @@
    (let [app (get *test-system* :medbook.handler/handler)
          uri (route-path (handler/router {}) route-name {:path path
                                                          :query query})
-         request (app (cond-> (mock/request http-method uri)
-                        (some? body) (mock/json-body body)))]
-     (update request :body (partial m/decode "application/json")))))
+         request (cond-> (mock/request http-method uri)
+                         (some? body) (mock/json-body body))
+         response (app request)]
+     (update response :body (partial m/decode "application/json")))))
 
 
-(defn patient->response
+(defn patient->output
   [patient]
   (update patient :birthday #(format "%1$tY-%1$tm-%1$td" %)))
 
