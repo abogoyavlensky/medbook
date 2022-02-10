@@ -87,27 +87,32 @@
        ::exception/wrap wrap-exception})))
 
 
+(defn router
+  "Return application router."
+  [context]
+  (ring/router
+    [routes/api-routes
+     ["/assets/*" (ring/create-resource-handler)]]
+    {:validate ring-spec/validate
+     :data {:muuntaja muuntaja-core/instance
+            :coercion coercion-spec/coercion
+            :middleware [; add handler options to request
+                         [middlewares-util/wrap-handler-context context]
+                         ; parse any request params
+                         params/parameters-middleware
+                         ; negotiate request and response
+                         muuntaja/format-middleware
+                         ; handle any exceptions
+                         exception-middleware
+                         ; coerce request and response to spec
+                         ring-coercion/coerce-request-middleware
+                         ring-coercion/coerce-response-middleware]}}))
+
 (def ^:private handler
   "Main application handler."
   (fn [context]
     (ring/ring-handler
-      (ring/router
-        [routes/api-routes
-         ["/assets/*" (ring/create-resource-handler)]]
-        {:validate ring-spec/validate
-         :data {:muuntaja muuntaja-core/instance
-                :coercion coercion-spec/coercion
-                :middleware [; add handler options to request
-                             [middlewares-util/wrap-handler-context context]
-                             ; parse any request params
-                             params/parameters-middleware
-                             ; negotiate request and response
-                             muuntaja/format-middleware
-                             ; handle any exceptions
-                             exception-middleware
-                             ; coerce request and response to spec
-                             ring-coercion/coerce-request-middleware
-                             ring-coercion/coerce-response-middleware]}})
+      (router context)
       (ring/routes
         (create-index-handler {:index-file "index.html"
                                :root "public"})

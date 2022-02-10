@@ -2,10 +2,14 @@
   (:require [clojure.test :refer :all]
             [clojure.string :as str]
             [integrant.core :as ig]
+            [reitit.core :as reitit]
+            [integrant.repl.state :as state]
+            [automigrate.core :as automigrate]
+            [ring.mock.request :as mock]
+            [muuntaja.core :as m]
             [medbook.util.system :as system-util]
             [medbook.util.db :as db-util]
-            [automigrate.core :as automigrate]
-            [integrant.repl.state :as state]))
+            [medbook.handler :as handler]))
 
 (def ^:dynamic *test-system* nil)
 
@@ -103,6 +107,28 @@
         :on-conflict [:id]
         :do-nothing true
         :returning [:*]}))))
+
+
+(defn route-path
+  "Return route path by its name."
+  ([route route-name]
+   (route-path route route-name {}))
+  ([route route-name {:keys [path query]}]
+   (-> route
+       (reitit/match-by-name route-name path)
+       (reitit/match->path query))))
+
+
+(defn api-request!
+  ([http-method route-name]
+   (api-request! http-method route-name {}))
+  ([http-method route-name {:keys [path query body]}]
+   (let [app (get *test-system* :medbook.handler/handler)
+         uri (route-path (handler/router {}) route-name {:path path
+                                                         :query query})
+         request (app (cond-> (mock/request http-method uri)
+                        (some? body) (mock/json-body body)))]
+     (update request :body (partial m/decode "application/json")))))
 
 
 (comment

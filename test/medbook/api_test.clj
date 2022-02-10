@@ -1,7 +1,5 @@
 (ns medbook.api-test
   (:require [clojure.test :refer :all]
-            [ring.mock.request :as mock]
-            [muuntaja.core :as m]
             [medbook.testing-utils :as test-util]))
 
 (use-fixtures :once
@@ -23,15 +21,8 @@
 
   (let [app (get test-util/*test-system* :medbook.handler/handler)
         method :get
-        route-name :medbook.routes/patient-list
-        uri "/api/v1/patients"
-        body nil
-        api-request! (fn []
-                       (let [request (app (cond-> (mock/request method uri)
-                                           (some? body) (mock/json-body body)))]
-                         (update request :body (partial m/decode "application/json"))))]
-    #p (api-request!))
-    ;#p (get test-util/*test-system* :medbook.handler/handler))
+        route-name :medbook.routes/patient-list]
+    #p (test-util/api-request! method route-name))
 
 
   (testing "FIXME, I fail."
