@@ -1,5 +1,6 @@
 (ns medbook.testing-utils
   (:require [clojure.test :refer :all]
+            [clojure.string :as str]
             [integrant.core :as ig]
             [medbook.util.system :as system-util]
             [medbook.util.db :as db-util]
@@ -75,6 +76,33 @@
                             :migrations-dir "resources/db/migrations"
                             :jdbc-url (get-in config [:medbook.db/db :options :jdbc-url])})
       (f))))
+
+
+(defn- rand-insurance-number
+  []
+  (->> (map (fn [_] (rand-int 10)) (range 16))
+       (map str)
+       (str/join)))
+
+(defn create-patient!
+  "Create and return testing patient."
+  ([db]
+   (create-patient! db {}))
+  ([db params]
+   (let [values (merge
+                  {:full-name "John Doe"
+                   :gender (rand-int 2)
+                   :birthday #inst "1990-02-02"
+                   :address "Moscow, st. Tulskaya 1"
+                   :insurance-number (rand-insurance-number)}
+                  params)]
+
+     (db-util/exec-one! db
+       {:insert-into :patient
+        :values [values]
+        :on-conflict [:id]
+        :do-nothing true
+        :returning [:*]}))))
 
 
 (comment
