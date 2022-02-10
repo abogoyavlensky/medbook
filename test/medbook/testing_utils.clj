@@ -135,6 +135,11 @@
      (update request :body (partial m/decode "application/json")))))
 
 
+(defn patient->response
+  [patient]
+  (update patient :birthday #(format "%1$tY-%1$tm-%1$td" %)))
+
+
 (comment
   (require '[clojure.pprint :as pprint])
   (require '[clojure.reflect :as r])

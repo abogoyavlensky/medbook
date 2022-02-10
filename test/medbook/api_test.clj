@@ -4,7 +4,8 @@
 
 
 (use-fixtures :once
-  (test-util/with-system)
+  (test-util/with-system
+    {:exclude [:medbook.server/server]})
   (test-util/with-dropped-tables)
   (test-util/with-migrations))
 
@@ -18,8 +19,26 @@
         patients [(test-util/create-patient! db)
                   (test-util/create-patient! db {:full-name "New patient 1"})]
         expected (->> patients
-                   (map (fn [v] (update v :birthday #(format "%1$tY-%1$tm-%1$td" %))))
+                   (map test-util/patient->response)
                    (reverse))
         response (test-util/api-request! :get :medbook.routes/patient-list)]
+    (is (= 200 (:status response)))
+    (is (= expected (:body response)))))
+
+
+(deftest test-patient-list-empty
+  (let [expected []
+        response (test-util/api-request! :get :medbook.routes/patient-list)]
+    (is (= 200 (:status response)))
+    (is (= expected (:body response)))))
+
+
+(deftest test-patient-detail-ok
+  (let [db (get test-util/*test-system* :medbook.db/db)
+        expected (-> (test-util/create-patient! db)
+                   (test-util/patient->response))
+        response (test-util/api-request! :get
+                   :medbook.routes/patient-detail
+                   {:path {:patient-id (:id expected)}})]
     (is (= 200 (:status response)))
     (is (= expected (:body response)))))
