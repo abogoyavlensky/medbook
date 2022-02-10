@@ -38,7 +38,7 @@
     (etaoin/go driver "http://127.0.0.1:8001/")
     ;(etaoin/wait-visible driver [{:id :simpleSearch} {:tag :input :name :search}])
     ;(etaoin/wait-visible driver {:fn/has-text "Patients"} {:timeout 5})
-    (etaoin/wait-visible driver {:tag :h2} {:timeout 5})
+    (etaoin/wait-visible driver {:tag :h2} {:timeout 3})
     (is (true? (etaoin/visible? driver {:tag :h2})))
     ;#p (etaoin/get-title driver)))
     (etaoin/screenshot driver "page.png")))

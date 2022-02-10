@@ -18,10 +18,12 @@
      :config (cond-> {:css-dirs   ["resources/public/css"]}
                (= :serve mode) (assoc :watch-dirs ["src"]))
      :options (cond-> {:main 'medbook.ui.main
-                       :output-to "target/resources/public/js/dev-main.js"
+                       :output-to (format "target/resources/public/js/%s-main.js" build-id)
                        :output-dir (format "target/resources/public/js/%s" build-id)
                        :asset-path (format "/assets/js/%s" build-id)}
-                (not= :serve mode) (assoc :clean-outputs true)
+                (= :build-once mode) (assoc
+                                       :clean-outputs true
+                                       :optimizations :whitespace)
                 (= :serve mode) (assoc
                                   :closure-defines {'medbook.ui.main/DEBUG true
                                                     "re_frame.trace.trace_enabled_QMARK_" true}
