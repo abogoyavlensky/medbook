@@ -122,6 +122,15 @@
      :order-by [[:created-at :desc]]}))
 
 
+(defn get-patient-by-insurance
+  "Return patient by insurance-number from testing db."
+  [db insurance-number]
+  (db-util/exec-one! db
+    {:select [:id :full-name :gender :birthday :address :insurance-number]
+     :from [:patient]
+     :where [:= :insurance-number insurance-number]}))
+
+
 (defn route-path
   "Return route path by its name."
   ([route route-name]
@@ -140,7 +149,7 @@
          uri (route-path (handler/router {}) route-name {:path path
                                                          :query query})
          request (cond-> (mock/request http-method uri)
-                         (some? body) (mock/json-body body))
+                   (some? body) (mock/json-body body))
          response (app request)]
      (update response :body (partial m/decode "application/json")))))
 
