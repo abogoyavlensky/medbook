@@ -1,17 +1,21 @@
 (ns medbook.ui-test
   (:require [clojure.test :refer :all]
             [etaoin.api :as etaoin]
+            [medbook.util.system :as system-util]
             [medbook.testing-utils :as test-util]))
 
 
 (use-fixtures :once
-  (test-util/with-system))
-;  (test-util/with-dropped-tables)
-;  (test-util/with-migrations))
-;
-;
-;(use-fixtures :each
-;  (test-util/with-truncated-tables))
+  (test-util/with-system
+    {:include {:medbook.figwheel/figwheel
+               {:options {:mode :build-once
+                          :build-id system-util/BUILD-ID-TEST}}}})
+  (test-util/with-dropped-tables)
+  (test-util/with-migrations))
+
+
+(use-fixtures :each
+  (test-util/with-truncated-tables))
 
 
 (deftest test-front-page-not-found-ok

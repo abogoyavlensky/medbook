@@ -20,9 +20,11 @@
 (defn with-system
   ([]
    (with-system {}))
-  ([{:keys [exclude] :or {exclude []}}]
+  ([{:keys [exclude include] :or {exclude [] include {}}}]
    (fn [test-fn]
-     (let [test-config (apply dissoc (system-util/config :test) exclude)]
+     (let [test-config (-> (apply dissoc (system-util/config :test) exclude)
+                         (merge include))]
+
        ; TODO: try to remove!
        (ig/load-namespaces test-config)
        (binding [*test-system* (ig/init test-config)]

@@ -5,7 +5,7 @@
             [medbook.util.system :as system-util]))
 
 
-(defn start-figwheel
+(defn- start-figwheel
   [{:keys [mode build-id]
     :or {mode :serve
          build-id system-util/BUILD-ID-DEV}}]
@@ -28,7 +28,9 @@
                                   :closure-defines {'medbook.ui.main/DEBUG true
                                                     "re_frame.trace.trace_enabled_QMARK_" true}
                                   :preloads ['day8.re-frame-10x.preload
-                                             'hashp.core]))}))
+                                             'hashp.core]))})
+  {:build-id build-id})
+
 
 (defmethod ig/init-key ::figwheel
   [_ {:keys [options]}]
@@ -37,10 +39,10 @@
 
 
 (defmethod ig/halt-key! ::figwheel
-  [_ _]
+  [_ {:keys [build-id]}]
   (log/info "[Figwheel] Stopping figwheel dev build...")
   (try
-    (fig/stop system-util/BUILD-ID-DEV)
+    (fig/stop build-id)
     (catch Exception _
       (log/info "[Figwheel] Warning: figwheel has been stopped."))))
 
