@@ -6,6 +6,7 @@
             [automigrate.core :as automigrate]
             [ring.mock.request :as mock]
             [muuntaja.core :as m]
+            [etaoin.api :as etaoin]
             [medbook.util.system :as system-util]
             [medbook.util.db :as db-util]
             [medbook.handler :as handler]))
@@ -171,6 +172,21 @@
   (update patient :birthday #(format "%1$tY-%1$tm-%1$td" %)))
 
 
+; Chromedriver testing component.
+
+(defmethod ig/init-key ::chromedriver
+  [_ {{:keys [testing-env]} :options}]
+  (etaoin/chrome-headless
+    (cond-> {:args ["--no-sandbox"]}
+      (= "local" testing-env) (assoc :host "127.0.0.1" :port 4444))))
+
+
+(defmethod ig/halt-key! ::chromedriver
+  [_ driver]
+  (etaoin/quit driver))
+
+
+; Print all methods for java class
 (comment
   (require '[clojure.pprint :as pprint])
   (require '[clojure.reflect :as r])

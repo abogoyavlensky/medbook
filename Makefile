@@ -29,6 +29,11 @@ repl:
 	@$(INFO) "Run repl..."
 	@clj -M:dev:test:migrations
 
+.PHONY: test  # Run tests with coverage
+test:
+	@$(INFO) "Running tests..."
+	@clojure -X:dev:migrations:test
+
 .PHONY: fmt-check  # Checking code formatting
 fmt-check:
 	@$(INFO) "Checking code formatting..."
