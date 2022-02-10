@@ -59,7 +59,7 @@
     (if (some? patient)
       (ring-response/response patient)
       (throw+ {:type :medbook.handler/error
-               :messages ["Patient does not exit."]}))))
+               :messages {:common ["Patient does not exit."]}}))))
 
 
 (defn update-patient!
@@ -86,8 +86,12 @@
   "Delete patient from db by given id."
   [{{:keys [db]} :context
     {{:keys [patient-id]} :path} :parameters}]
-  (sql/delete-patient! db patient-id)
-  (deletion-success-response))
+  (if (some? (sql/get-patient-detail! db patient-id))
+    (do
+      (sql/delete-patient! db patient-id)
+      (deletion-success-response))
+    (throw+ {:type :medbook.handler/error
+             :messages {:common ["Patient does not exit."]}})))
 
 
 (comment

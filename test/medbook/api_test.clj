@@ -60,6 +60,19 @@
             (:body response))))))
 
 
+(deftest test-patient-detail-does-not-exist-err
+  (bond/with-stub! [[log/log* (constantly nil)]]
+    (let [response (test-util/api-request! :get
+                     :medbook.routes/patient-detail
+                     {:path {:patient-id 1111}})]
+      (is (= 400 (:status response)))
+      (is (= {:error "medbook.handler/error"
+              :exception "clojure.lang.ExceptionInfo"
+              :messages {:common ["Patient does not exit."]}
+              :type "Application error"}
+            (:body response))))))
+
+
 (deftest test-patient-create-ok
   (let [db (get test-util/*test-system* :medbook.db/db)]
     (is (= 0 (count (test-util/get-patient-list db))))
@@ -233,3 +246,16 @@
                    {:path {:patient-id (:id patient)}})]
     (is (= 204 (:status response)))
     (is (nil? (test-util/get-patient-by-insurance db (:insurance-number patient))))))
+
+
+(deftest test-patient-delete-ok
+  (bond/with-stub! [[log/log* (constantly nil)]]
+    (let [response (test-util/api-request! :delete
+                     :medbook.routes/patient-detail
+                     {:path {:patient-id 1111}})]
+      (is (= 400 (:status response)))
+      (is (= {:error "medbook.handler/error"
+              :exception "clojure.lang.ExceptionInfo"
+              :messages {:common ["Patient does not exit."]}
+              :type "Application error"}
+            (:body response))))))
