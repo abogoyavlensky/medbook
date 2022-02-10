@@ -108,6 +108,7 @@
                          ring-coercion/coerce-request-middleware
                          ring-coercion/coerce-response-middleware]}}))
 
+
 (def ^:private handler
   "Main application handler."
   (fn [context]

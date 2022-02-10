@@ -11,7 +11,9 @@
             [medbook.util.db :as db-util]
             [medbook.handler :as handler]))
 
+
 (def ^:dynamic *test-system* nil)
+
 
 (defn with-system
   ([]
@@ -35,10 +37,11 @@
         :where [:and
                 [:= :table_schema "public"]
                 [:= :table_type "BASE TABLE"]]}
-       (db-util/exec! db)
-       (map (comp keyword :table-name))))
+    (db-util/exec! db)
+    (map (comp keyword :table-name))))
 
-(defn- trancate-all-tables
+
+(defn- truncate-all-tables
   "Remove all data from database tables for public schema."
   [db]
   (doseq [table (all-tables db)
@@ -51,7 +54,7 @@
   []
   (fn [f]
     (let [db (get *test-system* :medbook.db/db)]
-      (trancate-all-tables db)
+      (truncate-all-tables db)
       (f))))
 
 
@@ -85,8 +88,9 @@
 (defn- rand-insurance-number
   []
   (->> (map (fn [_] (rand-int 10)) (range 16))
-       (map str)
-       (str/join)))
+    (map str)
+    (str/join)))
+
 
 (defn create-patient!
   "Create and return testing patient."
@@ -106,7 +110,7 @@
         :values [values]
         :on-conflict [:id]
         :do-nothing true
-        :returning [:*]}))))
+        :returning [:id :full-name :gender :birthday :address :insurance-number]}))))
 
 
 (defn route-path
@@ -115,8 +119,8 @@
    (route-path route route-name {}))
   ([route route-name {:keys [path query]}]
    (-> route
-       (reitit/match-by-name route-name path)
-       (reitit/match->path query))))
+     (reitit/match-by-name route-name path)
+     (reitit/match->path query))))
 
 
 (defn api-request!
