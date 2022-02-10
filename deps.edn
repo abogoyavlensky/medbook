@@ -14,7 +14,7 @@
         hikari-cp/hikari-cp {:mvn/version "2.13.0"}
         org.postgresql/postgresql {:mvn/version "42.3.2"}
         com.github.seancorfield/honeysql {:mvn/version "2.2.861"}
-        com.github.seancorfield/next.jdbc {:mvn/version "1.2.761"}
+        com.github.seancorfield/next.jdbc {:mvn/version "1.2.772"}
         ; ui
         re-frame/re-frame {:mvn/version "1.2.0"}
         metosin/reitit-frontend {:mvn/version "0.5.15"}
