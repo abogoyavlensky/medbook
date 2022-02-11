@@ -50,7 +50,5 @@ services:
     environment:
       MEDBOOK_DB_URL: "jdbc:postgresql://test-db:5432/medbook?user=medbook&password=medbook"
       TESTING_ENV: "ci"
-    ports:
-      - 8001:8001
     volumes:
       - .:/app

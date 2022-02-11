@@ -71,8 +71,9 @@
 (defn- drop-all-tables
   "Remove all tables from database for public schema."
   [db]
-  ;(doseq [table (all-tables)])
-  (db-util/exec! db {:drop-table (all-tables db)}))
+  (let [tables (all-tables db)]
+    (when (seq tables)
+      (db-util/exec! db {:drop-table tables}))))
 
 
 (defn with-dropped-tables
