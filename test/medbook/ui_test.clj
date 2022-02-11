@@ -7,11 +7,10 @@
 
 (use-fixtures :once
   (test-util/with-system
-    {:include {:medbook.figwheel/figwheel {:options {:mode :build-once
-                                                     :build-id system-util/BUILD-ID-TEST}}
-               :medbook.testing-utils/chromedriver {:options
-                                                    {:testing-env (or (System/getenv "TESTING_ENV")
-                                                                    "local")}}}})
+    {:include {:medbook.figwheel/figwheel {:options
+                                           {:mode :build-once
+                                            :build-id system-util/BUILD-ID-TEST}}
+               :medbook.testing-utils/chromedriver {}}})
   (test-util/with-dropped-tables)
   (test-util/with-migrations))
 

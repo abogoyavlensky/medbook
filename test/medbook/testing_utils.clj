@@ -19,7 +19,7 @@
 
 (def TEST-URL-BASE
   "Basic url for UI testing."
-  (str "http://localhost:8001"))
+  (str "http://127.0.0.1:8001"))
 
 
 (defn with-system
@@ -176,10 +176,13 @@
 ; Chromedriver testing component.
 
 (defmethod ig/init-key ::chromedriver
-  [_ {{:keys [testing-env]} :options}]
+  [_ _]
   (etaoin/chrome-headless
-    (cond-> {:args ["--no-sandbox"]}
-      (= "local" testing-env) (assoc :host "127.0.0.1" :port 4444))))
+    (let [testing-env (or (System/getenv "TESTING_ENV")
+                        "local")]
+      (cond-> {:args ["--no-sandbox"]}
+        (= "local" testing-env) (assoc :host "127.0.0.1"
+                                  :port 4444)))))
 
 
 (defmethod ig/halt-key! ::chromedriver
