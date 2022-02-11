@@ -7,7 +7,7 @@ INFO := @sh -c '\
     printf $(NC)' VALUE
 
 
-DIRS?=src test
+DIRS?=src test build
 GOALS = $(filter-out $@,$(MAKECMDGOALS))
 
 .SILENT:  # Ignore output of make `echo` command
@@ -22,7 +22,7 @@ help:
 .PHONY: deps  # Install deps
 deps:
 	@$(INFO) "Install deps..."
-	@clojure -P -X:dev:test:migrations
+	@clojure -P -X:dev:test:ui:migrations
 
 
 .PHONY: target  # Make target/resources dirs for figwheel
@@ -34,12 +34,13 @@ target:
 .PHONY: repl  # Run repl
 repl:
 	@$(INFO) "Run repl..."
-	@clj -M:dev:test:migrations
+	@clojure -M:dev:test:ui:migrations
 
 .PHONY: test  # Run tests with coverage
 test:
 	@$(INFO) "Running tests..."
-	@clojure -X:dev:migrations:test
+	@$(MAKE) target
+	@clojure -X:dev:ui:migrations:test
 
 .PHONY: fmt-check  # Checking code formatting
 fmt-check:
@@ -85,9 +86,17 @@ up:
 
 .PHONY: clean  # Clean target dir
 clean:
-	@$(INFO) "Cleaning target dir..."
-	@rm -rf target/resources/*
+	@$(INFO) "Cleaning target and asset dirs..."
+	@rm -rf target
+	@rm -rf medbook.standalone.jar
+	@rm -rf resources/public/js
+	@rm -rf resources/public/prod.html
 
 .PHONY: migrations  # Manage migrations
 migrations:
 	@clojure -X:dev:migrations $(GOALS)
+
+
+.PHONY: build  # Build an uberjar
+build:
+	@clojure -X:ui:build build
