@@ -4,6 +4,7 @@
             [clojure.tools.namespace.repl :refer [set-refresh-dirs]]
             [medbook.util.system :as system-util]
             [figwheel.main.api :as fig]
+            [clojure.test :as test]
             [hashp.core]))
 
 
@@ -13,7 +14,10 @@
 (integrant.repl/set-prep!
   (constantly
     ; Add figwheel component to the dev system.
-    (assoc (system-util/config :dev) :medbook.figwheel/figwheel {})))
+    (-> (system-util/config :dev)
+      (assoc :medbook.figwheel/figwheel {}))))
+      ; Uncomment for running system without components.
+      ;(select-keys []))))
 
 
 (defn reset
@@ -30,9 +34,15 @@
 
 
 (defn cljs-repl
+  "Run clojurescript repl."
   []
   (fig/cljs-repl system-util/BUILD-ID-DEV))
 
+(defn run-all-tests
+  "Run all tests for the project."
+  []
+  (reset)
+  (test/run-all-tests #"medbook.*-test"))
 
 (comment
   (keys ig-state/system)

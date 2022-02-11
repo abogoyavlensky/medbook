@@ -1,14 +1,76 @@
 (ns medbook.routes
   (:require [clojure.spec.alpha :as s]
-            [medbook.patients.handlers :as patients]))
+            [clojure.string :as str]
+            [spec-tools.core :as st]
+            [medbook.patients.handlers :as patients])
+  (:import [java.time.format DateTimeFormatter DateTimeParseException]
+           [java.time LocalDate]))
 
+
+(def ^:private MALE-GENDER 0)
+(def ^:private FEMALE-GENDER 1)
+
+
+(defn- gender->db
+  [_ value]
+  (try
+    (Integer. value)
+    (catch NumberFormatException _
+      ; will be caught by spec
+      nil)))
+
+
+(s/def ::not-empty-string
+  (fn [value]
+    (and
+      (string? value)
+      (boolean (seq (str/trim value))))))
+
+
+(def ^:private INSURANCE-NUMBER-LENGTH 16)
 
 (s/def ::id pos-int?)
-(s/def ::full-name string?)
-(s/def ::gender integer?)
-(s/def ::birthday inst?)
-(s/def ::address string?)
-(s/def ::insurance-number string?)
+(s/def ::full-name ::not-empty-string)
+
+
+(s/def ::gender
+  (st/spec
+    {:spec #{MALE-GENDER FEMALE-GENDER}
+     :decode/json gender->db}))
+
+
+(def ^:private date-format
+  (DateTimeFormatter/ofPattern "yyyy-MM-dd"))
+
+
+(defn- valid-date?
+  [date-str]
+  (try
+    (LocalDate/parse date-str date-format)
+    (catch DateTimeParseException _
+      false)))
+
+
+(s/def ::birthday (s/and string? valid-date?))
+
+(s/def ::address ::not-empty-string)
+
+
+(defn- insurance-number-length-valid?
+  [value]
+  (= INSURANCE-NUMBER-LENGTH (count value)))
+
+
+(defn- insurance-number-length-digits?
+  [value]
+  (some? (re-matches #"^[\d+]{16}$" value)))
+
+
+(s/def ::insurance-number
+  (s/and
+    ::not-empty-string
+    insurance-number-length-valid?
+    insurance-number-length-digits?))
 
 
 (s/def ::patient
@@ -61,4 +123,8 @@
                       :put {:handler patients/update-patient!
                             :parameters {:path {:patient-id ::id}
                                          :body ::patient-update}
-                            :responses {200 {:body ::patient-with-id}}}}]]]])
+                            :responses {200 {:body ::patient-with-id}}}
+                      :delete {:handler patients/delete-patient!
+                               :parameters {:path {:patient-id ::id}}
+                               :responses {204 {:body nil?}}}}]]]])
+

@@ -6,4 +6,5 @@
     #"^:?use$" [[:block 0]],
     #"^[^ \[]" [[:inner 0]]}},
   :vars {:enabled? false},
-  :namespaces {:enabled? false}}}
+  :namespaces {:enabled? false}
+  :comments {:enabled? false}}}

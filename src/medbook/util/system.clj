@@ -8,12 +8,18 @@
 
 (def PROFILES
   "Available profiles for app."
-  #{:dev :prod})
+  #{:dev :test :prod})
 
 
 (def BUILD-ID-DEV
   "Build id for figwheel in dev env."
   "dev")
+
+
+(def BUILD-ID-TEST
+  "Build id for figwheel in dev env."
+  "test")
+
 
 ; Add #ig/ref tag for reading integrant config from aero.
 (defmethod aero/reader 'ig/ref

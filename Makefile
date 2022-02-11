@@ -22,12 +22,24 @@ help:
 .PHONY: deps  # Install deps
 deps:
 	@$(INFO) "Install deps..."
-	@clojure -P -X:dev
+	@clojure -P -X:dev:test:migrations
+
+
+.PHONY: target  # Make target/resources dirs for figwheel
+target:
+	@$(INFO) "Creating target/resources dirs..."
+	@mkdir -p target/resources
+
 
 .PHONY: repl  # Run repl
 repl:
 	@$(INFO) "Run repl..."
-	@clj -M:dev
+	@clj -M:dev:test:migrations
+
+.PHONY: test  # Run tests with coverage
+test:
+	@$(INFO) "Running tests..."
+	@clojure -X:dev:migrations:test
 
 .PHONY: fmt-check  # Checking code formatting
 fmt-check:
@@ -68,7 +80,7 @@ check:
 .PHONY: up  # Run db, testing db and db admin web UI locally for development
 up:
 	@$(INFO) "Running db..."
-	@docker-compose up -d db adminer test-db
+	@docker-compose up -d db adminer test-db chromedriver-host
 
 
 .PHONY: clean  # Clean target dir

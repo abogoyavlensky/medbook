@@ -1,20 +1,35 @@
 (ns medbook.ui.views
   (:require [re-frame.core :as re-frame]
+            [reitit.frontend.easy :as reitit-easy]
             [medbook.ui.subs :as subs]))
 
 
-(defn home-page
-  "View for home page."
+(defn- header
+  []
+  [:h1
+   [:a
+    {:href (reitit-easy/href :medbook.ui.router/home)}
+    "MedBook"]])
+
+
+(defn- page-not-found
   []
   [:div
-   {:class ["container" "grid-lg"]}
-   [:h1 "Home page!"]])
+   [:h2 "Page not found."]
+   [:a
+    {:href (reitit-easy/href :medbook.ui.router/home)
+     :class ["btn"]}
+    "-> Home page"]])
 
 
 (defn router-component
   "Component for routing ui navigation."
-  [{:keys [_router]}]
-  (let [current-page @(re-frame/subscribe [::subs/current-page])]
+  [{:keys [router]}]
+  (let [current-route @(re-frame/subscribe [::subs/current-page])]
     [:div
-     (when current-page
-       [(-> current-page :data :view)])]))
+     {:class ["container" "grid-lg"]}
+     [header]
+     (if current-route
+       [(-> current-route :data :view) {:router router
+                                        :current-route current-route}]
+       [page-not-found])]))
