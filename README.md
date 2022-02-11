@@ -54,6 +54,8 @@ FIXME: listing of options this app accepts.
 - [ ] Test cljs with [re-frame-test](https://github.com/day8/re-frame-test)
 - [ ] Cursor pagination.
 - [ ] Form library for re-frame.
+- [ ] Collect logs and metrics.
+- [ ] Serve static using nginx or traefik.
 
 ## License
 
