@@ -24,6 +24,13 @@ deps:
 	@$(INFO) "Install deps..."
 	@clojure -P -X:dev:test:migrations
 
+
+.PHONY: target  # Make target/resources dirs for figwheel
+target:
+	@$(INFO) "Creating target/resources dirs..."
+	@mkdir -p target/resources
+
+
 .PHONY: repl  # Run repl
 repl:
 	@$(INFO) "Run repl..."
