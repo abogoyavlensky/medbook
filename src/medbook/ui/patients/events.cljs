@@ -42,8 +42,8 @@
   (fn [{:keys [db]} [_ patient-id]]
     {:db (-> db
            (assoc :patient-detail-loading? true))
-             ; TODO: uncomment!
-             ;(assoc :patients-error nil))
+     ; TODO: uncomment!
+     ;(assoc :patients-error nil))
      :http-xhrio {:method :get
                   ; TODO: update to shared routes for api!
                   :uri (str "/api/v1/patients/" patient-id)

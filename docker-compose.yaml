@@ -2,8 +2,7 @@ version: "3.8"
 
 services:
   check:
-    # TODO: update with formatter up to 0.2.0
-    image: abogoyavlensky/clojure-openjdk11-build:0.1.3
+    image: abogoyavlensky/clojure-openjdk11-build:0.2.0
     volumes:
       - .:/app
 

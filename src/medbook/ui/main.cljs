@@ -36,5 +36,6 @@
   (re-frame/dispatch-sync [::events/initialize-db])
   (mount-root))
 
+
 ; Render the app for first time load of the html page.
 (render)
