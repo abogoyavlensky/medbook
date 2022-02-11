@@ -51,6 +51,7 @@ FIXME: listing of options this app accepts.
 ## TODO
 - [ ] TailwindCSS.
 - [ ] Validation form field on client side.
+- [ ] Test cljs with [re-frame-test](https://github.com/day8/re-frame-test)
 - [ ] Cursor pagination.
 - [ ] Form library for re-frame.
 

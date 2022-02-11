@@ -62,7 +62,7 @@
 
 (defn- wrap-exception
   [handler e request]
-  (log/error (pr-str (:request-method request) (:uri request)) e)
+  (log/error (pr-str (:request-method request) (:uri request)) (ex-message e))
   (handler e request))
 
 
