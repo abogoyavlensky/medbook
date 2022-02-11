@@ -10,6 +10,7 @@
         metosin/reitit-ring {:mvn/version "0.5.15"}
         metosin/reitit-middleware {:mvn/version "0.5.15"}
         metosin/reitit-spec {:mvn/version "0.5.15"}
+        ring/ring-devel {:mvn/version "1.9.5"}
         ; db
         hikari-cp/hikari-cp {:mvn/version "2.13.0"}
         org.postgresql/postgresql {:mvn/version "42.3.2"}
@@ -26,7 +27,6 @@
  :aliases {:dev {:extra-paths ["dev" "target/resources"]
                  :extra-deps {hashp/hashp {:mvn/version "0.2.1"}
                               integrant/repl {:mvn/version "0.3.2"}
-                              ring/ring-devel {:mvn/version "1.9.5"}
                               metosin/reitit-dev {:mvn/version "0.5.15"}
                               com.bhauman/figwheel-main {:mvn/version "0.2.16"}
                               org.clojure/clojurescript {:mvn/version "1.11.4"}
@@ -48,8 +48,17 @@
                               :runner :eftest
                               :runner-opts {:multithread? false}}}
 
+           :build {:extra-deps {io.github.seancorfield/build-clj {:git/url "https://github.com/seancorfield/build-clj.git"
+                                                                  :sha "22c2d098b44f44d641f4014c9e61329e02c37a94"}
+                                ; TODO: move to ui
+                                org.clojure/clojurescript {:mvn/version "1.11.4"}
+                                digest/digest {:mvn/version "1.4.10"}}
+                   :extra-paths ["build"]
+                   :ns-default medbook.build}
+
            :check-deps {:extra-deps {com.github.liquidz/antq {:mvn/version "1.5.0"}}
-                        :main-opts ["-m" "antq.core" "--force"]}
+                        :main-opts ["-m" "antq.core" "--force"
+                                    "--exclude=io.github.seancorfield/build-clj"]}
 
            :migrations {:extra-deps {net.clojars.abogoyavlensky/automigrate {:mvn/version "0.1.0"}}
                         :ns-default automigrate.core

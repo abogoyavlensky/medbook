@@ -28,3 +28,5 @@ lsp/
 *.iml
 .idea/
 page.png
+resources/public/js/
+resources/public/prod.html

@@ -7,7 +7,7 @@ INFO := @sh -c '\
     printf $(NC)' VALUE
 
 
-DIRS?=src test
+DIRS?=src test build
 GOALS = $(filter-out $@,$(MAKECMDGOALS))
 
 .SILENT:  # Ignore output of make `echo` command
@@ -91,3 +91,8 @@ clean:
 .PHONY: migrations  # Manage migrations
 migrations:
 	@clojure -X:dev:migrations $(GOALS)
+
+
+.PHONY: build  # Build an uberjar
+build:
+	@clojure -X:build build

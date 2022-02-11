@@ -10,6 +10,7 @@
  :medbook.handler/handler {:options {:wrap-reload? #profile {:dev true
                                                              :test false
                                                              :prod false}
-                                     :index-file #profile {:default "index.html"
-                                                           :test "test.html"}}
+                                     :index-file #profile {:dev "index.html"
+                                                           :test "test.html"
+                                                           :prod "prod.html"}}
                            :db #ig/ref :medbook.db/db}}
