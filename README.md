@@ -49,13 +49,13 @@ FIXME: listing of options this app accepts.
 ### Might be Useful
 
 ## TODO
+- [ ] Test cljs with [re-frame-test](https://github.com/day8/re-frame-test)
 - [ ] TailwindCSS.
 - [ ] Validation form field on client side.
-- [ ] Test cljs with [re-frame-test](https://github.com/day8/re-frame-test)
-- [ ] Cursor pagination.
 - [ ] Form library for re-frame.
+- [ ] Cursor pagination.
 - [ ] Collect logs and metrics.
-- [ ] Serve static using nginx or traefik.
+- [ ] Serve static using CDN.
 
 ## License
 

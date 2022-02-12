@@ -42,7 +42,8 @@
                                cloverage/cloverage {:mvn/version "1.2.2"}
                                ring/ring-mock {:mvn/version "0.4.0"}
                                circleci/bond {:mvn/version "0.6.0"}
-                               etaoin/etaoin {:mvn/version "0.4.6"}}
+                               etaoin/etaoin {:mvn/version "0.4.6"}
+                               digest/digest {:mvn/version "1.4.10"}}
                   :exec-fn cloverage.coverage/run-project
                   :exec-args {:test-ns-path ["test"]
                               :src-ns-path ["src"]
