@@ -8,7 +8,7 @@ on:
 
 env:
   IMAGE_VERSION: ${{ github.sha }}
-  IMAGE_TAG: abogoyavlensky/medbook:$IMAGE_VERSION
+  IMAGE_TAG: abogoyavlensky/medbook:${{ IMAGE_VERSION }}
 
 jobs:
   deploy:
@@ -25,15 +25,14 @@ jobs:
       - name: Build and push new image
         run: | 
           docker build -t $IMAGE_TAG .
+          docker push $IMAGE_TAG
 
-#          docker push $IMAGE_TAG
-#
-#      - name: Install doctl
-#        uses: digitalocean/action-doctl@v2
-#        with:
-#          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
-#          version: 1.70.0
-#
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+          version: 1.70.0
+
 #      - name: Save DigitalOcean kubeconfig
 #        run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 k8s-ams3-staging
 #
