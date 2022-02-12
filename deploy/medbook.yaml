@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: medbook
 spec:
-  replicas: 2
+  replicas: 1
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -35,14 +35,21 @@ spec:
             limits:
               memory: "512M"
               cpu: "200m"
-          readinessProbe:
-            httpGet:
-              path: /health
-              port: 8000
-            failureThreshold: 10
-            initialDelaySeconds: 60
-            periodSeconds: 20
-            timeoutSeconds: 5
+#          TODO: uncomment!
+#          readinessProbe:
+#            httpGet:
+#              path: /health
+#              port: 8000
+#            failureThreshold: 20
+#            initialDelaySeconds: 30
+#            periodSeconds: 10
+#            timeoutSeconds: 5
+#          startupProbe:
+#            httpGet:
+#              path: /health
+#              port: 8000
+#            failureThreshold: 30
+#            periodSeconds: 10
           livenessProbe:
             httpGet:
               path: /health
