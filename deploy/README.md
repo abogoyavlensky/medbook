@@ -45,5 +45,5 @@ kubectl apply -f deploy/hairpin_proxy.yaml
 Now you can deploy the app:
 
 ```shell
-kubectl apply -f deploy/medbook.yaml
+IMAGE_VERSION=<some-next-version> kubectl apply -f deploy/medbook.yaml
 ```
