@@ -14,8 +14,8 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Deploy to kubernetes
-        run: |
-          kubectl version
+        run: kubectl version
+#          kubectl version
 #          --kubeconfig <(echo ${{ KUBE_CONFIG }} | base64 --decode)
 #          mkdir -p $HOME/.kube
 #          echo -n ${{ KUBE_CONFIG }} | base64 -d > $HOME/.kube/config
