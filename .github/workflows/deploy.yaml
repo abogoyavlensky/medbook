@@ -22,9 +22,11 @@ jobs:
           password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
 
       - name: Build and push new image
-        run: |
-#          docker build -t abogoyavlensky/medbook:$IMAGE_VERSION .
+        run: | 
           docker build -t $IMAGE_TAG .
+        
+
+#          docker build -t abogoyavlensky/medbook:$IMAGE_VERSION .
 #          docker push $IMAGE_TAG
 #        env:
 #          IMAGE_VERSION: ${{ github.sha }}
