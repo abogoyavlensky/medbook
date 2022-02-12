@@ -38,6 +38,7 @@ using [hairpin-proxy](https://github.com/compumike/hairpin-proxy) config:
 ```shell
 kubectl apply -f deploy/hairpin_proxy.yaml
 ```
+*Or get it latest version from [github](https://raw.githubusercontent.com/compumike/hairpin-proxy/v0.2.1/deploy.yml).*
 
 ### Deploy app
 
