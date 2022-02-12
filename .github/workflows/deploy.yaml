@@ -16,6 +16,7 @@ jobs:
       - name: Deploy to kubernetes
         run: |
           kubectl version
-          mkdir -p $HOME/.kube
+#          --kubeconfig <(echo ${{ KUBE_CONFIG }} | base64 --decode)
+#          mkdir -p $HOME/.kube
 #          echo -n ${{ KUBE_CONFIG }} | base64 -d > $HOME/.kube/config
 #          kubectl config view
