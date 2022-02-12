@@ -27,3 +27,7 @@ jobs:
         run: |
           kubectl version
           kubectl get pods
+          echo "Image version:"
+          echo $IMAGE_VERSION
+        env:
+          IMAGE_VERSION: ${{ github.sha }}
