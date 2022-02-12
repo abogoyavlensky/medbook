@@ -7,6 +7,7 @@
                                       :test #or [#env MEDBOOK_DB_URL
                                                  "jdbc:postgresql://localhost:5555/medbook?user=medbook&password=medbook"]
                                       :prod #env MEDBOOK_DB_URL}
+                  ; ElephantDB on free plan allows only 5 connections
                   :maximum-pool-size 3}}
  :medbook.handler/handler {:options {:wrap-reload? #profile {:dev true
                                                              :test false
