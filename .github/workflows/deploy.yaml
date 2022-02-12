@@ -7,8 +7,7 @@ on:
     branches: [ deploy ]
 
 env:
-  IMAGE_VERSION: ${{ github.sha }}
-  IMAGE_TAG: abogoyavlensky/medbook:${{ env.IMAGE_VERSION }}
+  IMAGE_TAG: abogoyavlensky/medbook:${{ github.sha }}
 
 jobs:
   deploy:

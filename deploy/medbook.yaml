@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: medbook
-          image: abogoyavlensky/medbook:$IMAGE_VERSION
+          image: $IMAGE_TAG
           ports:
             - containerPort: 8000
           env:
