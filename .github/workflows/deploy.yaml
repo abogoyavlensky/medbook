@@ -7,7 +7,8 @@ on:
     branches: [ deploy ]
 
 env:
-  IMAGE_TAG: abogoyavlensky/medbook:${{ github.sha }}
+  IMAGE_VERSION: ${{ github.sha }}
+  IMAGE_TAG: abogoyavlensky/medbook:$IMAGE_VERSION
 
 jobs:
   deploy:
@@ -24,13 +25,9 @@ jobs:
       - name: Build and push new image
         run: | 
           docker build -t $IMAGE_TAG .
-        
 
-#          docker build -t abogoyavlensky/medbook:$IMAGE_VERSION .
 #          docker push $IMAGE_TAG
-#        env:
-#          IMAGE_VERSION: ${{ github.sha }}
-
+#
 #      - name: Install doctl
 #        uses: digitalocean/action-doctl@v2
 #        with:
