@@ -17,5 +17,5 @@ jobs:
         run: |
           kubectl version
           mkdir -p $HOME/.kube
-          echo -n $KUBE_CONFIG | base64 -d > $HOME/.kube/config
-          kubectl config view
+#          echo -n ${{ KUBE_CONFIG }} | base64 -d > $HOME/.kube/config
+#          kubectl config view
