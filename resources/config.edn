@@ -6,7 +6,8 @@
                  {:jdbc-url #profile {:dev "jdbc:postgresql://localhost:5432/medbook?user=medbook&password=medbook"
                                       :test #or [#env MEDBOOK_DB_URL
                                                  "jdbc:postgresql://localhost:5555/medbook?user=medbook&password=medbook"]
-                                      :prod #env MEDBOOK_DB_URL}}}
+                                      :prod #env MEDBOOK_DB_URL}
+                  :maximum-pool-size 3}}
  :medbook.handler/handler {:options {:wrap-reload? #profile {:dev true
                                                              :test false
                                                              :prod false}
