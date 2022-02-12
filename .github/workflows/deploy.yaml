@@ -6,8 +6,10 @@ on:
 #     TODO: fix to master
     branches: [ deploy ]
 
+
 env:
   IMAGE_TAG: abogoyavlensky/medbook:${{ github.sha }}
+
 
 jobs:
   deploy:
@@ -32,16 +34,14 @@ jobs:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
           version: 1.70.0
 
-#      - name: Save DigitalOcean kubeconfig
-#        run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 k8s-ams3-staging
-#
-#      - name: Deploy to kubernetes
-#        run: |
-#          kubectl version
-#          echo "Image version: abogoyavlensky/medbook:$IMAGE_VERSION"
-#          envsubst < deploy/medbook.yaml | kubectl apply -f -
-#        env:
-#          IMAGE_VERSION: ${{ github.sha }}
-#
-#      - name: Verify deployment
-#        run: kubectl rollout status deployment/medbook
+      - name: Save DigitalOcean kubeconfig
+        run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 k8s-ams3-staging
+
+      - name: Deploy to kubernetes
+        run: |
+          kubectl version
+          echo "Image tag: $IMAGE_TAG"
+          envsubst < deploy/medbook.yaml | kubectl apply -f -
+
+      - name: Verify deployment
+        run: kubectl rollout status deployment/medbook
