@@ -19,12 +19,11 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
 
-
-#      - name: Build and push new image
-#        run: |
-#          docker build -t abogoyavlensky/medbook:$IMAGE_VERSION .
-#        env:
-#          IMAGE_VERSION: ${{ github.sha }}
+      - name: Build and push new image
+        run: |
+          docker build -t abogoyavlensky/medbook:$IMAGE_VERSION .
+        env:
+          IMAGE_VERSION: ${{ github.sha }}
 
 #      - name: Install doctl
 #        uses: digitalocean/action-doctl@v2
