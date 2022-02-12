@@ -1,10 +1,9 @@
-name: Checks
+name: Deploy
 
 
 on:
   push:
-#     TODO: fix to master
-    branches: [ deploy ]
+    branches: [ master ]
 
 
 env:
