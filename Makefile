@@ -94,7 +94,7 @@ clean:
 
 .PHONY: migrations  # Manage migrations
 migrations:
-	@clojure -X:dev:migrations $(GOALS)
+	@clojure -X:migrations $(GOALS)
 
 
 .PHONY: build  # Build an uberjar

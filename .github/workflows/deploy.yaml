@@ -18,7 +18,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Run db migrations
-        run: docker-compose run --rm check bash -c "clojure -X:migrations list :jdbc-url $MEDBOOK_DB_URL"
+        run: docker-compose run --rm check bash -c "clojure -X:migrations migrate :jdbc-url $MEDBOOK_DB_URL"
         env:
           MEDBOOK_DB_URL: ${{ secrets.MEDBOOK_DB_URL}}
 
