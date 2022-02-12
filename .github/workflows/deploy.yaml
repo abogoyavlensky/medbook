@@ -26,6 +26,4 @@ jobs:
       - name: Deploy to kubernetes
         run: |
           kubectl version
-          kubectl config view
-#        env:
-#          KUBE_CONFIG: ${{secrets.KUBE_CONFIG}}
+          kubectl get pods
