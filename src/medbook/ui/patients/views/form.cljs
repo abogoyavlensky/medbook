@@ -2,7 +2,8 @@
   (:require [re-frame.core :as re-frame]
             [reitit.frontend.easy :as reitit-easy]
             [medbook.ui.patients.subs :as subs]
-            [medbook.ui.patients.events :as events]))
+            [medbook.ui.patients.events :as events]
+            [medbook.ui.patients.consts :as consts]))
 
 
 (defn- error-hint
@@ -47,10 +48,6 @@
       [::events/update-patient-form-field field value])))
 
 
-(def ^:private GENDER-VALUE-MALE 0)
-(def ^:private GENDER-VALUE-FEMALE 1)
-
-
 (defn- radio-input
   [label value field]
   [:label.form-radio
@@ -66,8 +63,8 @@
   []
   [:div.form-group
    [:label.form-label "Gender"]
-   [radio-input "Male" GENDER-VALUE-MALE :gender]
-   [radio-input "Female" GENDER-VALUE-FEMALE :gender]])
+   [radio-input "Male" consts/GENDER-VALUE-MALE :gender]
+   [radio-input "Female" consts/GENDER-VALUE-FEMALE :gender]])
 
 
 (defn- form-error

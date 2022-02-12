@@ -2,7 +2,8 @@
   (:require [re-frame.core :as re-frame]
             [reitit.frontend.easy :as reitit-easy]
             [medbook.ui.patients.subs :as subs]
-            [medbook.ui.patients.events :as events]))
+            [medbook.ui.patients.events :as events]
+            [medbook.ui.patients.consts :as consts]))
 
 
 (defn- create-patient-btn
@@ -22,6 +23,14 @@
    "Edit"])
 
 
+(defn- render-gender-value
+  [source-value]
+  (let [output-value (condp = source-value
+                       consts/GENDER-VALUE-MALE "Male"
+                       consts/GENDER-VALUE-FEMALE "Female")]
+    [:span {:class ["label" "label-rounded"]} output-value]))
+
+
 (defn- render-patient-item
   [active-patient-id patient]
   (let [tr-class (cond-> []
@@ -32,7 +41,7 @@
      {:key (:id patient)
       :class tr-class}
      [:td (:full-name patient)]
-     [:td (:gender patient)]
+     [:td [render-gender-value (:gender patient)]]
      [:td (:birthday patient)]
      [:td (:address patient)]
      [:td (:insurance-number patient)]
