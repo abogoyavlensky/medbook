@@ -92,6 +92,8 @@
   [context]
   (ring/router
     [routes/api-routes
+     ["/health" {:name ::health-check
+                 :get {:handler (fn [_] (response/response "ok"))}}]
      ["/assets/*" (ring/create-resource-handler)]]
     {:validate ring-spec/validate
      :data {:muuntaja muuntaja-core/instance
