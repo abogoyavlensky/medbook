@@ -1,11 +1,11 @@
 name: Checks
 
-
 on:
   push:
     branches: [ master ]
-  pull_request:
-    branches: [ master ]
+# TODO: uncomment!
+#  pull_request:
+#    branches: [ master ]
 
 
 jobs:
