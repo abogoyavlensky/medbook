@@ -16,16 +16,16 @@ Project is live at [https://medbook.bogoyavlensky.com/](https://medbook.bogoyavl
 
 Following tools should be installed for convenient local development:
 
-- docker & docker-compose (latest)
-- Java 11
-- clojure.tools.deps (>= 1.10.3.1040)
-- chromedriver (>= 98.0.4758.80)
+- [docker](https://www.docker.com/) & [docker-compose](https://docs.docker.com/compose/install/) (latest)
+- [Java 11](https://adoptopenjdk.net/)
+- [clojure.tools.deps](https://github.com/clojure/tools.deps.alpha) (>= 1.10.3.1040)
+- [chromedriver](https://sites.google.com/a/chromium.org/chromedriver/downloads) (>= 98.0.4758.80)
 
 Optional tools in case you would like to run linting and formatting locally without docker on a git-hook:
 
-- lefthook (latest)
-- cljstyle (>= 0.15.0)
-- clj-kondo (>= 2021.12.19)
+- [lefthook](https://github.com/evilmartians/lefthook) (latest)
+- [clj-kondo](https://github.com/clj-kondo/clj-kondo) (>= 2021.12.19)
+- [cljstyle](https://github.com/greglook/cljstyle) (>= 0.15.0)
 
 ### Manage project
 
