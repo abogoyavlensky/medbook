@@ -184,7 +184,8 @@
   "Testing fixture for deleting any temp file for every test."
   [path]
   (fn [f]
-    (io/delete-file path)
+    (when (.isFile (io/file path))
+      (io/delete-file path))
     (f)))
 
 
