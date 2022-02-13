@@ -164,7 +164,6 @@
                   (test-util/patient->output))]
     (testing "check updating patient and showing it on the list page"
       (let [driver (get test-util/*test-system* ::test-util/chromedriver)]
-        ; check that patient table is empty
         (etaoin/go driver test-util/TEST-URL-BASE)
         (etaoin/wait-visible driver {:tag :h2
                                      :fn/has-text "Patients"})
@@ -181,7 +180,6 @@
         (is (false? (etaoin/visible? driver {:tag :td :fn/text "John Doe"})))
         (is (etaoin/visible? driver {:tag :td :fn/text "New name"}))
         ; check info panel
-        (etaoin/screenshot driver "page.png")
         (etaoin/wait-visible driver {:tag :div :fn/has-class "toast"})
         (is (etaoin/visible? driver
               {:tag :p
@@ -201,7 +199,6 @@
                   (test-util/patient->output))]
     (testing "check updating patient and showing it on the list page"
       (let [driver (get test-util/*test-system* ::test-util/chromedriver)]
-        ; check that patient table is empty
         (etaoin/go driver test-util/TEST-URL-BASE)
         (etaoin/wait-visible driver {:tag :h2
                                      :fn/has-text "Patients"})
@@ -219,7 +216,32 @@
                                      :fn/text "Full name is required."}))))))
 
 
+(deftest test-delete-patient-ok
+  (let [db (get test-util/*test-system* :medbook.db/db)
+        patient (test-util/create-patient! db)]
+    (testing "check updating patient and showing it on the list page"
+      (let [driver (get test-util/*test-system* ::test-util/chromedriver)]
+        (etaoin/go driver test-util/TEST-URL-BASE)
+        (etaoin/wait-visible driver {:tag :h2
+                                     :fn/has-text "Patients"})
+        (etaoin/visible? driver {:tag :td :fn/text "John Doe"})
+        ;; go to form
+        (etaoin/click driver {:tag :a :fn/text "Edit"})
+        (etaoin/wait-visible driver {:tag :h2 :fn/has-text "Edit patient"})
+        ;; delete patient
+        (etaoin/click driver {:tag :button
+                              :fn/text "Delete"})
+        (etaoin/wait-visible driver {:tag :p
+                                     :fn/has-text "There are no patients yet."})
+        (is (false? (etaoin/visible? driver {:tag :td :fn/text "John Doe"})))
+        (etaoin/wait-visible driver {:tag :div :fn/has-class "toast"})
+        (is (etaoin/visible? driver
+              {:tag :p
+               :fn/has-text (str "Patient has been deleted successfully.")})))
+      ; check patient has been deleted from db
+      (is (nil? (test-util/get-patient-by-insurance db (:insurance-number patient)))))))
+
+
 ; TODO:
-; - delete patient
 ; - get list with common database error
 ; - create patient with common database error

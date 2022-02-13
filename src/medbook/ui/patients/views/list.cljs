@@ -1,7 +1,6 @@
 (ns medbook.ui.patients.views.list
   (:require [re-frame.core :as re-frame]
             [reitit.frontend.easy :as reitit-easy]
-            [medbook.ui.views :as core-views]
             [medbook.ui.patients.subs :as subs]
             [medbook.ui.patients.consts :as consts]))
 
@@ -60,7 +59,6 @@
   [patients]
   (if (seq patients)
     [:div
-     [core-views/info-panel]
      [:table
       {:class ["table"]}
       [:thead

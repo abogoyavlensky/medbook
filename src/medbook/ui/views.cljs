@@ -29,6 +29,7 @@
   (let [info-message @(re-frame/subscribe [::subs/info-message])]
     (when (some? info-message)
       [:div.toast.toast-success
+       {:class ["mb-2"]}
        [:button.btn.btn-clear.float-right
         {:on-click #(re-frame/dispatch [::events/clear-info-message])}]
        [:p info-message]])))
@@ -41,6 +42,7 @@
     [:div
      {:class ["container" "grid-lg"]}
      [header]
+     [info-panel]
      (if current-route
        [(-> current-route :data :view) {:router router
                                         :current-route current-route}]
