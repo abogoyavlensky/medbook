@@ -16,7 +16,7 @@
 
 
 (defn- input-field
-  [{:keys [field label field-type submitting? errors pattern]}]
+  [{:keys [field label field-type submitting? errors pattern maxlength]}]
   (let [field-name-str (name field)
         form-classes ["form-group"]
         field-errors (get errors field)
@@ -38,7 +38,8 @@
                              [::events/update-patient-form-field field (-> % .-target .-value)])
                :disabled (true? submitting?)
                :class ["form-input"]}
-        (some? pattern) (assoc :pattern pattern))]
+        (some? pattern) (assoc :pattern pattern)
+        (some? maxlength) (assoc :maxlength maxlength))]
      (map error-hint field-errors)]))
 
 
@@ -109,6 +110,7 @@
                      :field-type "text"
                      :submitting? patient-form-submitting?
                      :pattern "^[\\d+]{16}$"
+                     :maxlength 16
                      :errors errors}]
        [:button
         {:type :button
