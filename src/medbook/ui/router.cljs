@@ -17,11 +17,14 @@
      :view patients-views-list/patient-list-view
      :controllers
      [{:start (fn [& _] (re-frame/dispatch [::patients-events/get-patients]))
-       ; TODO: clear info panel!
-       :stop  (fn [& _params] (js/console.log "Leaving home page"))}]}]
+       :stop  (fn [& _params]
+                (re-frame/dispatch [::events/clear-info-message])
+                (re-frame/dispatch [::events/clear-error-message]))}]}]
    ["patient"
     {:controllers
-     [{:stop (fn [& _] (re-frame/dispatch [::patients-events/clear-patient-form]))}]}
+     [{:stop (fn [& _]
+               (re-frame/dispatch [::patients-events/clear-patient-form])
+               (re-frame/dispatch [::events/clear-error-message]))}]}
     ["/create"
      {:name ::create-patient
       :page-title "Create new patient"

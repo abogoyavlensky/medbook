@@ -2,7 +2,7 @@
   (:require [re-frame.core :as re-frame]
             [reitit.frontend.easy :as reitit-easy]
             [medbook.ui.patients.subs :as subs]
-            [medbook.ui.patients.events :as events]))
+            [medbook.ui.patients.consts :as consts]))
 
 
 (defn- create-patient-btn
@@ -22,6 +22,14 @@
    "Edit"])
 
 
+(defn- render-gender-value
+  [source-value]
+  (let [output-value (condp = source-value
+                       consts/GENDER-VALUE-MALE "Male"
+                       consts/GENDER-VALUE-FEMALE "Female")]
+    [:span {:class ["label" "label-rounded"]} output-value]))
+
+
 (defn- render-patient-item
   [active-patient-id patient]
   (let [tr-class (cond-> []
@@ -32,7 +40,7 @@
      {:key (:id patient)
       :class tr-class}
      [:td (:full-name patient)]
-     [:td (:gender patient)]
+     [:td [render-gender-value (:gender patient)]]
      [:td (:birthday patient)]
      [:td (:address patient)]
      [:td (:insurance-number patient)]
@@ -49,27 +57,21 @@
 
 (defn- render-patients-table
   [patients]
-  (let [patient-new @(re-frame/subscribe [::subs/patient-new])]
-    (if (seq patients)
-      [:div
-       (when (some? patient-new)
-         [:div.toast.toast-success
-          [:button.btn.btn-clear.float-right
-           {:on-click #(re-frame/dispatch [::events/clear-patient-new])}]
-          [:p (str "New patient \"" (:full-name patient-new) "\" has been created successfully!")]])
-       [:table
-        {:class ["table"]}
-        [:thead
-         [:tr
-          [:th "Full name"]
-          [:th "Gender"]
-          [:th "Birthday"]
-          [:th "Address"]
-          [:th "Insurance number"]
-          [:th "Action"]]]
-        [:tbody
-         (map (partial render-patient-item nil) patients)]]]
-      [empty-patients])))
+  (if (seq patients)
+    [:div
+     [:table
+      {:class ["table"]}
+      [:thead
+       [:tr
+        [:th "Full name"]
+        [:th "Gender"]
+        [:th "Birthday"]
+        [:th "Address"]
+        [:th "Insurance number"]
+        [:th "Action"]]]
+      [:tbody
+       (map (partial render-patient-item nil) patients)]]]
+    [empty-patients]))
 
 
 (defn patient-list-view

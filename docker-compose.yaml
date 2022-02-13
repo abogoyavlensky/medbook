@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   check:
-    image: abogoyavlensky/clojure-openjdk11-build:0.2.0
+    image: abogoyavlensky/clojure-openjdk11-build:0.2.1
     volumes:
       - .:/app
 
@@ -25,14 +25,6 @@ services:
 
   # Testing
 
-  chromedriver-host:
-      image: robcherry/docker-chromedriver:77
-      network_mode: host
-      ports:
-        - "4444:4444"
-      environment:
-        CHROMEDRIVER_WHITELISTED_IPS: ''
-
   test-db:
     image: postgres:14-alpine
     ports:
@@ -43,11 +35,10 @@ services:
       POSTGRES_PASSWORD: medbook
 
   test:
-    image: abogoyavlensky/clojure-openjdk11-build:0.2.0
+    image: abogoyavlensky/clojure-openjdk11-build:0.2.1
     depends_on:
       - test-db
     environment:
-      MEDBOOK_DB_URL: "jdbc:postgresql://test-db:5432/medbook?user=medbook&password=medbook"
-      TESTING_ENV: "ci"
+      MEDBOOK_DB_URL_TEST: "jdbc:postgresql://test-db:5432/medbook?user=medbook&password=medbook"
     volumes:
       - .:/app

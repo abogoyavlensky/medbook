@@ -7,6 +7,7 @@
             [ring.mock.request :as mock]
             [muuntaja.core :as m]
             [etaoin.api :as etaoin]
+            [etaoin.keys :as keys]
             [medbook.util.system :as system-util]
             [medbook.util.db :as db-util]
             [medbook.handler :as handler]))
@@ -30,8 +31,6 @@
    (fn [test-fn]
      (let [test-config (-> (apply dissoc (system-util/config :test) exclude)
                          (merge include))]
-
-       ; TODO: try to remove!
        (ig/load-namespaces test-config)
        (binding [*test-system* (ig/init test-config)]
          (try
@@ -173,16 +172,17 @@
   (update patient :birthday #(format "%1$tY-%1$tm-%1$td" %)))
 
 
+(defn clear-input
+  "Clear value for input element."
+  [driver selector value]
+  (apply etaoin/fill driver selector (repeat (count value) keys/backspace)))
+
+
 ; Chromedriver testing component.
 
 (defmethod ig/init-key ::chromedriver
   [_ _]
-  (etaoin/chrome-headless
-    (let [testing-env (or (System/getenv "TESTING_ENV")
-                        "local")]
-      (cond-> {:args ["--no-sandbox"]}
-        (= "local" testing-env) (assoc :host "127.0.0.1"
-                                  :port 4444)))))
+  (etaoin/chrome-headless {:args ["--no-sandbox"]}))
 
 
 (defmethod ig/halt-key! ::chromedriver

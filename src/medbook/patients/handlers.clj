@@ -59,7 +59,7 @@
     (if (some? patient)
       (ring-response/response patient)
       (throw+ {:type :medbook.handler/error
-               :messages {:common ["Patient does not exit."]}}))))
+               :messages {:common ["Patient does not exist."]}}))))
 
 
 (defn update-patient!
@@ -91,7 +91,7 @@
       (sql/delete-patient! db patient-id)
       (deletion-success-response))
     (throw+ {:type :medbook.handler/error
-             :messages {:common ["Patient does not exit."]}})))
+             :messages {:common ["Patient does not exist."]}})))
 
 
 (comment

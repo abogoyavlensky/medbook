@@ -4,7 +4,7 @@
                          :handler #ig/ref :medbook.handler/handler}
  :medbook.db/db {:options
                  {:jdbc-url #profile {:dev "jdbc:postgresql://localhost:5432/medbook?user=medbook&password=medbook"
-                                      :test #or [#env MEDBOOK_DB_URL
+                                      :test #or [#env MEDBOOK_DB_URL_TEST
                                                  "jdbc:postgresql://localhost:5555/medbook?user=medbook&password=medbook"]
                                       :prod #env MEDBOOK_DB_URL}
                   ; ElephantDB on free plan allows only 5 connections

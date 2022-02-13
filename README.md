@@ -32,30 +32,33 @@ Run that uberjar:
 
 If you remove `version` from `build.clj`, the uberjar will become `target/medbook-standalone.jar`.
 
-## Options
+## Development
 
-FIXME: listing of options this app accepts.
+### Prerequisites
 
-## Examples
+TODO: add links for all tools!
 
-...
+Following tools should be installed for convenient local development:
 
-### Bugs
+- docker & docker-compose (latest)
+- Java 11
+- clojure.tools.deps (>= 1.10.3.1040)
+- chromedriver (>= 98.0.4758.80)
 
-...
+Optional tools in case you would like to run linting and formatting locally without docker on a git-hook:
 
-### Any Other Sections
-### That You Think
-### Might be Useful
+- lefthook (latest)
+- cljstyle (>= 0.15.0)
+- clj-kondo (>= 2021.12.19)
 
 ## TODO
+- [ ] Test cljs with [re-frame-test](https://github.com/day8/re-frame-test)
 - [ ] TailwindCSS.
 - [ ] Validation form field on client side.
-- [ ] Test cljs with [re-frame-test](https://github.com/day8/re-frame-test)
-- [ ] Cursor pagination.
 - [ ] Form library for re-frame.
+- [ ] Cursor pagination.
 - [ ] Collect logs and metrics.
-- [ ] Serve static using nginx or traefik.
+- [ ] Serve static using CDN.
 
 ## License
 
