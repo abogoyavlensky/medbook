@@ -10,7 +10,7 @@
   "Return patients data from db."
   [{{:keys [db]} :context}]
   (let [patients (->> (sql/get-patient-list! db)
-                   (s/unform ::patient-list->response))]
+                   (s/unform ::serializers/patient-list->response))]
     (ring-response/response patients)))
 
 
