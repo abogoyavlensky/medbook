@@ -68,7 +68,7 @@
       (is (= 400 (:status response)))
       (is (= {:error "medbook.handler/error"
               :exception "clojure.lang.ExceptionInfo"
-              :messages {:common ["Patient does not exit."]}
+              :messages {:common ["Patient does not exist."]}
               :type "Application error"}
             (:body response))))))
 
@@ -278,6 +278,6 @@
       (is (= 400 (:status response)))
       (is (= {:error "medbook.handler/error"
               :exception "clojure.lang.ExceptionInfo"
-              :messages {:common ["Patient does not exit."]}
+              :messages {:common ["Patient does not exist."]}
               :type "Application error"}
             (:body response))))))

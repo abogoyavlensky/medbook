@@ -157,7 +157,6 @@
       "<- Back to list"]
      [:div
       {:class ["columns"]}
-      ; TODO: need to pre-fill update form with patient by id!
       (let [patient-detail-loading? @(re-frame/subscribe [::subs/patient-detail-loading?])
             common-error-message @(re-frame/subscribe [::core-subs/error-message])]
         (if patient-detail-loading?

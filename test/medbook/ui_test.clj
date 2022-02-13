@@ -26,7 +26,7 @@
                                    :fn/text "Page not found."})))))
 
 
-(deftest test-patinents-list-ok
+(deftest test-patients-list-ok
   (let [driver (get test-util/*test-system* ::test-util/chromedriver)
         db (get test-util/*test-system* :medbook.db/db)
         patients [(test-util/create-patient! db {:gender 0
@@ -216,6 +216,18 @@
                                      :fn/text "Full name is required."}))))))
 
 
+(deftest test-update-patient-with-patient-does-not-exist-err
+  (testing "check updating patient and showing it on the list page"
+    (let [driver (get test-util/*test-system* ::test-util/chromedriver)]
+      (etaoin/go driver (str test-util/TEST-URL-BASE "/patient/update/100"))
+      (etaoin/wait-visible driver {:tag :h2 :fn/has-text "Edit patient"})
+      (etaoin/wait-visible driver {:tag :div :fn/has-class "toast-error"})
+      (etaoin/screenshot driver "page.png")
+      (is (etaoin/visible? driver
+            {:tag :p
+             :fn/has-text "Patient does not exist."})))))
+
+
 (deftest test-delete-patient-ok
   (let [db (get test-util/*test-system* :medbook.db/db)
         patient (test-util/create-patient! db)]
@@ -238,11 +250,6 @@
         (is (etaoin/visible? driver
               {:tag :p
                :fn/has-text (str "Patient has been deleted successfully.")})))
-      ; check patient has been deleted from db
-      (is (nil? (test-util/get-patient-by-insurance db (:insurance-number patient)))))))
 
-
-; TODO:
-; - test common error patient does not exist
-; - get list with common database error
-; - create patient with common database error
+      (testing "check patient has been deleted from db"
+        (is (nil? (test-util/get-patient-by-insurance db (:insurance-number patient))))))))
