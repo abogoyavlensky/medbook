@@ -43,7 +43,7 @@ Following tools should be installed for convenient local development:
 - docker & docker-compose (latest)
 - Java 11
 - clojure.tools.deps (>= 1.10.3.1040)
-- chromedriver (>= 97.0.4692.71)
+- chromedriver (>= 98.0.4758.80)
 
 Optional tools in case you would like to run linting and formatting locally without docker on a git-hook:
 

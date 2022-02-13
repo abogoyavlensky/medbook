@@ -56,7 +56,8 @@
                     :value value
                     :checked (= value @(re-frame/subscribe [::subs/patient-form-field field]))
                     :on-change (partial radio-on-change field value)})]
-   [:i.form-icon] label])
+   [:i.form-icon]
+   label])
 
 
 (defn- gender-input
