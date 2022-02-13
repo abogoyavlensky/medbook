@@ -202,14 +202,7 @@
 
 (defmethod ig/init-key ::chromedriver
   [_ _]
-  (etaoin/chrome-headless))
-
-
-;(let [testing-env (or (System/getenv "TESTING_ENV")
-;                    "local"))
-;(cond-> {:args ["--no-sandbox"]}))))
-;(= "local" testing-env) (assoc :host "127.0.0.1"
-;                          :port 4444]}))))
+  (etaoin/chrome-headless {:args ["--no-sandbox"]}))
 
 
 (defmethod ig/halt-key! ::chromedriver

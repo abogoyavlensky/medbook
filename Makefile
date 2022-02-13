@@ -81,7 +81,7 @@ check:
 .PHONY: up  # Run db, testing db and db admin web UI locally for development
 up:
 	@$(INFO) "Running db..."
-	@docker-compose up -d db adminer test-db chromedriver-host
+	@docker-compose up -d db adminer test-db
 
 
 .PHONY: clean  # Clean target dir
