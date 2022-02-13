@@ -176,8 +176,8 @@
 
 (defn clear-input
   "Clear value for input element."
-  [driver selector]
-  (etaoin/fill driver selector keys/home (keys/with-shift keys/end) keys/delete))
+  [driver selector value]
+  (apply etaoin/fill driver selector (repeat (count value) keys/backspace)))
 
 
 ; Chromedriver testing component.
