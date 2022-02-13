@@ -5,6 +5,16 @@
             [day8.re-frame.http-fx]))
 
 
+; TODO: update to shared routes for api!
+(defn- api-routes
+  ([route-name]
+   (api-routes route-name {}))
+  ([route-name {:keys [patient-id]}]
+   (condp = route-name
+     :list "/api/v1/patients"
+     :detail (str "/api/v1/patients/" patient-id))))
+
+
 (re-frame/reg-event-db
   ::get-patients-success
   (fn [db [_ patients]]
@@ -30,7 +40,7 @@
            :patients-error nil)
      :http-xhrio {:method :get
                   ; TODO: update to shared routes for api!
-                  :uri "/api/v1/patients"
+                  :uri (api-routes :list)
                   :format (ajax/json-request-format)
                   :response-format (ajax/json-response-format {:keywords? true})
                   :on-success [::get-patients-success]
@@ -45,7 +55,7 @@
      ;(assoc :patients-error nil))
      :http-xhrio {:method :get
                   ; TODO: update to shared routes for api!
-                  :uri (str "/api/v1/patients/" patient-id)
+                  :uri (api-routes :detail {:patient-id patient-id})
                   :format (ajax/json-request-format)
                   :response-format (ajax/json-response-format {:keywords? true})
                   :on-success [::get-patient-detail-success]
@@ -77,7 +87,7 @@
            :patient-form-errors nil)
      :http-xhrio {:method :post
                   ; TODO: update to shared routes for api!
-                  :uri "/api/v1/patients"
+                  :uri (api-routes :list)
                   :format (ajax/json-request-format)
                   :params (:patient-form db)
                   :response-format (ajax/json-response-format {:keywords? true})
@@ -131,9 +141,8 @@
            :patient-form-errors nil)
      :http-xhrio {:method :put
                   ; TODO: update to shared routes for api!
-                  :uri (str "/api/v1/patients/" (get-in db [:patient-form :id]))
+                  :uri (api-routes :detail {:patient-id (get-in db [:patient-form :id])})
                   :format (ajax/json-request-format)
-                  ;:params params
                   :params (dissoc (:patient-form db) :id)
                   :response-format (ajax/json-response-format {:keywords? true})
                   :on-success [::update-patient-success]
@@ -167,7 +176,7 @@
            :patient-delete-errors nil)
      :http-xhrio {:method :delete
                   ; TODO: update to shared routes for api!
-                  :uri (str "/api/v1/patients/" patient-id)
+                  :uri (api-routes :detail {:patient-id patient-id})
                   :format (ajax/json-request-format)
                   :response-format (ajax/json-response-format {:keywords? true})
                   :on-success [::delete-patient-success]
