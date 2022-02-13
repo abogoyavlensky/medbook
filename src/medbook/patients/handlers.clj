@@ -1,34 +1,9 @@
 (ns medbook.patients.handlers
   (:require [clojure.spec.alpha :as s]
-            [clojure.instant :as instant]
             [ring.util.response :as ring-response]
             [slingshot.slingshot :refer [throw+]]
-            [medbook.patients.sql :as sql]))
-
-
-(defn- date->string
-  [date-inst]
-  (format "%1$tY-%1$tm-%1$td" date-inst))
-
-
-(defn- string->date
-  [date-str]
-  (instant/read-instant-date date-str))
-
-
-(s/def ::birthday
-  (s/conformer
-    string->date
-    date->string))
-
-
-(s/def ::patient->response
-  (s/keys
-    :req-un [::birthday]))
-
-
-(s/def ::patient-list->response
-  (s/coll-of ::patient->response :kind vector?))
+            [medbook.patients.sql :as sql]
+            [medbook.patients.serializers :as serializers]))
 
 
 (defn patient-list
@@ -44,9 +19,9 @@
   [{{:keys [db]} :context
     {:keys [body]} :parameters}]
   (let [created-patient (->> body
-                          (s/conform ::patient->response)
+                          (s/conform ::serializers/patient->response)
                           (sql/create-patient! db)
-                          (s/unform ::patient->response))]
+                          (s/unform ::serializers/patient->response))]
     (ring-response/response created-patient)))
 
 
@@ -55,7 +30,7 @@
   [{{:keys [db]} :context
     {{:keys [patient-id]} :path} :parameters}]
   (let [patient (->> (sql/get-patient-detail! db patient-id)
-                  (s/unform ::patient->response))]
+                  (s/unform ::serializers/patient->response))]
     (if (some? patient)
       (ring-response/response patient)
       (throw+ {:type :medbook.handler/error
@@ -68,14 +43,13 @@
     {:keys [body]
      {:keys [patient-id]} :path} :parameters}]
   (let [patient (->> body
-                  (s/conform ::patient->response)
+                  (s/conform ::serializers/patient->response)
                   (sql/update-patient! db patient-id)
-                  (s/unform ::patient->response))]
+                  (s/unform ::serializers/patient->response))]
     (ring-response/response patient)))
 
 
-(defn deletion-success-response
-  "Return 204 response status without body"
+(defn- deletion-success-response
   []
   {:status  204
    :headers {}
@@ -92,13 +66,3 @@
       (deletion-success-response))
     (throw+ {:type :medbook.handler/error
              :messages {:common ["Patient does not exist."]}})))
-
-
-(comment
-  (require '[integrant.repl.state :as ig-state])
-
-  (let [db (get ig-state/system :medbook.db/db)
-        id 40]
-    (->> 40
-      (sql/get-patient-detail! db)
-      (s/conform ::patient->response))))

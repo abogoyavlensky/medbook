@@ -19,12 +19,12 @@
 
 
 (def ^:private error-messages
-  {:medbook.routes/full-name (field-error :full-name "%s value should be string.")
-   :medbook.routes/address (field-error :address "%s value should be string.")
-   :medbook.routes/gender (field-error :gender "%s value is invalid.")
-   :medbook.routes/birthday (field-error :birthday "%s value has invalid format.")
-   :medbook.routes/insurance-number (field-error :insurance-number "%s value should contain 16 digits without spaces.")
-   :medbook.routes/not-empty-string
+  {:medbook.spec/full-name (field-error :full-name "%s value should be string.")
+   :medbook.spec/address (field-error :address "%s value should be string.")
+   :medbook.spec/gender (field-error :gender "%s value is invalid.")
+   :medbook.spec/birthday (field-error :birthday "%s value has invalid format.")
+   :medbook.spec/insurance-number (field-error :insurance-number "%s value should contain 16 digits without spaces.")
+   :medbook.spec/not-empty-string
    (fn [problem]
      (let [field (peek (:in problem))]
        (field-error field "%s is required.")))})
