@@ -193,3 +193,33 @@
                               (test-util/patient->output))]
         (is (= (assoc patient :full-name "New name")
               patient-from-db))))))
+
+
+(deftest test-update-patient-with-validation-err
+  (let [db (get test-util/*test-system* :medbook.db/db)
+        patient (-> (test-util/create-patient! db {:full-name "John Doe"})
+                  (test-util/patient->output))]
+    (testing "check updating patient and showing it on the list page"
+      (let [driver (get test-util/*test-system* ::test-util/chromedriver)]
+        ; check that patient table is empty
+        (etaoin/go driver test-util/TEST-URL-BASE)
+        (etaoin/wait-visible driver {:tag :h2
+                                     :fn/has-text "Patients"})
+        (etaoin/click driver {:tag :a :fn/text "Edit"})
+        (etaoin/wait-visible driver {:tag :h2 :fn/has-text "Edit patient"})
+        ; clear full-name input
+        (test-util/clear-input driver :full-name (:full-name patient))
+        (etaoin/fill driver :full-name "")
+        (etaoin/click driver {:tag :button
+                              :fn/text "Save"})
+        (etaoin/wait-enabled driver {:tag :button
+                                     :fn/text "Save"})
+        (is (etaoin/visible? driver {:tag :p
+                                     :class :form-input-hint
+                                     :fn/text "Full name is required."}))))))
+
+
+; TODO:
+; - delete patient
+; - get list with common database error
+; - create patient with common database error
