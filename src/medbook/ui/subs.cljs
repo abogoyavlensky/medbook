@@ -6,3 +6,9 @@
   ::current-page
   (fn [db]
     (:current-page db)))
+
+
+(re-frame/reg-sub
+  ::info-message
+  (fn [db]
+    (:info-message db)))

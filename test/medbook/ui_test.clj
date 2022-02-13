@@ -179,12 +179,13 @@
                                      {:tag :th
                                       :fn/has-text "Full name"}])
         (is (false? (etaoin/visible? driver {:tag :td :fn/text "John Doe"})))
-        (is (etaoin/visible? driver {:tag :td :fn/text "New name"}))))
-    ;; check info panel
-    ;(etaoin/wait-visible driver {:tag :div
-    ;                             :fn/has-class "toast"})
-    ;(is (etaoin/visible? driver {:tag :p
-    ;                             :fn/has-text (str "New patient John Doe has been created successfully!")}))))
+        (is (etaoin/visible? driver {:tag :td :fn/text "New name"}))
+        ; check info panel
+        (etaoin/screenshot driver "page.png")
+        (etaoin/wait-visible driver {:tag :div :fn/has-class "toast"})
+        (is (etaoin/visible? driver
+              {:tag :p
+               :fn/has-text (str "New patient New name has been updated successfully!")}))))
 
     (testing "check patient has been updated in db"
       (let [patient-from-db (-> (test-util/get-patient-by-insurance db

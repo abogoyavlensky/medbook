@@ -57,7 +57,6 @@
   ::get-patient-detail-success
   (fn [db [_ patient]]
     (-> db
-      ;(assoc :patient-detail-current patient)
       (assoc :patient-form patient)
       (assoc :patient-detail-loading? false))))
 
@@ -90,11 +89,10 @@
 (re-frame/reg-event-fx
   ::create-patient-success
   (fn [{:keys [db]} [_ response]]
-    {:db (-> db
-           (assoc :patient-form-submitting? false)
-           (assoc :patient-form-errors nil)
-           (assoc :patient-new response)
-           (assoc :patient-form nil))
+    {:db (assoc db :patient-form-submitting? false
+           :patient-form-errors nil
+           :info-message (str "New patient " (:full-name response) " has been created successfully!")
+           :patient-form nil)
      :fx/push-state {:route :medbook.ui.router/home}}))
 
 
@@ -104,13 +102,6 @@
     (-> db
       (assoc :patient-form-submitting? false)
       (assoc :patient-form-errors messages))))
-
-
-(re-frame/reg-event-db
-  ::clear-patient-new
-  (fn [db [_ _]]
-    (-> db
-      (assoc :patient-new nil))))
 
 
 (re-frame/reg-event-db
@@ -125,14 +116,6 @@
                        :address ""
                        :insurance-number ""}
         :patient-form-errors nil))))
-
-
-;(re-frame/reg-event-fx
-;  ::clear-patient-form
-;  (fn [{:keys [db]} [_ _]]
-;    {:db (-> db
-;           (assoc :patient-form-errors nil))
-;     :fx/push-state {:route :medbook.ui.router/home}}))
 
 
 (re-frame/reg-event-db
@@ -160,20 +143,19 @@
 
 (re-frame/reg-event-fx
   ::update-patient-success
-  (fn [{:keys [db]} [_ _response]]
-    {:db (-> db
-           (assoc :patient-form-submitting? false)
-           (assoc :patient-form-errors nil)
-           (assoc :patient-form {}))
+  (fn [{:keys [db]} [_ response]]
+    {:db (assoc db :patient-form-submitting? false
+           :patient-form-errors nil
+           :info-message (str "New patient " (:full-name response) " has been updated successfully!")
+           :patient-form {})
      :fx/push-state {:route :medbook.ui.router/home}}))
 
 
 (re-frame/reg-event-db
   ::update-patient-error
   (fn [db [_ {{:keys [messages]} :response}]]
-    (-> db
-      (assoc :patient-form-submitting? false)
-      (assoc :patient-form-errors messages))))
+    (assoc db :patient-form-submitting? false
+      :patient-form-errors messages)))
 
 
 (re-frame/reg-event-fx

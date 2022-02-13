@@ -26,6 +26,12 @@
     (reitit-easy/push-state route)))
 
 
+(re-frame/reg-event-db
+  ::clear-info-message
+  (fn [db [_ _]]
+    (assoc db :info-message nil)))
+
+
 ;; Inspect app-db state
 (comment
   (require '[re-frame.db :as rf-db])

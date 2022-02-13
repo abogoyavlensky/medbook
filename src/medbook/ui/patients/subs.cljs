@@ -27,12 +27,6 @@
 
 
 (re-frame/reg-sub
-  ::patient-new
-  (fn [db]
-    (:patient-new db)))
-
-
-(re-frame/reg-sub
   ::patient-detail-current
   (fn [db]
     (:patient-detail-current db)))

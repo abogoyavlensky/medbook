@@ -12,7 +12,6 @@
    :patients-error nil
 
    :patient-form-errors nil
-   :patient-new nil
    :patient-detail-current {:full-name ""
                             :gender "0"
                             :birthday ""

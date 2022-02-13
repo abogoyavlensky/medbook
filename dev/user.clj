@@ -15,9 +15,9 @@
   (constantly
     ; Add figwheel component to the dev system.
     (-> (system-util/config :dev)
-      (assoc :medbook.figwheel/figwheel {})
+      (assoc :medbook.figwheel/figwheel {}))))
       ; Uncomment for running system without components.
-      (select-keys []))))
+      ;(select-keys []))))
 
 
 (defn reset
