@@ -66,12 +66,12 @@ make help
 
 
 ## TODO
-- [ ] Test cljs with [re-frame-test](https://github.com/day8/re-frame-test)
+- [ ] Pagination.
+- [ ] Test cljs with [re-frame-test](https://github.com/day8/re-frame-test).
 - [ ] Share api routes between backend and frontend using cljc-file.
 - [ ] Validation form field on client side.
-- [ ] TailwindCSS.
+- [ ] Tailwind CSS.
 - [ ] Form library for re-frame.
-- [ ] Cursor pagination.
 - [ ] Collect logs and metrics.
 - [ ] Serve static using CDN.
 

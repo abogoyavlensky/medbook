@@ -81,13 +81,14 @@
         patients @(re-frame/subscribe [::subs/patients])
         loading? @(re-frame/subscribe [::subs/patients-loading?])]
     [:div
-     {:class ["container"]}
      [:div
-      {:class ["columns"]}
-      [:h2
-       {:class ["col-2" "col-mr-auto"]}
-       page-title]
-      [create-patient-btn]]
+      {:class ["container"]}
+      [:div
+       {:class ["columns"]}
+       [:h2
+        {:class ["col-2" "col-mr-auto"]}
+        page-title]
+       [create-patient-btn]]]
      [:div
       (if (true? loading?)
         [:p "Loading..."]
