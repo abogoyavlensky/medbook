@@ -213,6 +213,28 @@
           (:body response)))))
 
 
+(deftest test-patient-update-already-exists-err
+  (bond/with-stub! [[log/log* (constantly nil)]]
+    (let [db (get test-util/*test-system* :medbook.db/db)
+          patient (test-util/create-patient! db)
+          another-patient (test-util/create-patient! db)
+          params {:full-name "New patient"
+                  :gender 1
+                  :birthday "1990-02-02"
+                  :address "New address"
+                  :insurance-number (:insurance-number another-patient)}
+          response (test-util/api-request! :put
+                     :medbook.routes/patient-detail
+                     {:path {:patient-id (:id patient)}
+                      :body params})]
+      (is (= 400 (:status response)))
+      (is (= {:error "medbook.handler/error"
+              :exception "clojure.lang.ExceptionInfo"
+              :messages {:insurance-number ["Insurance number already exists."]}
+              :type "Application error"}
+            (:body response))))))
+
+
 (deftest test-patient-update-invalid-params-err
   (bond/with-stub! [[log/log* (constantly nil)]]
     (let [db (get test-util/*test-system* :medbook.db/db)

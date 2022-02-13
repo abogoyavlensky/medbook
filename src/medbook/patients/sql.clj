@@ -50,20 +50,20 @@
 (defn update-patient!
   "Update an existing patient in db with given params."
   [db patient-id params]
-  (db-util/exec-one! db
-    (try
+  (try
+    (db-util/exec-one! db
       {:update :patient
        :set params
        :where [:= :id patient-id]
-       :returning patient-fields}
-      (catch PSQLException e
-        (let [msg (ex-message e)
-              unique-err-pattern "duplicate key value violates unique constraint"]
-          (when (str/includes? msg unique-err-pattern)
-            (let [unique-err-msg "Insurance number already exists."]
-              (throw+ {:type :medbook.handler/error
-                       :messages {:insurance-number [unique-err-msg]}})))
-          (throw e))))))
+       :returning patient-fields})
+    (catch PSQLException e
+      (let [msg (ex-message e)
+            unique-err-pattern "duplicate key value violates unique constraint"]
+        (when (str/includes? msg unique-err-pattern)
+          (let [unique-err-msg "Insurance number already exists."]
+            (throw+ {:type :medbook.handler/error
+                     :messages {:insurance-number [unique-err-msg]}})))
+        (throw e)))))
 
 
 (defn delete-patient!
