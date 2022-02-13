@@ -1,9 +1,8 @@
 (ns medbook.ui.patients.views.list
   (:require [re-frame.core :as re-frame]
             [reitit.frontend.easy :as reitit-easy]
-            [medbook.ui.subs :as core-subs]
+            [medbook.ui.views :as core-views]
             [medbook.ui.patients.subs :as subs]
-            [medbook.ui.events :as core-events]
             [medbook.ui.patients.consts :as consts]))
 
 
@@ -57,22 +56,11 @@
     "Please create a new patient by clicking \"Create patient\" button above."]])
 
 
-(defn info-panel
-  "Show info message on the page if it exists."
-  []
-  (let [info-message @(re-frame/subscribe [::core-subs/info-message])]
-    (when (some? info-message)
-      [:div.toast.toast-success
-       [:button.btn.btn-clear.float-right
-        {:on-click #(re-frame/dispatch [::core-events/clear-info-message])}]
-       [:p info-message]])))
-
-
 (defn- render-patients-table
   [patients]
   (if (seq patients)
     [:div
-     [info-panel]
+     [core-views/info-panel]
      [:table
       {:class ["table"]}
       [:thead
