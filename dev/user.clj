@@ -38,11 +38,13 @@
   []
   (fig/cljs-repl system-util/BUILD-ID-DEV))
 
+
 (defn run-all-tests
   "Run all tests for the project."
   []
   (reset)
   (test/run-all-tests #"medbook.*-test"))
+
 
 (comment
   (keys ig-state/system)
