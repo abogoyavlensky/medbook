@@ -50,23 +50,25 @@
 
 
 (defn- radio-input
-  [label value field]
+  [label value field patient-form-submitting?]
   [:label.form-radio
-   [:input (cond-> {:type "radio"
-                    :name (name field)
-                    :value value
-                    :checked (= value @(re-frame/subscribe [::subs/patient-form-field field]))
-                    :on-change (partial radio-on-change field value)})]
+   [:input
+    {:type "radio"
+     :name (name field)
+     :value value
+     :disabled (true? patient-form-submitting?)
+     :checked (= value @(re-frame/subscribe [::subs/patient-form-field field]))
+     :on-change (partial radio-on-change field value)}]
    [:i.form-icon]
    label])
 
 
 (defn- gender-input
-  []
+  [patient-form-submitting?]
   [:div.form-group
    [:label.form-label "Gender"]
-   [radio-input "Male" consts/GENDER-VALUE-MALE :gender]
-   [radio-input "Female" consts/GENDER-VALUE-FEMALE :gender]])
+   [radio-input "Male" consts/GENDER-VALUE-MALE :gender patient-form-submitting?]
+   [radio-input "Female" consts/GENDER-VALUE-FEMALE :gender patient-form-submitting?]])
 
 
 (defn- form-error
@@ -91,7 +93,7 @@
                      :field-type "text"
                      :submitting? patient-form-submitting?
                      :errors errors}]
-       [gender-input]
+       [gender-input patient-form-submitting?]
        [input-field {:field :birthday
                      :label "Birthday"
                      :field-type "date"
@@ -111,13 +113,13 @@
        [:button
         {:type :button
          :disabled (true? patient-form-submitting?)
-         ; TODO: patient id!
          :on-click #(re-frame/dispatch [submit-event])
          :class ["btn" "btn-primary" "btn-lg" "mt-2" "float-right"]}
         "Save"]
        [:a
         {:href (reitit-easy/href :medbook.ui.router/home)
-         :class ["btn" "btn-lg" "mt-2" "float-right" "mr-2"]}
+         :class ["btn" "btn-lg" "mt-2" "float-right" "mr-2"]
+         :disabled (true? patient-form-submitting?)}
         "Cancel"]
        (when (true? delete-btn?)
          (let [patient-id @(re-frame/subscribe [::subs/patient-form-field :id])]
@@ -161,7 +163,8 @@
         (if patient-detail-loading?
           [:p.mt-2 "Loading..."]
           (if (some? common-error-message)
-            [:p.mt-2 "An error happened while fetching the patient data."]
+            [:p.mt-2
+             [:i "An error happened while fetching or submitting the patient data."]]
             [patient-form
              {:delete-btn? true
               :submit-event ::events/update-patient}])))]]))

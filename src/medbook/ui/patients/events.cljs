@@ -2,7 +2,8 @@
   (:require [re-frame.core :as re-frame]
             [ajax.core :as ajax]
             ; import http-fx to register http-xhrio events
-            [day8.re-frame.http-fx]))
+            [day8.re-frame.http-fx]
+            [medbook.ui.patients.consts :as consts]))
 
 
 ; TODO: update to reitit shared routes for api!
@@ -30,7 +31,6 @@
            :patients-loading? true
            :error-message nil)
      :http-xhrio {:method :get
-                  ; TODO: update to shared routes for api!
                   :uri (api-routes :list)
                   :format (ajax/json-request-format)
                   :response-format (ajax/json-response-format {:keywords? true})
@@ -61,7 +61,6 @@
            :patient-detail-loading? true
            :error-message nil)
      :http-xhrio {:method :get
-                  ; TODO: update to shared routes for api!
                   :uri (api-routes :detail {:patient-id patient-id})
                   :format (ajax/json-request-format)
                   :response-format (ajax/json-response-format {:keywords? true})
@@ -94,7 +93,6 @@
            :patient-form-errors nil
            :error-message nil)
      :http-xhrio {:method :post
-                  ; TODO: update to shared routes for api!
                   :uri (api-routes :list)
                   :format (ajax/json-request-format)
                   :params (:patient-form db)
@@ -129,8 +127,7 @@
   (fn [db [_ _]]
     (assoc db
       :patient-form {:full-name ""
-                     ; TODO: import const var!
-                     :gender 0
+                     :gender consts/GENDER-VALUE-MALE
                      :birthday ""
                      :address ""
                      :insurance-number ""}
@@ -149,9 +146,9 @@
   (fn [{:keys [db]} _]
     {:db (assoc db
            :patient-form-submitting? true
-           :patient-form-errors nil)
+           :patient-form-errors nil
+           :error-message nil)
      :http-xhrio {:method :put
-                  ; TODO: update to shared routes for api!
                   :uri (api-routes :detail {:patient-id (get-in db [:patient-form :id])})
                   :format (ajax/json-request-format)
                   :params (dissoc (:patient-form db) :id)
@@ -167,26 +164,27 @@
            :patient-form-submitting? false
            :patient-form-errors nil
            :info-message (str "New patient " (:full-name response) " has been updated successfully!")
-           :patient-form {})
+           :patient-form {}
+           :error-message nil)
      :fx/push-state {:route :medbook.ui.router/home}}))
 
 
 (re-frame/reg-event-db
   ::update-patient-error
-  (fn [db [_ {{:keys [messages]} :response}]]
+  (fn [db [_ {{:keys [messages] :as response} :response}]]
     (assoc db
       :patient-form-submitting? false
-      :patient-form-errors messages)))
+      :patient-form-errors messages
+      :error-message (get-common-error response))))
 
 
 (re-frame/reg-event-fx
   ::delete-patient
   (fn [{:keys [db]} [_ patient-id]]
     {:db (assoc db
-           :patient-delete-submitting? true
-           :patient-delete-errors nil)
+           :patient-form-submitting? true
+           :error-message nil)
      :http-xhrio {:method :delete
-                  ; TODO: update to shared routes for api!
                   :uri (api-routes :detail {:patient-id patient-id})
                   :format (ajax/json-request-format)
                   :response-format (ajax/json-response-format {:keywords? true})
@@ -196,16 +194,17 @@
 
 (re-frame/reg-event-fx
   ::delete-patient-success
-  (fn [{:keys [db]} [_ _response]]
-    {:db (assoc db :patient-delete-submitting? false
-           :patient-delete-errors nil
-           :info-message "Patient has been deleted successfully.")
+  (fn [{:keys [db]} [_ _]]
+    {:db (assoc db
+           :patient-form-submitting? false
+           :info-message "Patient has been deleted successfully."
+           :error-message nil)
      :fx/push-state {:route :medbook.ui.router/home}}))
 
 
 (re-frame/reg-event-db
   ::delete-patient-error
-  (fn [db [_ {{:keys [messages]} :response}]]
+  (fn [db [_ {:keys [response]}]]
     (assoc db
-      :patient-delete-submitting? false
-      :patient-delete-errors messages)))
+      :patient-form-submitting? false
+      :error-message (get-common-error response))))

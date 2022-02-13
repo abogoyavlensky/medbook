@@ -5,6 +5,9 @@
 (def default-db
   "Main data for the app."
   {:current-page nil
+   :error-message nil
+   :info-message nil
+   ; patients
    :patients []
    :patients-loading? false
    :patient-form-submitting? false
@@ -14,15 +17,4 @@
                   :address ""
                   :insurance-number ""}
    :patient-form-errors nil
-   :error-message nil
-
-   ; TODO: use it!
-   :patient-detail-loading? false
-
-   ; TODO: use it!
-   :patient-delete-submitting? false
-
-   ; TODO: delete!
-   :patient-delete-errors nil
-
-   :info-message nil})
+   :patient-detail-loading? false})
