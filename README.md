@@ -39,6 +39,7 @@ Now you can run the project inside repl:
 
 ```bash
 make repl
+
 (reset)  # run and reset the system;
 (stop)  # stop the system;
 (cljs-repl)  # run cljs repl
