@@ -65,7 +65,7 @@
          [:div.toast.toast-success
           [:button.btn.btn-clear.float-right
            {:on-click #(re-frame/dispatch [::events/clear-patient-new])}]
-          [:p (str "New patient \"" (:full-name patient-new) "\" has been created successfully!")]])
+          [:p (str "New patient " (:full-name patient-new) " has been created successfully!")]])
        [:table
         {:class ["table"]}
         [:thead
