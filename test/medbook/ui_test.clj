@@ -1,7 +1,6 @@
 (ns medbook.ui-test
   (:require [clojure.test :refer :all]
             [etaoin.api :as etaoin]
-            [digest :as digest]
             [medbook.util.system :as system-util]
             [medbook.testing-utils :as test-util]))
 
@@ -16,7 +15,8 @@
 
 
 (use-fixtures :each
-  (test-util/with-truncated-tables))
+  (test-util/with-truncated-tables)
+  (test-util/with-delete-file test-util/SCREENSHOT-RESULT-PAGE-PATH))
 
 
 (deftest test-front-page-not-found-ok
@@ -54,8 +54,4 @@
     (is (etaoin/visible? driver {:tag :td :fn/text "Some other address 10"}))
     (is (etaoin/visible? driver {:tag :td :fn/text (-> patients second :insurance-number)}))
 
-    ; TODO: try to uncomment!
-    (etaoin/screenshot driver "test/medbook/resources/result_page.png")
-    (let [result-page-digest (digest/md5 (slurp "test/medbook/resources/result_page.png"))
-          expected-page-digest (digest/md5 (slurp "test/medbook/resources/chrome/list_page_ok.png"))]
-      (is (= expected-page-digest result-page-digest)))))
+    (is (true? (test-util/check-screenshot driver "chrome/list_page_ok.png")))))

@@ -1,12 +1,14 @@
 (ns medbook.testing-utils
   (:require [clojure.test :refer :all]
             [clojure.string :as str]
+            [clojure.java.io :as io]
             [integrant.core :as ig]
             [reitit.core :as reitit]
             [automigrate.core :as automigrate]
             [ring.mock.request :as mock]
             [muuntaja.core :as m]
             [etaoin.api :as etaoin]
+            [digest :as digest]
             [medbook.util.system :as system-util]
             [medbook.util.db :as db-util]
             [medbook.handler :as handler]))
@@ -171,6 +173,28 @@
   "Conform patient from db to api input format."
   [patient]
   (update patient :birthday #(format "%1$tY-%1$tm-%1$td" %)))
+
+
+(def SCREENSHOT-RESULT-PAGE-PATH
+  "File path for storing screenshot of actual page rendered during test."
+  "test/medbook/resources/result_page.png")
+
+
+(defn with-delete-file
+  "Testing fixture for deleting any temp file for every test."
+  [path]
+  (fn [f]
+    (io/delete-file path)
+    (f)))
+
+
+(defn check-screenshot
+  "Return true if expected file is the same as result page screenshot."
+  [driver expected-file-path]
+  (etaoin/screenshot driver SCREENSHOT-RESULT-PAGE-PATH)
+  (let [result-page-digest (digest/md5 (slurp SCREENSHOT-RESULT-PAGE-PATH))
+        expected-page-digest (digest/md5 (slurp (str "test/medbook/resources/" expected-file-path)))]
+    (= expected-page-digest result-page-digest)))
 
 
 ; Chromedriver testing component.
