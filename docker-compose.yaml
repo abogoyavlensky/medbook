@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   check:
-    image: abogoyavlensky/clojure-openjdk11-build:0.2.0
+    image: abogoyavlensky/clojure-openjdk11-build:0.2.1
     volumes:
       - .:/app
 
@@ -35,7 +35,7 @@ services:
       POSTGRES_PASSWORD: medbook
 
   test:
-    image: abogoyavlensky/clojure-openjdk11-build:0.2.0
+    image: abogoyavlensky/clojure-openjdk11-build:0.2.1
     depends_on:
       - test-db
     environment:
