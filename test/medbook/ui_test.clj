@@ -14,8 +14,7 @@
 
 
 (use-fixtures :each
-  (test-util/with-truncated-tables)
-  (test-util/with-delete-file test-util/SCREENSHOT-RESULT-PAGE-PATH))
+  (test-util/with-truncated-tables))
 
 
 (deftest test-front-page-not-found-ok
@@ -52,9 +51,7 @@
     (is (etaoin/visible? driver {:tag :td :fn/text "1990-02-02"}))
     (is (etaoin/visible? driver {:tag :span :fn/text "Male"}))
     (is (etaoin/visible? driver {:tag :td :fn/text "Some other address 10"}))
-    (is (etaoin/visible? driver {:tag :td :fn/text (-> patients second :insurance-number)}))
-    (testing "check page screenshot in chrome"
-      (is (true? (test-util/check-screenshot driver "chrome/list_page_ok.png"))))))
+    (is (etaoin/visible? driver {:tag :td :fn/text (-> patients second :insurance-number)}))))
 
 
 (deftest test-front-create-patient-and-get-list-ok
