@@ -7,6 +7,7 @@
             [ring.mock.request :as mock]
             [muuntaja.core :as m]
             [etaoin.api :as etaoin]
+            [etaoin.keys :as keys]
             [medbook.util.system :as system-util]
             [medbook.util.db :as db-util]
             [medbook.handler :as handler]))
@@ -171,6 +172,12 @@
   "Conform patient from db to api input format."
   [patient]
   (update patient :birthday #(format "%1$tY-%1$tm-%1$td" %)))
+
+
+(defn clear-input
+  "Clear value for input element."
+  [driver selector]
+  (etaoin/fill driver selector keys/home (keys/with-shift keys/end) keys/delete))
 
 
 ; Chromedriver testing component.
