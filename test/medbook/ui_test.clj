@@ -101,36 +101,58 @@
 
 
 (deftest test-create-patient-and-get-validation-err
-  (let [db (get test-util/*test-system* :medbook.db/db)
+  (let [driver (get test-util/*test-system* ::test-util/chromedriver)
         invalid-insurance-number "1234567891"]
-    (testing "check creating patient and showing it on the list page"
-      (let [driver (get test-util/*test-system* ::test-util/chromedriver)]
-        ; check that patient table is empty
-        (is (= [] (test-util/get-patient-list db)))
-        (etaoin/go driver test-util/TEST-URL-BASE)
-        (etaoin/wait-visible driver {:tag :h2
-                                     :fn/has-text "Patients"})
-        (etaoin/click driver {:tag :a
-                              :fn/text "Create patient"})
-        (etaoin/wait-visible driver {:tag :h2
-                                     :fn/has-text "Create new patient"})
-        (etaoin/fill driver {:tag :input
-                             :name :full-name} "")
-        (etaoin/fill driver :insurance-number invalid-insurance-number)
-        (etaoin/click driver {:tag :button
-                              :fn/text "Save"})
-        (etaoin/wait-enabled driver {:tag :button
-                                     :fn/text "Save"})
-        (etaoin/screenshot driver "page.png")
-        (is (etaoin/visible? driver {:tag :p
-                                     :class :form-input-hint
-                                     :fn/text "Full name is required."}))
-        (is (etaoin/visible? driver {:tag :p
-                                     :class :form-input-hint
-                                     :fn/text "Address is required."}))
-        (is (etaoin/visible? driver {:tag :p
-                                     :class :form-input-hint
-                                     :fn/text "Birthday value has invalid format."}))
-        (is (etaoin/visible? driver {:tag :p
-                                     :class :form-input-hint
-                                     :fn/text "Insurance number value should contain 16 digits without spaces."}))))))
+    (etaoin/go driver test-util/TEST-URL-BASE)
+    (etaoin/wait-visible driver {:tag :h2
+                                 :fn/has-text "Patients"})
+    (etaoin/click driver {:tag :a
+                          :fn/text "Create patient"})
+    (etaoin/wait-visible driver {:tag :h2
+                                 :fn/has-text "Create new patient"})
+    (etaoin/fill driver {:tag :input
+                         :name :full-name} "")
+    (etaoin/fill driver :insurance-number invalid-insurance-number)
+    (etaoin/click driver {:tag :button
+                          :fn/text "Save"})
+    (etaoin/wait-enabled driver {:tag :button
+                                 :fn/text "Save"})
+    (is (etaoin/visible? driver {:tag :p
+                                 :class :form-input-hint
+                                 :fn/text "Full name is required."}))
+    (is (etaoin/visible? driver {:tag :p
+                                 :class :form-input-hint
+                                 :fn/text "Address is required."}))
+    (is (etaoin/visible? driver {:tag :p
+                                 :class :form-input-hint
+                                 :fn/text "Birthday value has invalid format."}))
+    (is (etaoin/visible? driver {:tag :p
+                                 :class :form-input-hint
+                                 :fn/text "Insurance number value should contain 16 digits without spaces."}))))
+
+
+(deftest test-create-patient-clean-from-after-validation-err
+  (let [driver (get test-util/*test-system* ::test-util/chromedriver)]
+    ; try to create patient with empty form
+    (etaoin/go driver test-util/TEST-URL-BASE)
+    (etaoin/wait-visible driver {:tag :h2 :fn/has-text "Patients"})
+    (etaoin/click driver {:tag :a :fn/text "Create patient"})
+    (etaoin/wait-visible driver {:tag :h2
+                                 :fn/has-text "Create new patient"})
+    (etaoin/click driver {:tag :button
+                          :fn/text "Save"})
+    (etaoin/wait-enabled driver {:tag :button
+                                 :fn/text "Save"})
+    (is (etaoin/visible? driver {:tag :p
+                                 :class :form-input-hint
+                                 :fn/text "Full name is required."}))
+    ; return to list page
+    (etaoin/go driver test-util/TEST-URL-BASE)
+    (etaoin/wait-visible driver {:tag :h2 :fn/has-text "Patients"})
+    ; check that form is clean on the creating page
+    (etaoin/click driver {:tag :a :fn/text "Create patient"})
+    (etaoin/wait-visible driver {:tag :h2
+                                 :fn/has-text "Create new patient"})
+    (is (false? (etaoin/visible? driver {:tag :p
+                                         :class :form-input-hint
+                                         :fn/text "Full name is required."})))))
