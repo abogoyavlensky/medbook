@@ -243,5 +243,6 @@
 
 
 ; TODO:
+; - test common error patient does not exist
 ; - get list with common database error
 ; - create patient with common database error
