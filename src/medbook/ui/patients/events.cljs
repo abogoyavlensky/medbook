@@ -5,7 +5,7 @@
             [day8.re-frame.http-fx]))
 
 
-; TODO: update to shared routes for api!
+; TODO: update to reitit shared routes for api!
 (defn- api-routes
   ([route-name]
    (api-routes route-name {}))
@@ -13,6 +13,37 @@
    (condp = route-name
      :list "/api/v1/patients"
      :detail (str "/api/v1/patients/" patient-id))))
+
+
+(defn- get-common-error
+  [response]
+  (let [messages (:messages response)]
+    (if (seq messages)
+      (first (:common messages))
+      (:type response))))
+
+
+(re-frame/reg-event-fx
+  ::get-patients
+  (fn [{:keys [db]} _]
+    {:db (assoc db
+           :patients-loading? true
+           :error-message nil)
+     :http-xhrio {:method :get
+                  ; TODO: update to shared routes for api!
+                  :uri (api-routes :list)
+                  :format (ajax/json-request-format)
+                  :response-format (ajax/json-response-format {:keywords? true})
+                  :on-success [::get-patients-success]
+                  :on-failure [::get-patients-error]}}))
+
+
+(re-frame/reg-event-db
+  ::get-patients-error
+  (fn [db [_ {:keys [response]}]]
+    (assoc db
+      :error-message (get-common-error response)
+      :patients-loading? false)))
 
 
 (re-frame/reg-event-db
@@ -23,36 +54,12 @@
       :patients-loading? false)))
 
 
-(re-frame/reg-event-db
-  ::get-patients-error
-  (fn [db [_ _]]
-    (assoc db
-      :patients-error (str "Error happened while fetching patients. "
-                        "Please try to reload the page.")
-      :patients-loading? false)))
-
-
-(re-frame/reg-event-fx
-  ::get-patients
-  (fn [{:keys [db]} _]
-    {:db (assoc db
-           :patients-loading? true
-           :patients-error nil)
-     :http-xhrio {:method :get
-                  ; TODO: update to shared routes for api!
-                  :uri (api-routes :list)
-                  :format (ajax/json-request-format)
-                  :response-format (ajax/json-response-format {:keywords? true})
-                  :on-success [::get-patients-success]
-                  :on-failure [::get-patients-error]}}))
-
-
 (re-frame/reg-event-fx
   ::get-patient-detail
   (fn [{:keys [db]} [_ patient-id]]
-    {:db (assoc db :patient-detail-loading? true)
-     ; TODO: uncomment!
-     ;(assoc :patients-error nil))
+    {:db (assoc db
+           :patient-detail-loading? true
+           :error-message nil)
      :http-xhrio {:method :get
                   ; TODO: update to shared routes for api!
                   :uri (api-routes :detail {:patient-id patient-id})
@@ -67,15 +74,15 @@
   (fn [db [_ patient]]
     (assoc db
       :patient-form patient
-      :patient-detail-loading? false)))
+      :patient-detail-loading? false
+      :error-message nil)))
 
 
 (re-frame/reg-event-db
   ::get-patient-detail-error
-  (fn [db [_ _]]
+  (fn [db [_ {:keys [response]}]]
     (assoc db
-      :patients-error (str "Error happened while fetching a patient. "
-                        "Please try to reload the page.")
+      :error-message (get-common-error response)
       :patient-detail-loading? false)))
 
 
@@ -84,7 +91,8 @@
   (fn [{:keys [db]} _]
     {:db (assoc db
            :patient-form-submitting? true
-           :patient-form-errors nil)
+           :patient-form-errors nil
+           :error-message nil)
      :http-xhrio {:method :post
                   ; TODO: update to shared routes for api!
                   :uri (api-routes :list)
@@ -102,16 +110,18 @@
            :patient-form-submitting? false
            :patient-form-errors nil
            :info-message (str "New patient " (:full-name response) " has been created successfully!")
-           :patient-form nil)
+           :patient-form nil
+           :error-message nil)
      :fx/push-state {:route :medbook.ui.router/home}}))
 
 
 (re-frame/reg-event-db
   ::create-patient-error
-  (fn [db [_ {{:keys [messages]} :response}]]
+  (fn [db [_ {{:keys [messages] :as response} :response}]]
     (assoc db
       :patient-form-submitting? false
-      :patient-form-errors messages)))
+      :patient-form-errors messages
+      :error-message (get-common-error response))))
 
 
 (re-frame/reg-event-db
@@ -124,7 +134,8 @@
                      :birthday ""
                      :address ""
                      :insurance-number ""}
-      :patient-form-errors nil)))
+      :patient-form-errors nil
+      :error-message nil)))
 
 
 (re-frame/reg-event-db
@@ -195,5 +206,6 @@
 (re-frame/reg-event-db
   ::delete-patient-error
   (fn [db [_ {{:keys [messages]} :response}]]
-    (assoc db :patient-delete-submitting? false
+    (assoc db
+      :patient-delete-submitting? false
       :patient-delete-errors messages)))

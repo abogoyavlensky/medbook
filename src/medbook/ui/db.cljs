@@ -1,4 +1,5 @@
-(ns medbook.ui.db)
+(ns medbook.ui.db
+  (:require [medbook.ui.patients.consts :as consts]))
 
 
 (def default-db
@@ -7,26 +8,21 @@
    :patients []
    :patients-loading? false
    :patient-form-submitting? false
-
-   ; TODO: use it!
-   :patients-error nil
-
-   :patient-form-errors nil
-   :patient-detail-current {:full-name ""
-                            :gender "0"
-                            :birthday ""
-                            :address ""
-                            :insurance-number ""}
-   :patient-detail-loading? false
-
    :patient-form {:full-name ""
-                  ; TODO: import const var!
-                  :gender 0
+                  :gender consts/GENDER-VALUE-MALE
                   :birthday ""
                   :address ""
                   :insurance-number ""}
+   :patient-form-errors nil
+   :error-message nil
 
+   ; TODO: use it!
+   :patient-detail-loading? false
+
+   ; TODO: use it!
    :patient-delete-submitting? false
+
+   ; TODO: delete!
    :patient-delete-errors nil
 
    :info-message nil})

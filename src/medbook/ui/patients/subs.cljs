@@ -21,15 +21,15 @@
 
 
 (re-frame/reg-sub
-  ::patient-form-errors
+  ::patient-detail-loading?
   (fn [db]
-    (:patient-form-errors db)))
+    (:patient-detail-loading? db)))
 
 
 (re-frame/reg-sub
-  ::patient-detail-current
+  ::patient-form-errors
   (fn [db]
-    (:patient-detail-current db)))
+    (:patient-form-errors db)))
 
 
 (re-frame/reg-sub

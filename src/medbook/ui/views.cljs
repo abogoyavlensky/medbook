@@ -35,6 +35,17 @@
        [:p info-message]])))
 
 
+(defn- error-panel
+  []
+  (let [error-message @(re-frame/subscribe [::subs/error-message])]
+    (when (some? error-message)
+      [:div.toast.toast-error
+       {:class ["mb-2"]}
+       [:button.btn.btn-clear.float-right
+        {:on-click #(re-frame/dispatch [::events/clear-error-message])}]
+       [:p error-message]])))
+
+
 (defn router-component
   "Component for routing ui navigation."
   [{:keys [router]}]
@@ -43,6 +54,7 @@
      {:class ["container" "grid-lg"]}
      [header]
      [info-panel]
+     [error-panel]
      (if current-route
        [(-> current-route :data :view) {:router router
                                         :current-route current-route}]

@@ -1,6 +1,7 @@
 (ns medbook.ui.patients.views.form
   (:require [re-frame.core :as re-frame]
             [reitit.frontend.easy :as reitit-easy]
+            [medbook.ui.subs :as core-subs]
             [medbook.ui.patients.subs :as subs]
             [medbook.ui.patients.events :as events]
             [medbook.ui.patients.consts :as consts]))
@@ -155,6 +156,12 @@
      [:div
       {:class ["columns"]}
       ; TODO: need to pre-fill update form with patient by id!
-      [patient-form
-       {:delete-btn? true
-        :submit-event ::events/update-patient}]]]))
+      (let [patient-detail-loading? @(re-frame/subscribe [::subs/patient-detail-loading?])
+            common-error-message @(re-frame/subscribe [::core-subs/error-message])]
+        (if patient-detail-loading?
+          [:p.mt-2 "Loading..."]
+          (if (some? common-error-message)
+            [:p.mt-2 "An error happened while fetching the patient data."]
+            [patient-form
+             {:delete-btn? true
+              :submit-event ::events/update-patient}])))]]))
