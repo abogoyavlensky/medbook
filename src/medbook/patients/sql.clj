@@ -29,7 +29,7 @@
         (throw e)))))
 
 
-(defn get-patient-list!
+(defn get-patient-list
   "Return patient data vector from db."
   [db]
   (db-util/exec! db
@@ -38,7 +38,7 @@
      :order-by [[:created-at :desc]]}))
 
 
-(defn get-patient-detail!
+(defn get-patient-detail
   "Return single patient data from db."
   [db patient-id]
   (db-util/exec-one! db

@@ -9,7 +9,7 @@
 (defn patient-list
   "Return patients data from db."
   [{{:keys [db]} :context}]
-  (let [patients (->> (sql/get-patient-list! db)
+  (let [patients (->> (sql/get-patient-list db)
                    (s/unform ::serializers/patient-list->response))]
     (ring-response/response patients)))
 
@@ -29,7 +29,7 @@
   "Return data for particular patient by id from db."
   [{{:keys [db]} :context
     {{:keys [patient-id]} :path} :parameters}]
-  (let [patient (->> (sql/get-patient-detail! db patient-id)
+  (let [patient (->> (sql/get-patient-detail db patient-id)
                   (s/unform ::serializers/patient->response))]
     (if (some? patient)
       (ring-response/response patient)
@@ -60,7 +60,7 @@
   "Delete patient from db by given id."
   [{{:keys [db]} :context
     {{:keys [patient-id]} :path} :parameters}]
-  (if (some? (sql/get-patient-detail! db patient-id))
+  (if (some? (sql/get-patient-detail db patient-id))
     (do
       (sql/delete-patient! db patient-id)
       (deletion-success-response))
