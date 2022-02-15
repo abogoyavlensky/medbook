@@ -3,17 +3,8 @@
             [ajax.core :as ajax]
             ; import http-fx to register http-xhrio events
             [day8.re-frame.http-fx]
-            [medbook.ui.patients.consts :as consts]))
-
-
-; TODO: update to reitit shared routes for api!
-(defn- api-routes
-  ([route-name]
-   (api-routes route-name {}))
-  ([route-name {:keys [patient-id]}]
-   (condp = route-name
-     :list "/api/v1/patients"
-     :detail (str "/api/v1/patients/" patient-id))))
+            [medbook.ui.patients.consts :as consts]
+            [medbook.routes :as api-routes]))
 
 
 (defn- get-common-error
@@ -31,7 +22,7 @@
            :patients-loading? true
            :error-message nil)
      :http-xhrio {:method :get
-                  :uri (api-routes :list)
+                  :uri (api-routes/api-route-path ::api-routes/patient-list)
                   :format (ajax/json-request-format)
                   :response-format (ajax/json-response-format {:keywords? true})
                   :on-success [::get-patients-success]
@@ -61,7 +52,8 @@
            :patient-detail-loading? true
            :error-message nil)
      :http-xhrio {:method :get
-                  :uri (api-routes :detail {:patient-id patient-id})
+                  :uri (api-routes/api-route-path ::api-routes/patient-detail
+                         {:path {:patient-id patient-id}})
                   :format (ajax/json-request-format)
                   :response-format (ajax/json-response-format {:keywords? true})
                   :on-success [::get-patient-detail-success]
@@ -93,7 +85,7 @@
            :patient-form-errors nil
            :error-message nil)
      :http-xhrio {:method :post
-                  :uri (api-routes :list)
+                  :uri (api-routes/api-route-path ::api-routes/patient-list)
                   :format (ajax/json-request-format)
                   :params (:patient-form db)
                   :response-format (ajax/json-response-format {:keywords? true})
@@ -149,7 +141,8 @@
            :patient-form-errors nil
            :error-message nil)
      :http-xhrio {:method :put
-                  :uri (api-routes :detail {:patient-id (get-in db [:patient-form :id])})
+                  :uri (api-routes/api-route-path ::api-routes/patient-detail
+                         {:path {:patient-id (get-in db [:patient-form :id])}})
                   :format (ajax/json-request-format)
                   :params (dissoc (:patient-form db) :id)
                   :response-format (ajax/json-response-format {:keywords? true})
@@ -185,7 +178,8 @@
            :patient-form-submitting? true
            :error-message nil)
      :http-xhrio {:method :delete
-                  :uri (api-routes :detail {:patient-id patient-id})
+                  :uri (api-routes/api-route-path ::api-routes/patient-detail
+                         {:path {:patient-id patient-id}})
                   :format (ajax/json-request-format)
                   :response-format (ajax/json-response-format {:keywords? true})
                   :on-success [::delete-patient-success]
