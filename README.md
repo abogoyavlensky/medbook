@@ -77,6 +77,6 @@ make help
 
 ## License
 
-Copyright © 2021 Andrey Bogoyavlensky
+Copyright © 2022 Andrey Bogoyavlensky
 
 Distributed under the MIT License.

@@ -144,10 +144,10 @@
 
 (defn route-path
   "Return route path by its name."
-  ([route route-name]
-   (route-path route route-name {}))
-  ([route route-name {:keys [path query]}]
-   (-> route
+  ([router route-name]
+   (route-path router route-name {}))
+  ([router route-name {:keys [path query]}]
+   (-> router
      (reitit/match-by-name route-name path)
      (reitit/match->path query))))
 

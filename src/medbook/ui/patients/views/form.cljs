@@ -39,7 +39,7 @@
                :disabled (true? submitting?)
                :class ["form-input"]}
         (some? pattern) (assoc :pattern pattern)
-        (some? maxlength) (assoc :maxlength maxlength))]
+        (some? maxlength) (assoc :maxLength maxlength))]
      (map error-hint field-errors)]))
 
 
