@@ -18,6 +18,9 @@
   nil)
 
 
+(defonce ST)
+
+
 (def TEST-URL-BASE
   "Basic url for UI testing."
   (str "http://127.0.0.1:8001"))

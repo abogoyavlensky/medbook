@@ -38,6 +38,19 @@
                   :on-failure [::get-patients-error]}}))
 
 
+;(re-frame/reg-event-fx
+;  ::get-patients
+;  (fn [{:keys [db]} _]
+;    {:db (assoc db
+;           :patients-loading? true
+;           :error-message nil)
+;     :fx/ajax {:method :get
+;               :uri (api-routes :list)
+;               :format (ajax/json-request-format)
+;               :response-format (ajax/json-response-format {:keywords? true})
+;               :on-success [::get-patients-success]
+;               :on-failure [::get-patients-error]}}))
+
 (re-frame/reg-event-db
   ::get-patients-error
   (fn [db [_ {:keys [response]}]]
@@ -49,6 +62,7 @@
 (re-frame/reg-event-db
   ::get-patients-success
   (fn [db [_ patients]]
+    #p patients
     (assoc db
       :patients patients
       :patients-loading? false)))

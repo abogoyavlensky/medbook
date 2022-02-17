@@ -26,6 +26,15 @@
     (reitit-easy/push-state route)))
 
 
+(re-frame/reg-fx :fx/ajax
+  (fn [{:keys [uri on-success]}]
+    (-> (js/fetch uri)
+      (.then (fn [response]
+               (-> (.json response)
+                 (.then (fn [resp]
+                          (re-frame/dispatch (conj on-success (js->clj resp :keywordize-keys true)))))))))))
+
+
 (re-frame/reg-event-db
   ::clear-info-message
   (fn [db [_ _]]

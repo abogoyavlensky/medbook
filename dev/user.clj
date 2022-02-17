@@ -49,4 +49,5 @@
 (comment
   (keys ig-state/system)
   (system-util/config :dev)
-  (cljs-repl))
+  (cljs-repl)
+  (reset))

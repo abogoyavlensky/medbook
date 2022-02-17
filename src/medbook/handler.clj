@@ -128,3 +128,21 @@
   (if (true? (:wrap-reload? options))
     (middlewares-util/wrap-reload #'handler context)
     (handler context)))
+
+
+(comment
+  {:db {:url "jdbc..."}})
+
+
+(defonce STATE (atom {}))
+
+
+(defn create-server
+  [config]
+  (let [server (handler config)]
+    {:new-server server}))
+
+
+(comment
+  (let [srv (create-server {})]
+    (srv {:uri "http"})))
